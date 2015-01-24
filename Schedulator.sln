@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedulator", "Schedulator\Schedulator.csproj", "{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedulator.Tests", "Schedulator.Tests\Schedulator.Tests.csproj", "{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
