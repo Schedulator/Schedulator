@@ -1,26 +1,29 @@
-﻿using System;
+﻿using Schedulator.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace Schedulator.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        [Authorize]
+        private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            return View();
+            return View(db.Users.Find(User.Identity.GetUserId<int>()));
         }
-        [Authorize]
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
             return View();
         }
-        [Authorize]
+
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

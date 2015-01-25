@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedulator", "Schedulator\Schedulator.csproj", "{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedulator", "Schedulator\Schedulator.csproj", "{FA5F1E42-0D3A-484D-9FDE-192D6EBAEFA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedulator.Tests", "Schedulator.Tests\Schedulator.Tests.csproj", "{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedulator.Tests", "Schedulator.Tests\Schedulator.Tests.csproj", "{054B6885-5CA8-4D40-BC4A-8CB920DDE19A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{908D6A3E-4CB1-4894-AFF0-A7A66D3BDD0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17B53B7A-2A44-4F17-B4C8-8A21A20BE865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA5F1E42-0D3A-484D-9FDE-192D6EBAEFA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA5F1E42-0D3A-484D-9FDE-192D6EBAEFA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA5F1E42-0D3A-484D-9FDE-192D6EBAEFA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA5F1E42-0D3A-484D-9FDE-192D6EBAEFA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{054B6885-5CA8-4D40-BC4A-8CB920DDE19A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{054B6885-5CA8-4D40-BC4A-8CB920DDE19A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{054B6885-5CA8-4D40-BC4A-8CB920DDE19A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{054B6885-5CA8-4D40-BC4A-8CB920DDE19A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
