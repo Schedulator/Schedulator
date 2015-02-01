@@ -57,8 +57,14 @@ namespace Schedulator.Models
         {
         }
 
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Lecture> Lectures { get; set; }
+        public DbSet<Tutorial> Tutorials { get; set; }
+        public DbSet<Lab> Labs { get; set; }
+
         public static ApplicationDbContext Create()
         {
+
             return new ApplicationDbContext();
         }
     }
