@@ -14,6 +14,7 @@ namespace Schedulator.Models
         public string SpecialNote { get; set; }
 
         public virtual ICollection<Lecture> Lectures { get; set; }
+        public virtual ICollection<Prerequisite> Prerequisites { get; set; }
 
     }
 }

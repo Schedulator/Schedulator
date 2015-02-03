@@ -16,7 +16,9 @@ namespace Schedulator.Models
         public string SecondDay { get; set; }
         public string ClassRoomNumber { get; set; }
 
+        public virtual Semester Semester { get; set; }
         public virtual Course Course { get; set; }
         public virtual ICollection<Tutorial> Tutorials { get; set; }
+       
     }
 }
