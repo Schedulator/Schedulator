@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Schedulator.Models.Course>
 
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,43 +11,49 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseLetters)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SpecialNote)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseLetters)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SpecialNote)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CourseID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CourseID })
-        </td>
-    </tr>
+<div class="panel-group" id="accordion">
+
+@foreach (var item in Model)
+{
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"
+                   href="#collapse@(item.CourseID)">
+                    @Html.DisplayFor(modelItem => item.CourseLetters) @Html.DisplayFor(modelItem => item.CourseNumber) @Html.DisplayFor(modelItem => item.Title)
+                </a>
+            </h4>
+        </div>
+        <div id="collapse@(item.CourseID)" class="panel-collapse collapse">
+            <div class="panel-body">
+                <table class="table">
+                    Lectures:
+                    @foreach (var item2 in item.Lectures)
+                    {
+                        if (item2.LectureLetter != null && item2.LectureLetter != "UgradNSched IE")
+                        {
+                            <tr>
+                                <td>
+                                    Lect @Html.DisplayFor(modelItem => item2.LectureLetter)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item2.StartTime) - @Html.DisplayFor(modelItem => item2.EndTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item2.FirstDay) @Html.DisplayFor(modelItem => item2.SecondDay)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item2.Teacher)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
 }
+</div>
 
-</table>
