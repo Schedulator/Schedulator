@@ -8,7 +8,6 @@ namespace Schedulator.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
-        public string test = "";
     }
 
     public class ExternalLoginListViewModel
