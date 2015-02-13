@@ -24,12 +24,15 @@ namespace Schedulator.Migrations
 
         protected override void Seed(Schedulator.Models.ApplicationDbContext context)
         {
-
-          context.Labs.ToList().ForEach(s => context.Labs.Remove(s));
+            context.Enrollement.ToList().ForEach(s => context.Enrollement.Remove(s));
+            context.Schedule.ToList().ForEach(s => context.Schedule.Remove(s));
+            context.Labs.ToList().ForEach(s => context.Labs.Remove(s));
             context.Tutorials.ToList().ForEach(s => context.Tutorials.Remove(s));
             context.Lectures.ToList().ForEach(s => context.Lectures.Remove(s));
             context.Courses.ToList().ForEach(s => context.Courses.Remove(s));
             context.Semesters.ToList().ForEach(s => context.Semesters.Remove(s));
+
+            context.SaveChanges();
 
             var fallSemester = new Semester { Season = Season.Fall, SemesterStart = new DateTime(2014, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) };
             var winterSemester = new Semester { Season = Season.Winter, SemesterStart = new DateTime(2015, 1, 7), SemesterEnd = new DateTime(2015, 5, 2) };
@@ -74,68 +77,86 @@ namespace Schedulator.Migrations
                         }
                         while (count < row.Count() && row[count].Cells[0] != null && (row[count].Cells[0].Text == "Fall" || row[count].Cells[0].Text == "Winter" || row[count].Cells[0].Text == "Summer"))
                         {
-                            lectures.Add(new Lecture { Course = courses.LastOrDefault() });
+                            Semester temp = null;
+                            
                             if (count < row.Count() && row[count].Cells[0].Text == "Fall")
                             {
-                                lectures.LastOrDefault().Semester = fallSemester;
+                                temp = fallSemester;
                                 count++;
                             }
                             else if (count < row.Count() && row[count].Cells[0].Text == "Winter")
                             {
-                                lectures.LastOrDefault().Semester = winterSemester;
+                                temp = winterSemester;
                                 count++;
                             }
                             else if (count < row.Count() && row[count].Cells[0].Text == "Summer" && (Regex.IsMatch(row[count].Cells[1].Text, "May")))
                             {
-                                lectures.LastOrDefault().Semester = summerOneSemester;
+                                temp = summerOneSemester;
                                 count++;
                             }
                             else if (count < row.Count() && row[count].Cells[0].Text == "Summer")
                             {
-                                lectures.LastOrDefault().Semester = summerTwoSemester;
+                                temp = summerTwoSemester;
                                 count++;
                             }
                             else
                                 count++;
-                            if (count < row.Count() && row[count].Cells[1] != null && (row[count].Cells[1].Text == "UgradNSched IE"))
+                            while (count < row.Count() && row[count].Cells[1] != null && (Regex.IsMatch(row[count].Cells[1].Text, @"Lect\s[A-Z]{1,2}") || row[count].Cells[1].Text == "UgradNSched IE"))
                             {
-                                lectures.LastOrDefault().LectureLetter = "UgradNSched IE";
-                                time timeToSet = ParseTime(row[count].Cells[2].Text);
-
-                                lectures.LastOrDefault().StartTime = 0; ;
-                                lectures.LastOrDefault().EndTime = 0;
-                                count++;
-                            }
-                            else if (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lect\s[A-Z]{1,2}"))
-                            {
-                                string value = Regex.Match(row[count].Cells[1].Text, @"[A-Z]{2}").Value;
-                                lectures.LastOrDefault().LectureLetter = Regex.Replace(row[count].Cells[1].Text, @"Lect\s", "");
-                                time timeToSet = ParseTime(row[count].Cells[2].Text);
-
-                                lectures.LastOrDefault().StartTime = timeToSet.startTime;
-                                lectures.LastOrDefault().EndTime = timeToSet.endTime;
-                                lectures.LastOrDefault().FirstDay = timeToSet.firstDay;
-                                lectures.LastOrDefault().SecondDay = timeToSet.secondDay;
-                                lectures.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
-                                lectures.LastOrDefault().Teacher = row[count].Cells[4].Text;
-                                count++;
-
-                                while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Tut\s[A-Z]{1,2}"))
+                                lectures.Add(new Lecture { Course = courses.LastOrDefault(), Semester = temp });
+                                if (count < row.Count() && row[count].Cells[1] != null && (row[count].Cells[1].Text == "UgradNSched IE"))
                                 {
-                                    tutorials.Add(new Tutorial { Lecture = lectures.LastOrDefault(), TutorialLetter = Regex.Replace(row[count].Cells[1].Text, @"Tut\s", "") });
-                                    timeToSet = ParseTime(row[count].Cells[2].Text);
+                                    lectures.LastOrDefault().LectureLetter = "UgradNSched IE";
+                                    time timeToSet = ParseTime(row[count].Cells[2].Text);
 
-                                    tutorials.LastOrDefault().StartTime = timeToSet.startTime;
-                                    tutorials.LastOrDefault().EndTime = timeToSet.endTime;
-                                    tutorials.LastOrDefault().FirstDay = timeToSet.firstDay;
-                                    tutorials.LastOrDefault().SecondDay = timeToSet.secondDay;
-                                    tutorials.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
+                                    lectures.LastOrDefault().StartTime = 0; ;
+                                    lectures.LastOrDefault().EndTime = 0;
+                                    count++;
+                                }
+                                else if (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lect\s[A-Z]{1,2}"))
+                                {
+                                    string value = Regex.Match(row[count].Cells[1].Text, @"[A-Z]{2}").Value;
+                                    lectures.LastOrDefault().LectureLetter = Regex.Replace(row[count].Cells[1].Text, @"Lect\s", "");
+                                    time timeToSet = ParseTime(row[count].Cells[2].Text);
 
+                                    lectures.LastOrDefault().StartTime = timeToSet.startTime;
+                                    lectures.LastOrDefault().EndTime = timeToSet.endTime;
+                                    lectures.LastOrDefault().FirstDay = timeToSet.firstDay;
+                                    lectures.LastOrDefault().SecondDay = timeToSet.secondDay;
+                                    lectures.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
+                                    lectures.LastOrDefault().Teacher = row[count].Cells[4].Text;
                                     count++;
 
+                                    while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Tut\s[A-Z]{1,2}"))
+                                    {
+                                        tutorials.Add(new Tutorial { Lecture = lectures.LastOrDefault(), TutorialLetter = Regex.Replace(row[count].Cells[1].Text, @"Tut\s", "") });
+                                        timeToSet = ParseTime(row[count].Cells[2].Text);
+
+                                        tutorials.LastOrDefault().StartTime = timeToSet.startTime;
+                                        tutorials.LastOrDefault().EndTime = timeToSet.endTime;
+                                        tutorials.LastOrDefault().FirstDay = timeToSet.firstDay;
+                                        tutorials.LastOrDefault().SecondDay = timeToSet.secondDay;
+                                        tutorials.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
+
+                                        count++;
+
+                                        while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
+                                        {
+                                            labs.Add(new Lab { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "") });
+                                            timeToSet = ParseTime(row[count].Cells[2].Text);
+
+                                            labs.LastOrDefault().StartTime = timeToSet.startTime;
+                                            labs.LastOrDefault().EndTime = timeToSet.endTime;
+                                            labs.LastOrDefault().FirstDay = timeToSet.firstDay;
+                                            labs.LastOrDefault().SecondDay = timeToSet.secondDay;
+                                            labs.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
+
+                                            count++;
+                                        }
+                                    }
                                     while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
                                     {
-                                        labs.Add(new Lab { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "") });
+                                        labs.Add(new Lab { Lecture = lectures.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "") });
                                         timeToSet = ParseTime(row[count].Cells[2].Text);
 
                                         labs.LastOrDefault().StartTime = timeToSet.startTime;
@@ -146,23 +167,11 @@ namespace Schedulator.Migrations
 
                                         count++;
                                     }
+
                                 }
-                                while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
-                                {
-                                    labs.Add(new Lab { Lecture = lectures.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "") });
-                                    timeToSet = ParseTime(row[count].Cells[2].Text);
-
-                                    labs.LastOrDefault().StartTime = timeToSet.startTime;
-                                    labs.LastOrDefault().EndTime = timeToSet.endTime;
-                                    labs.LastOrDefault().FirstDay = timeToSet.firstDay;
-                                    labs.LastOrDefault().SecondDay = timeToSet.secondDay;
-                                    labs.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
-
-                                    count++;
-                                }
-
                             }
                         }
+                        
 
                     }
                     else
@@ -174,6 +183,17 @@ namespace Schedulator.Migrations
             lectures.ForEach(p => context.Lectures.AddOrUpdate(p));
             tutorials.ForEach(p => context.Tutorials.AddOrUpdate(p));
             labs.ForEach(p => context.Labs.AddOrUpdate(p));
+
+            Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester };
+            List<Enrollement> enrollements = new List<Enrollement>();
+            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "QA").FirstOrDefault(), Grade = Grade.BMinus });
+            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "UA").FirstOrDefault(), Grade = Grade.A });
+            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "HA").FirstOrDefault(), Grade = Grade.BPlus });
+            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "XE").FirstOrDefault(), Grade = Grade.CPlus });
+
+            context.Schedule.AddOrUpdate(schedule);
+ 
+            enrollements.ForEach(p => context.Enrollement.AddOrUpdate(p));
 
             context.SaveChanges();
         }
@@ -216,7 +236,7 @@ namespace Schedulator.Migrations
                     timeToReturn.firstDay = "T";
                 }
             }
-            if (days[1] == 'W')
+            if (days[2] == 'W')
             {
                 if (onSecondDay)
                     timeToReturn.secondDay = "W";

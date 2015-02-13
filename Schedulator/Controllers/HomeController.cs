@@ -30,5 +30,6 @@ namespace Schedulator.Controllers
 
             return View();
         }
+
     }
 }

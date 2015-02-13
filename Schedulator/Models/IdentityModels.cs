@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Schedulator.Models
 {
@@ -23,6 +24,7 @@ namespace Schedulator.Models
             // Add custom user claims here 
             return userIdentity;
         }
+        public virtual ICollection<Schedule> Schedules { get; set; }
     }
     public class CustomUserRole : IdentityUserRole<int> { }
     public class CustomUserClaim : IdentityUserClaim<int> { }
@@ -62,6 +64,8 @@ namespace Schedulator.Models
         public DbSet<Tutorial> Tutorials { get; set; }
         public DbSet<Lab> Labs { get; set; }
         public DbSet<Semester> Semesters { get; set; }
+        public DbSet<Schedule> Schedule { get; set; }
+        public DbSet<Enrollement> Enrollement { get; set; }
 
         public static ApplicationDbContext Create()
         {

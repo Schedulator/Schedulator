@@ -22,8 +22,21 @@
     </div>
     <div class="col-md-4">
         <h2>Academics</h2>
-        <p>COMP 248: A</p>
-        <p>COMP 249: A</p>
+        <ul class="list-group">
+            @foreach (var schedules in Model.Schedules)
+            {
+                foreach (var enrollements in schedules.Enrollements)
+                {
+                    <li class="list-group-item">
+                        @Html.DisplayFor(modelItem => enrollements.Tutorial.Lecture.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollements.Tutorial.Lecture.Course.CourseNumber) 
+                        @Html.DisplayFor(model => enrollements.Grade)
+
+                    </li>
+                }
+
+            }
+        </ul>
+
     </div>
     <div class="col-md-4">
         <h2>Other info</h2>

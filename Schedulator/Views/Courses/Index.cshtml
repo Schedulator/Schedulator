@@ -29,26 +29,74 @@
         <div id="collapse@(item.CourseID)" class="panel-collapse collapse">
             <div class="panel-body">
                 <table class="table">
-                    Lectures:
-                    @foreach (var item2 in item.Lectures)
+                    @foreach (var lecture in item.Lectures.OrderBy(c => c.Semester.SemesterStart))
                     {
-                        if (item2.LectureLetter != null && item2.LectureLetter != "UgradNSched IE")
+                        
+                        if (lecture.LectureLetter != null && lecture.LectureLetter != "UgradNSched IE")
                         {
                             <tr>
                                 <td>
-                                    Lect @Html.DisplayFor(modelItem => item2.LectureLetter)
+                                    @Html.DisplayFor(modelItem => lecture.Semester.Season) Lect @Html.DisplayFor(modelItem => lecture.LectureLetter)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item2.StartTime) - @Html.DisplayFor(modelItem => item2.EndTime)
+                                    @Html.DisplayFor(modelItem => lecture.StartTime) - @Html.DisplayFor(modelItem => lecture.EndTime)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item2.FirstDay) @Html.DisplayFor(modelItem => item2.SecondDay)
+                                    @Html.DisplayFor(modelItem => lecture.FirstDay) @Html.DisplayFor(modelItem => lecture.SecondDay)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item2.Teacher)
+                                    @Html.DisplayFor(modelItem => lecture.Teacher)
                                 </td>
                             </tr>
+                            
+                            <tr>
+                            <table class="table">
+                                @foreach (var tutorial in lecture.Tutorials)
+                                {
+                                    if (tutorial.TutorialLetter != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                Tut @Html.DisplayFor(modelItem => tutorial.TutorialLetter)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => tutorial.StartTime) - @Html.DisplayFor(modelItem => tutorial.EndTime)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => tutorial.FirstDay) @Html.DisplayFor(modelItem => tutorial.SecondDay)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => tutorial.ClassRoomNumber)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                @foreach (var labs in tutorial.Labs)
+                                                {
+                                                    if (labs.LabLetter != null)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                -- Lab @Html.DisplayFor(modelItem => labs.LabLetter)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => labs.StartTime) - @Html.DisplayFor(modelItem => labs.EndTime)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => labs.FirstDay) @Html.DisplayFor(modelItem => labs.SecondDay)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => labs.ClassRoomNumber)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                        </tr>
+                                    }
+                                }
+                            </table>
+                            </tr>
                         }
+
                     }
                 </table>
             </div>

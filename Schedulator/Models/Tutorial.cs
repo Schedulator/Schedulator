@@ -16,6 +16,7 @@ namespace Schedulator.Models
         public string ClassRoomNumber { get; set; }
 
         public virtual Lecture Lecture { get; set; }
+        public virtual ICollection<Lab> Labs { get; set; }
 
     }
 }

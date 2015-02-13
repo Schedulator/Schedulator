@@ -19,6 +19,6 @@ namespace Schedulator.Models
         public virtual Semester Semester { get; set; }
         public virtual Course Course { get; set; }
         public virtual ICollection<Tutorial> Tutorials { get; set; }
-       
+        public virtual ICollection<Lab> Labs { get; set; }
     }
 }
