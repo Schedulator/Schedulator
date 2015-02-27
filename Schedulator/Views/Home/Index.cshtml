@@ -25,7 +25,7 @@
         <ul class="list-group">
             @foreach (var schedules in Model.Schedules)
             {
-                foreach (var enrollements in schedules.Enrollements)
+                foreach (var enrollements in schedules.Enrollments)
                 {
                     <li class="list-group-item">
                         @Html.DisplayFor(modelItem => enrollements.Tutorial.Lecture.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollements.Tutorial.Lecture.Course.CourseNumber) 
