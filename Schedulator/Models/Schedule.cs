@@ -15,4 +15,5 @@ namespace Schedulator.Models
         public virtual ICollection<Enrollment> Enrollments { get; set; }
 
     }
+
 }

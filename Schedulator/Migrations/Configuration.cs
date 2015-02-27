@@ -195,6 +195,14 @@ namespace Schedulator.Migrations
 
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
 
+            Program program = new Program { ProgramName = "Software Engineering General Program", CreditsRequirement = 120 };
+            var courseSequenceList = new List<CourseSequence>();
+            courseSequenceList.Add(new CourseSequence { course = context.Courses.Where(u => u.CourseLetters == "COMP" && u.CourseNumber == 232).FirstOrDefault(), Season = "Fall", year = 1 });
+
+            context.Program.Add(program);
+            courseSequenceList.ForEach(p => context.CourseSequence.AddOrUpdate(p));
+
+
             context.SaveChanges();
         }
         public struct time

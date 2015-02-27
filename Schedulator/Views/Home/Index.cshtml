@@ -25,11 +25,11 @@
         <ul class="list-group">
             @foreach (var schedules in Model.Schedules)
             {
-                foreach (var enrollements in schedules.Enrollments)
+                foreach (var enrollments in schedules.Enrollments)
                 {
                     <li class="list-group-item">
-                        @Html.DisplayFor(modelItem => enrollements.Tutorial.Lecture.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollements.Tutorial.Lecture.Course.CourseNumber) 
-                        @Html.DisplayFor(model => enrollements.Grade)
+                        @Html.DisplayFor(modelItem => enrollments.Tutorial.Lecture.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Tutorial.Lecture.Course.CourseNumber) 
+                        @Html.DisplayFor(model => enrollments.Grade)
 
                     </li>
                 }
