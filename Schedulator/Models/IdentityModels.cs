@@ -65,7 +65,7 @@ namespace Schedulator.Models
         public DbSet<Lab> Labs { get; set; }
         public DbSet<Semester> Semesters { get; set; }
         public DbSet<Schedule> Schedule { get; set; }
-        public DbSet<Enrollement> Enrollement { get; set; }
+        public DbSet<Enrollment> Enrollment { get; set; }
 
         public static ApplicationDbContext Create()
         {

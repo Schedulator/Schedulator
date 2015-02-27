@@ -12,7 +12,7 @@ namespace Schedulator.Models
 
         public virtual Semester Semester { get; set; }
         public virtual ApplicationUser ApplicationUser {get; set;}
-        public virtual ICollection<Enrollement> Enrollements { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
 
     }
 }

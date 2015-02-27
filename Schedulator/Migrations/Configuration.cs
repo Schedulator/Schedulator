@@ -24,7 +24,7 @@ namespace Schedulator.Migrations
 
         protected override void Seed(Schedulator.Models.ApplicationDbContext context)
         {
-            context.Enrollement.ToList().ForEach(s => context.Enrollement.Remove(s));
+            context.Enrollment.ToList().ForEach(s => context.Enrollment.Remove(s));
             context.Schedule.ToList().ForEach(s => context.Schedule.Remove(s));
             context.Labs.ToList().ForEach(s => context.Labs.Remove(s));
             context.Tutorials.ToList().ForEach(s => context.Tutorials.Remove(s));
@@ -78,7 +78,7 @@ namespace Schedulator.Migrations
                         while (count < row.Count() && row[count].Cells[0] != null && (row[count].Cells[0].Text == "Fall" || row[count].Cells[0].Text == "Winter" || row[count].Cells[0].Text == "Summer"))
                         {
                             Semester temp = null;
-                            
+
                             if (count < row.Count() && row[count].Cells[0].Text == "Fall")
                             {
                                 temp = fallSemester;
@@ -171,13 +171,13 @@ namespace Schedulator.Migrations
                                 }
                             }
                         }
-                        
+
 
                     }
                     else
                         count++;
                 }
-                
+
             }
             courses.ForEach(p => context.Courses.AddOrUpdate(p));
             lectures.ForEach(p => context.Lectures.AddOrUpdate(p));
@@ -185,15 +185,15 @@ namespace Schedulator.Migrations
             labs.ForEach(p => context.Labs.AddOrUpdate(p));
 
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester };
-            List<Enrollement> enrollements = new List<Enrollement>();
-            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "QA").FirstOrDefault(), Grade = Grade.BMinus });
-            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "UA").FirstOrDefault(), Grade = Grade.A });
-            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "HA").FirstOrDefault(), Grade = Grade.BPlus });
-            enrollements.Add(new Enrollement { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "XE").FirstOrDefault(), Grade = Grade.CPlus });
+            List<Enrollment> enrollments = new List<Enrollment>();
+            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "QA").FirstOrDefault(), Grade = "B-" });
+            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "UA").FirstOrDefault(), Grade = "A" });
+            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "HA").FirstOrDefault(), Grade = "B+" });
+            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "XE").FirstOrDefault(), Grade = "C+" });
 
             context.Schedule.AddOrUpdate(schedule);
- 
-            enrollements.ForEach(p => context.Enrollement.AddOrUpdate(p));
+
+            enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
 
             context.SaveChanges();
         }

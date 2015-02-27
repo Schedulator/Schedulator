@@ -36,10 +36,10 @@ namespace Schedulator.Models
         [Display(Name = "F")]
         F
     };
-    public class Enrollement
+    public class Enrollment
     {
-        public int EnrollementID { get; set; }
-        public Grade Grade { get; set; }
+        public int EnrollmentID { get; set; }
+        public string Grade { get; set; }
         public virtual Schedule Schedule { get; set; }
         public virtual Tutorial Tutorial { get; set; }
         public virtual Lab Lab { get; set; }
