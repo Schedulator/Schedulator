@@ -170,9 +170,15 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
+    <Compile Include="Controllers\ScheduleGeneratorController.cs" />
     <Compile Include="Controllers\SeedController.cs" />
+    <Compile Include="Controllers\StudentScheduleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502272013439_init.cs" />
+    <Compile Include="Migrations\201502272013439_init.Designer.cs">
+      <DependentUpon>201502272013439_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -183,9 +189,12 @@
     <Compile Include="Models\Lab.cs" />
     <Compile Include="Models\Lecture.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Preference.cs" />
     <Compile Include="Models\Prerequisite.cs" />
     <Compile Include="Models\Program.cs" />
     <Compile Include="Models\Schedule.cs" />
+    <Compile Include="Models\ScheduleGenerator.cs" />
+    <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Seed.cs" />
     <Compile Include="Models\Semester.cs" />
     <Compile Include="Models\Tutorial.cs" />
@@ -259,6 +268,10 @@
     <Content Include="Views\Programs\Details.cshtml" />
     <Content Include="Views\Programs\Edit.cshtml" />
     <Content Include="Views\Programs\Index.cshtml" />
+    <Content Include="Views\ScheduleGenerator\Index.cshtml" />
+    <Content Include="Views\Shared\_Schedule.cshtml" />
+    <Content Include="Views\Shared\_ScheduleBlock.cshtml" />
+    <Content Include="Views\StudentSchedule\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -273,6 +286,11 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201502272013439_init.resx">
+      <DependentUpon>201502272013439_init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

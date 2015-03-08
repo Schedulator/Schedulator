@@ -25,12 +25,14 @@ namespace Schedulator.Migrations
         protected override void Seed(Schedulator.Models.ApplicationDbContext context)
         {
             context.Enrollment.ToList().ForEach(s => context.Enrollment.Remove(s));
+            context.Section.ToList().ForEach(s => context.Section.Remove(s));
             context.Schedule.ToList().ForEach(s => context.Schedule.Remove(s));
             context.Labs.ToList().ForEach(s => context.Labs.Remove(s));
             context.Tutorials.ToList().ForEach(s => context.Tutorials.Remove(s));
             context.Lectures.ToList().ForEach(s => context.Lectures.Remove(s));
             context.Courses.ToList().ForEach(s => context.Courses.Remove(s));
             context.Semesters.ToList().ForEach(s => context.Semesters.Remove(s));
+            
 
             context.SaveChanges();
 
@@ -49,6 +51,7 @@ namespace Schedulator.Migrations
             var tutorials = new List<Tutorial>();
             var labs = new List<Lab>();
             var prerequisites = new List<Prerequisite>();
+            var sections = new List<Section>();
 
             foreach (var worksheet in Workbook.Worksheets(@"C:\Users\Harley\Desktop\Schedulator\Schedulator\SoftwareAndCompCourseList.xlsx"))
             {
@@ -139,7 +142,8 @@ namespace Schedulator.Migrations
                                         tutorials.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
 
                                         count++;
-
+                                        if (!(count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}")))
+                                            sections.Add(new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault() });
                                         while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
                                         {
                                             labs.Add(new Lab { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "") });
@@ -152,6 +156,7 @@ namespace Schedulator.Migrations
                                             labs.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
 
                                             count++;
+                                            sections.Add(new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), Lab = labs.LastOrDefault() });
                                         }
                                     }
                                     while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
@@ -166,6 +171,7 @@ namespace Schedulator.Migrations
                                         labs.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
 
                                         count++;
+                                        sections.Add(new Section { Lecture = lectures.LastOrDefault(), Lab = labs.LastOrDefault() });
                                     }
 
                                 }
@@ -183,14 +189,19 @@ namespace Schedulator.Migrations
             lectures.ForEach(p => context.Lectures.AddOrUpdate(p));
             tutorials.ForEach(p => context.Tutorials.AddOrUpdate(p));
             labs.ForEach(p => context.Labs.AddOrUpdate(p));
+            sections.ForEach(p => context.Section.AddOrUpdate(p));
 
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester };
             List<Enrollment> enrollments = new List<Enrollment>();
-            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "QA").FirstOrDefault(), Grade = "B-" });
-            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "UA").FirstOrDefault(), Grade = "A" });
-            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "HA").FirstOrDefault(), Grade = "B+" });
-            enrollments.Add(new Enrollment { Schedule = schedule, Tutorial = tutorials.Where(t => t.TutorialLetter == "XE").FirstOrDefault(), Grade = "C+" });
 
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "QA" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
             context.Schedule.AddOrUpdate(schedule);
 
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));

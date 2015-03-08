@@ -66,6 +66,7 @@ namespace Schedulator.Models
         public DbSet<Semester> Semesters { get; set; }
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<Enrollment> Enrollment { get; set; }
+        public DbSet<Section> Section { get; set; }
         public DbSet<Program> Program { get; set; }
         public DbSet<CourseSequence> CourseSequence { get; set; }
 

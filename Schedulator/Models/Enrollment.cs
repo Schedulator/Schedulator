@@ -41,8 +41,10 @@ namespace Schedulator.Models
         public int EnrollmentID { get; set; }
         public string Grade { get; set; }
         public virtual Schedule Schedule { get; set; }
-        public virtual Tutorial Tutorial { get; set; }
-        public virtual Lab Lab { get; set; }
+        public virtual Course Course { get; set; }
+        public virtual Section Section { get; set; }
+
+        
 
     }
 

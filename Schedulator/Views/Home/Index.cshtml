@@ -28,7 +28,7 @@
                 foreach (var enrollments in schedules.Enrollments)
                 {
                     <li class="list-group-item">
-                        @Html.DisplayFor(modelItem => enrollments.Tutorial.Lecture.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Tutorial.Lecture.Course.CourseNumber) 
+                        @Html.DisplayFor(modelItem => enrollments.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Course.CourseNumber) 
                         @Html.DisplayFor(model => enrollments.Grade)
 
                     </li>

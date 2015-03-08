@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Schedulator.Models.Enrollment>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.Partial("_ScheduleBlock", Model.Enrollments)
+            </td>
+            <td>Anna</td>
+        </tr>
+    </tbody>
+</table>
