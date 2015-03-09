@@ -3,7 +3,10 @@
 @{
     ViewBag.Title = "Schedule Generator";
 }
-
-@Html.Partial("_Schedule", Model)
+<div class="jumbotron">
+        <h2>@Model.Semester.Season @Model.Semester.SemesterStart.ToString("yyyy") @(Model.IsRegisteredSchedule ? "Registered" : "Saved") Schedule</h2>
+        <h4> @Model.Semester.SemesterStart.ToString("MMMM d, yyyy") to @Model.Semester.SemesterEnd.ToString("MMMM d, yyyy")</h4>         
+</div>
+    @Html.Partial("_Schedule", Model)
 
 

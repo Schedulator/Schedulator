@@ -194,7 +194,7 @@ namespace Schedulator.Migrations
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester };
             List<Enrollment> enrollments = new List<Enrollment>();
 
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "QA" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
             enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
             enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
             enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
@@ -231,13 +231,15 @@ namespace Schedulator.Migrations
             enumMatch.MoveNext();
             Match mach = (Match)enumMatch.Current;
             string time = mach.Value;
-            time = time[0].ToString() + time[1].ToString() + "." + time[3].ToString() + time[4].ToString();
-            timeToReturn.startTime = Convert.ToDouble(time);
+            string timeHours = time[0].ToString() + time[1].ToString();
+            string timeMinutes = time[3].ToString() + time[4].ToString();
+            timeToReturn.startTime = Convert.ToDouble(timeHours) * 60 + Convert.ToDouble(timeMinutes);
             enumMatch.MoveNext();
             mach = (Match)enumMatch.Current;
             time = mach.Value;
-            time = time[0].ToString() + time[1].ToString() + "." + time[3].ToString() + time[4].ToString();
-            timeToReturn.endTime = Convert.ToDouble(time);
+            timeHours = time[0].ToString() + time[1].ToString();
+            timeMinutes = time[3].ToString() + time[4].ToString();
+            timeToReturn.endTime = Convert.ToDouble(timeHours) * 60 + Convert.ToDouble(timeMinutes);
             string days = Regex.Match(cell, @"[MTWJFSD-]{7}").Value;
             bool onSecondDay = false;
             if (days[0] == 'M')
