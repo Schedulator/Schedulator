@@ -191,7 +191,7 @@ namespace Schedulator.Migrations
             labs.ForEach(p => context.Labs.AddOrUpdate(p));
             sections.ForEach(p => context.Section.AddOrUpdate(p));
 
-            Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester };
+            Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester, IsRegisteredSchedule=true };
             List<Enrollment> enrollments = new List<Enrollment>();
 
             enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });

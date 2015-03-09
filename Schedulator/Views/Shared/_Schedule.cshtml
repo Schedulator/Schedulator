@@ -11,6 +11,7 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
+        z-index: -1;
 
     }
     #scheduleblockheader {
@@ -19,7 +20,8 @@
         text-align:center;
         height: 20px;
         width : 20%;
-        float: left;
+        position: absolute;
+
     }
     #Lect {
         vertical-align: middle;
@@ -51,19 +53,19 @@
     }
 </style>
 <div id="scheduleblock">
-    <div id="scheduleblockheader">
+    <div id="scheduleblockheader" style="left:0%">
         Monday
     </div>
-    <div id="scheduleblockheader">
+    <div id="scheduleblockheader" style="left:20%">
         Tuesday
     </div>
-    <div id="scheduleblockheader">
+    <div id="scheduleblockheader" style="left:40%">
         Wednesday
     </div>
-    <div id="scheduleblockheader">
+    <div id="scheduleblockheader" style="left:60%">
         Thursday
     </div>
-    <div id="scheduleblockheader">
+    <div id="scheduleblockheader" style="left:80%">
         Friday
     </div>
         @foreach(var Enrollments in Model.Enrollments)
