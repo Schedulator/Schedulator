@@ -22,3 +22,23 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/** Custom CSS **/
+div.steps {
+    
+    width: 100%;
+    background-color: #eee;
+    margin: 10px 0;
+    padding: 5px 7px;
+    border-radius: 7px;
+    
+}
+
+div.steps > p {
+    font-weight: bold;
+
+}
+
+input[type=checkbox] {
+    margin-left: 3px;
+}
