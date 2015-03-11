@@ -20,11 +20,21 @@
                 @Html.ActionLink("Schedulator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
+                @if (User.IsInRole("Student"))
+                { 
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Student Record", "Index", "Home")</li>
                     <li>@Html.ActionLink("Schedule", "Index", "StudentSchedule")</li>
                     <li>@Html.ActionLink("Schedule Maker", "Index", "ScheduleGenerator")</li>
                 </ul>
+                }
+                else if (User.IsInRole("Program Director"))
+                { 
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Course Management", "Index", "ProgramDirector")</li>
+                    <li>@Html.ActionLink("Student Management", "Index", "ProgramDirector")</li>
+                </ul>
+                }
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

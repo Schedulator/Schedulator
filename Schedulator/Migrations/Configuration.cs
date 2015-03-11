@@ -1,6 +1,7 @@
 namespace Schedulator.Migrations
 {
     using Excel;
+    using Schedulator.Controllers;
     using Schedulator.Models;
     using System;
     using System.Collections;
@@ -11,7 +12,10 @@ namespace Schedulator.Migrations
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
-
+    using Microsoft.Owin.Host.SystemWeb;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using System.Data.Entity.Validation;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Schedulator.Models.ApplicationDbContext>
     {
@@ -24,6 +28,9 @@ namespace Schedulator.Migrations
 
         protected override void Seed(Schedulator.Models.ApplicationDbContext context)
         {
+            if (System.Diagnostics.Debugger.IsAttached == false)
+                System.Diagnostics.Debugger.Launch();
+
             context.Enrollment.ToList().ForEach(s => context.Enrollment.Remove(s));
             context.Section.ToList().ForEach(s => context.Section.Remove(s));
             context.Schedule.ToList().ForEach(s => context.Schedule.Remove(s));
@@ -32,9 +39,26 @@ namespace Schedulator.Migrations
             context.Lectures.ToList().ForEach(s => context.Lectures.Remove(s));
             context.Courses.ToList().ForEach(s => context.Courses.Remove(s));
             context.Semesters.ToList().ForEach(s => context.Semesters.Remove(s));
-            
+            context.SaveChanges();
+          
+            if (!context.Roles.Any(u=> u.Name == "Student"))
+             context.Roles.AddOrUpdate(new IdentityRole { Name = "Student" });
+            if (!context.Roles.Any(u => u.Name == "Program Director"))
+                context.Roles.AddOrUpdate(new IdentityRole { Name = "Program Director" });
 
             context.SaveChanges();
+
+            if (!context.Users.Any(u => u.UserName == "harley.1011@gmail.com"))
+            {
+                var store = new UserStore<ApplicationUser>(context);
+                var manager = new UserManager<ApplicationUser>(store);
+                var user = new ApplicationUser { FirstName = "Harley", LastName = "McPhee", UserName = "harley.1011@gmail.com" };
+
+                var result = manager.Create(user, "Password@123!");
+                manager.AddToRole(user.Id, "Student");
+             
+            }
+
 
             var fallSemester = new Semester { Season = Season.Fall, SemesterStart = new DateTime(2014, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) };
             var winterSemester = new Semester { Season = Season.Winter, SemesterStart = new DateTime(2015, 1, 7), SemesterEnd = new DateTime(2015, 5, 2) };
@@ -192,6 +216,7 @@ namespace Schedulator.Migrations
             sections.ForEach(p => context.Section.AddOrUpdate(p));
 
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester, IsRegisteredSchedule=true };
+
             List<Enrollment> enrollments = new List<Enrollment>();
 
             enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });

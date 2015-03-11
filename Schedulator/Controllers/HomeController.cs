@@ -14,7 +14,11 @@ namespace Schedulator.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            return View(db.Users.Find(User.Identity.GetUserId<int>()));
+            if (User.IsInRole("Student"))
+                return View(db.Users.Find(User.Identity.GetUserId()));
+            else
+                return Redirect("ProgramDirector");
+
         }
     }
 }
