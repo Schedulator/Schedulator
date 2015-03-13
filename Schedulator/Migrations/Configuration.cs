@@ -28,9 +28,11 @@ namespace Schedulator.Migrations
 
         protected override void Seed(Schedulator.Models.ApplicationDbContext context)
         {
-            //if (System.Diagnostics.Debugger.IsAttached == false) // Uncomment if you want to debug
-             //   System.Diagnostics.Debugger.Launch();
+            if (System.Diagnostics.Debugger.IsAttached == false) // Uncomment if you want to debug
+                System.Diagnostics.Debugger.Launch();
+            string currentDirectoryUrl = Directory.GetCurrentDirectory();
 
+            context.CourseSequence.ToList().ForEach(s => context.CourseSequence.Remove(s));
             context.Prerequisite.ToList().ForEach(s => context.Prerequisite.Remove(s));
             context.Enrollment.ToList().ForEach(s => context.Enrollment.Remove(s));
             context.Section.ToList().ForEach(s => context.Section.Remove(s));
@@ -233,15 +235,61 @@ namespace Schedulator.Migrations
 
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
 
-            Program program = new Program { ProgramName = "Software Engineering General Program", CreditsRequirement = 120 };
-            var courseSequenceList = new List<CourseSequence>();
-            courseSequenceList.Add(new CourseSequence { course = context.Courses.Where(u => u.CourseLetters == "COMP" && u.CourseNumber == 232).FirstOrDefault(), Season = "Fall", year = 1 });
-
-            context.Program.Add(program);
-            courseSequenceList.ForEach(p => context.CourseSequence.AddOrUpdate(p));
             AddPrerequisite(courses).ForEach(p => context.Prerequisite.Add(p));
-
+            
+            AddProgramAndCourseSequence(@"C:\Users\Harley\Desktop\Schedulator\Schedulator\Programs.xlsx", courses);
             context.SaveChanges();
+        }
+        List<Program> AddProgramAndCourseSequence (string url, List<Course> courses)
+        {
+            List<Program> programs = new List<Program>();
+            List<CourseSequence> courseSequences = new List<CourseSequence>();
+            foreach (var worksheet in Workbook.Worksheets(url))
+            {
+                int count = 1;
+                var rows = worksheet.Rows;
+                Program program = new Program { ProgramName = rows[0].Cells[0].Text, ProgramOption = rows[0].Cells[1].Text, CreditsRequirement = Convert.ToInt32(rows[0].Cells[2].Text) };
+                Season season = 0;
+                int year = 0;
+                while (count < rows.Count())
+                {
+                    string currentCellText = rows[count].Cells[0].Text;
+
+                    if ( Regex.IsMatch(currentCellText, @"Year\s\d{1}\s-\s(Fall|Winter|Summer)"))
+                    {
+                        year = Convert.ToInt32(Regex.Match(currentCellText, @"\d{1}").ToString());
+                        season = (Season)Enum.Parse(typeof(Season), Regex.Match(currentCellText, @"(Fall|Winter|Summer").ToString());
+                    }
+                    else if ( Regex.IsMatch(currentCellText, @"[A-Z]{4}\s\d{3} or"))
+                    {
+                        List<CourseSequence> otherCourseOptions = new List<CourseSequence>();
+                        ElectiveType electiveType = ElectiveType.None;
+                        if (currentCellText.Contains("Elective"))
+                            electiveType = ElectiveType.TechnicalElective;
+                        foreach ( Match match in Regex.Matches(currentCellText, @"[A-Z]{4}\s\d{3}"))
+                        {
+                            CourseSequence temp = new CourseSequence { Program = program, ElectiveType = electiveType, Year = year, Season = season, Course = courses.Where(p => p.CourseLetters == Regex.Match(match.ToString(), @"[A-Z]{4}").ToString() && p.CourseNumber == Convert.ToInt32(Regex.Match(match.ToString(), @"\d{3}").ToString())).FirstOrDefault() };
+                            foreach(CourseSequence courseSequence in otherCourseOptions)
+                            {
+                                temp.OtherOptions.Add(courseSequence);
+                                courseSequence.OtherOptions.Add(temp);
+                            }
+                        }
+                        courseSequences.AddRange(otherCourseOptions);
+                    }
+                    else if ( Regex.IsMatch(currentCellText, @"[A-Z]{4}\s\d{3}"))
+                        courseSequences.Add(new CourseSequence{Program=program, ElectiveType = Models.ElectiveType.None, Year = year, Season = season, Course = courses.Where(p=> p.CourseLetters == Regex.Match(currentCellText,@"[A-Z]{4}").ToString() && p.CourseNumber == Convert.ToInt32(Regex.Match(currentCellText,@"\d{3}").ToString())).FirstOrDefault()});
+                    else if (currentCellText.Contains("General Elective"))
+                        courseSequences.Add(new CourseSequence { Program = program, ElectiveType = Models.ElectiveType.GeneralElective, Year = year, Season = season });
+                    else if (currentCellText.Contains("Basic Science"))
+                        courseSequences.Add(new CourseSequence { Program = program, ElectiveType = Models.ElectiveType.BasicScience, Year = year, Season = season });
+                    else if (currentCellText.Contains("Elective"))
+                        courseSequences.Add(new CourseSequence { Program = program, ElectiveType = Models.ElectiveType.TechnicalElective, Year = year, Season = season });
+                    count++;
+                }
+                
+            }
+            return programs;
         }
         List<Prerequisite> AddPrerequisite(List<Course> courses)
         {

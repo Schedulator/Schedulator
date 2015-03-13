@@ -9,6 +9,7 @@ namespace Schedulator.Models
     {
         public int ProgramId { get; set; }
         public string ProgramName { get; set; }
+        public string ProgramOption { get; set; }
         public int CreditsRequirement { get; set; }
 
         public virtual ICollection<CourseSequence> courseSequences { get; set; }
