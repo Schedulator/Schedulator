@@ -28,9 +28,10 @@ namespace Schedulator.Migrations
 
         protected override void Seed(Schedulator.Models.ApplicationDbContext context)
         {
-            if (System.Diagnostics.Debugger.IsAttached == false)
-                System.Diagnostics.Debugger.Launch();
+            //if (System.Diagnostics.Debugger.IsAttached == false) // Uncomment if you want to debug
+             //   System.Diagnostics.Debugger.Launch();
 
+            context.Prerequisite.ToList().ForEach(s => context.Prerequisite.Remove(s));
             context.Enrollment.ToList().ForEach(s => context.Enrollment.Remove(s));
             context.Section.ToList().ForEach(s => context.Section.Remove(s));
             context.Schedule.ToList().ForEach(s => context.Schedule.Remove(s));
@@ -39,6 +40,7 @@ namespace Schedulator.Migrations
             context.Lectures.ToList().ForEach(s => context.Lectures.Remove(s));
             context.Courses.ToList().ForEach(s => context.Courses.Remove(s));
             context.Semesters.ToList().ForEach(s => context.Semesters.Remove(s));
+            
             context.SaveChanges();
           
             if (!context.Roles.Any(u=> u.Name == "Student"))
@@ -237,9 +239,90 @@ namespace Schedulator.Migrations
 
             context.Program.Add(program);
             courseSequenceList.ForEach(p => context.CourseSequence.AddOrUpdate(p));
-
+            AddPrerequisite(courses).ForEach(p => context.Prerequisite.Add(p));
 
             context.SaveChanges();
+        }
+        List<Prerequisite> AddPrerequisite(List<Course> courses)
+        {
+            List<Prerequisite> prerequisites = new List<Prerequisite>();
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 287).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault()});
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 321).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 331).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 232).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 331).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENCS" && m.CourseNumber == 282).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 342).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 343).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 343).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 342).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 344).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 343).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 345).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 345).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 343).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 357).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 342).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 384).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENCS" && m.CourseNumber == 282).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 384).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 337).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 384).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 385).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 213).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 385).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 233).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 387).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 353).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 387).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 387).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 287).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 390).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 344).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 390).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 357).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 422).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 423).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 487).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 387).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 337).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 342).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 343).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 344).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 390).FirstOrDefault() });
+
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 242).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 213).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 243).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 213).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 243).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 242).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 371).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 213).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 371).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 233).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 391).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 213).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 391).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 233).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 391).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault() });
+
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 228).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 335).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 232).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 335).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 339).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 232).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 345).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 228).FirstOrDefault(), OrPrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 228).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault()});
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 348).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 232).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 353).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 354).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENCS" && m.CourseNumber == 282).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 361).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 232).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 361).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 371).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 376).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 371).FirstOrDefault(), Concurrently = true });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 426).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 428).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 442).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 335).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 442).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 445).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 465).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 335).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 465).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 472).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 473).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 474).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 476).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 376).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 476).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 361).FirstOrDefault(), OrPrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 391).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 477).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 371).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 477).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 361).FirstOrDefault(), OrPrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 391).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 478).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
+            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 479).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 233).FirstOrDefault(), OrPrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 371).FirstOrDefault() });
+
+            return prerequisites;
         }
         public struct time
         {
@@ -335,4 +418,5 @@ namespace Schedulator.Migrations
             return timeToReturn;
         }
     }
+
 }

@@ -177,9 +177,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201503110852538_init.cs" />
-    <Compile Include="Migrations\201503110852538_init.Designer.cs">
-      <DependentUpon>201503110852538_init.cs</DependentUpon>
+    <Compile Include="Migrations\201503130448082_init.cs" />
+    <Compile Include="Migrations\201503130448082_init.Designer.cs">
+      <DependentUpon>201503130448082_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -261,10 +261,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Courses\Create.cshtml" />
-    <Content Include="Views\Courses\Delete.cshtml" />
-    <Content Include="Views\Courses\Details.cshtml" />
-    <Content Include="Views\Courses\Edit.cshtml" />
     <Content Include="Views\Courses\Index.cshtml" />
     <Content Include="Views\Programs\Create.cshtml" />
     <Content Include="Views\Programs\Delete.cshtml" />
@@ -296,8 +292,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201503110852538_init.resx">
-      <DependentUpon>201503110852538_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201503130448082_init.resx">
+      <DependentUpon>201503130448082_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

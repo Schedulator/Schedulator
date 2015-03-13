@@ -42,7 +42,7 @@ namespace Schedulator.Models
         public DbSet<Section> Section { get; set; }
         public DbSet<Program> Program { get; set; }
         public DbSet<CourseSequence> CourseSequence { get; set; }
-
+        public DbSet<Prerequisite> Prerequisite { get; set; }
         public static ApplicationDbContext Create()
         {
 

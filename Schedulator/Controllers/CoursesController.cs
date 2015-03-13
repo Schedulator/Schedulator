@@ -10,13 +10,14 @@ using Schedulator.Models;
 
 namespace Schedulator.Controllers
 {
-    public class CoursesController : Controller
+    public class CoursesController : AsyncController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Courses
         public ActionResult Index()
         {
+            ViewData["Courses"] = db.Courses.ToList();
             return View(db.Courses.ToList());
         }
 
