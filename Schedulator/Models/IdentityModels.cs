@@ -23,6 +23,7 @@ namespace Schedulator.Models
             return userIdentity;
         }
         public virtual ICollection<Schedule> Schedules { get; set; }
+        public virtual Program Program { get; set; }
     }
   
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

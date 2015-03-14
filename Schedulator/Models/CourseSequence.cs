@@ -17,6 +17,7 @@ namespace Schedulator.Models
         public ElectiveType ElectiveType { get; set; }
         public virtual Program Program { get; set; }
         public virtual Course Course { get; set; }
+        public virtual CourseSequence ContainerSequence { get; set; }
         public virtual ICollection<CourseSequence> OtherOptions { get; set; }
     }
 }
