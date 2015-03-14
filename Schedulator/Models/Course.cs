@@ -16,5 +16,27 @@ namespace Schedulator.Models
         public virtual ICollection<Lecture> Lectures { get; set; }
         public virtual ICollection<Prerequisite> Prerequisites { get; set; }
 
+
+        public List<Prerequisite> MissingPrequisite( List<Enrollment> enrollments)
+        {
+            List<Prerequisite> missingPrequisite = new List<Prerequisite>();
+            foreach (Prerequisite prerequisite in Prerequisites)
+            {
+                bool enrollmentContainsPrereq = false;
+                foreach(Enrollment enrollment in enrollments)
+                {
+                    if ( prerequisite.Course == enrollment.Course )
+                    {
+                        enrollmentContainsPrereq = true;
+                        break;
+                    }
+                }
+                if (enrollmentContainsPrereq)
+                    enrollmentContainsPrereq = false;
+                else
+                    missingPrequisite.Add(prerequisite);
+            }
+            return missingPrequisite;
+        }
     }
 }
