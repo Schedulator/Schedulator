@@ -48,7 +48,13 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+        @Html.LabelFor(m => m.ProgramSelectViewModel.SelectedProgramId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.ProgramSelectViewModel.SelectedProgramId, Model.ProgramSelectViewModel.ProgramList)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>
     </div>

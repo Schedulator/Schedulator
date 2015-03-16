@@ -141,7 +141,9 @@ namespace Schedulator.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            ApplicationDbContext db = new ApplicationDbContext();
+            RegisterViewModel model = new RegisterViewModel { ProgramSelectViewModel = new ProgramSelectViewModel { programs = db.Program.ToList()} };
+            return View(model);
         }
 
         //
