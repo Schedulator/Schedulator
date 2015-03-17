@@ -4,20 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 
 namespace Schedulator.Controllers
 {
-    [Authorize]
-    public class HomeController : Controller
+    public class StudentScheduleController : Controller
     {
+        
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            if (User.IsInRole("Student"))
-                return View(db.Users.Find(User.Identity.GetUserId()));
-            else
-                return Redirect("ProgramDirector");
+            var schedule = db.Schedule.Where(t => t.ApplicationUser.FirstName=="Harley").FirstOrDefault();
+            db.Courses.ToList();
+            return View(schedule);
 
         }
     }

@@ -17,16 +17,37 @@
             <br />
             @Html.DisplayNameFor(model => model.LastName):
             @Html.DisplayFor(modelItem => modelItem.LastName)
+            <br />
+            @Html.DisplayNameFor(model => model.Program):
+            @Html.DisplayFor(modelItem => modelItem.Program)
         </p>
 
     </div>
     <div class="col-md-4">
         <h2>Academics</h2>
-        <p>COMP 248: A</p>
-        <p>COMP 249: A</p>
+        <ul class="list-group">
+            @foreach (var schedules in Model.Schedules)
+            {
+                foreach (var enrollments in schedules.Enrollments)
+                {
+                    <li class="list-group-item">
+                        @Html.DisplayFor(modelItem => enrollments.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Course.CourseNumber) 
+                        @Html.DisplayFor(model => enrollments.Grade)
+
+                    </li>
+                }
+
+            }
+        </ul>
+
     </div>
     <div class="col-md-4">
+        <button type="button" class="btn btn-primary">View Progression</button>
+        <button type="button" class="btn btn-primary">View Transcript</button>
+        <button type="button" class="btn btn-primary">View Course Sequence</button>
         <h2>Other info</h2>
-        <p>Stuff</p>
+        <p>Personal Stuff</p>
     </div>
+
+    
 </div>

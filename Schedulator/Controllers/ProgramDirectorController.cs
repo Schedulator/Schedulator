@@ -10,18 +10,18 @@ using Schedulator.Models;
 
 namespace Schedulator.Controllers
 {
-    public class CoursesController : AsyncController
+    [Authorize(Roles="Program Director")]
+    public class ProgramDirectorController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Courses
+        // GET: ProgramDirector
         public ActionResult Index()
         {
-            ViewData["Courses"] = db.Courses.ToList();
             return View(db.Courses.ToList());
         }
 
-        // GET: Courses/Details/5
+        // GET: ProgramDirector/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,13 +36,13 @@ namespace Schedulator.Controllers
             return View(course);
         }
 
-        // GET: Courses/Create
+        // GET: ProgramDirector/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: ProgramDirector/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -59,7 +59,7 @@ namespace Schedulator.Controllers
             return View(course);
         }
 
-        // GET: Courses/Edit/5
+        // GET: ProgramDirector/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -74,7 +74,7 @@ namespace Schedulator.Controllers
             return View(course);
         }
 
-        // POST: Courses/Edit/5
+        // POST: ProgramDirector/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -90,7 +90,7 @@ namespace Schedulator.Controllers
             return View(course);
         }
 
-        // GET: Courses/Delete/5
+        // GET: ProgramDirector/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -105,7 +105,7 @@ namespace Schedulator.Controllers
             return View(course);
         }
 
-        // POST: Courses/Delete/5
+        // POST: ProgramDirector/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

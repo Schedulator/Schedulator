@@ -10,108 +10,107 @@ using Schedulator.Models;
 
 namespace Schedulator.Controllers
 {
-    public class CoursesController : AsyncController
+    public class ProgramsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Courses
+        // GET: Programs
         public ActionResult Index()
         {
-            ViewData["Courses"] = db.Courses.ToList();
-            return View(db.Courses.ToList());
+            return View(db.Program.ToList());
         }
 
-        // GET: Courses/Details/5
+        // GET: Programs/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            Program program = db.Program.Find(id);
+            if (program == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(program);
         }
 
-        // GET: Courses/Create
+        // GET: Programs/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: Programs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseID,Title,CourseLetters,CourseNumber,SpecialNote")] Course course)
+        public ActionResult Create([Bind(Include = "ProgramId,ProgramName,CreditsRequirement")] Program program)
         {
             if (ModelState.IsValid)
             {
-                db.Courses.Add(course);
+                db.Program.Add(program);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(course);
+            return View(program);
         }
 
-        // GET: Courses/Edit/5
+        // GET: Programs/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            Program program = db.Program.Find(id);
+            if (program == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(program);
         }
 
-        // POST: Courses/Edit/5
+        // POST: Programs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CourseID,Title,CourseLetters,CourseNumber,SpecialNote")] Course course)
+        public ActionResult Edit([Bind(Include = "ProgramId,ProgramName,CreditsRequirement")] Program program)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
+                db.Entry(program).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(course);
+            return View(program);
         }
 
-        // GET: Courses/Delete/5
+        // GET: Programs/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            Program program = db.Program.Find(id);
+            if (program == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(program);
         }
 
-        // POST: Courses/Delete/5
+        // POST: Programs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Courses.Find(id);
-            db.Courses.Remove(course);
+            Program program = db.Program.Find(id);
+            db.Program.Remove(program);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

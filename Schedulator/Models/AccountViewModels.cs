@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+
 namespace Schedulator.Models
 {
     public class ExternalLoginConfirmationViewModel
@@ -87,6 +88,34 @@ namespace Schedulator.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Program Director")]
+        public bool ProgramDirector { get; set; }
+
+        [Display(Name = "Program")]
+        public int SelectedProgramId { get; set; }
+
+        public ProgramSelectViewModel ProgramSelectViewModel;
+
+    }
+    public class ProgramSelectViewModel
+    {
+        public List<Program> programs;
+        
+        [Display(Name = "Program")]
+        
+        public IEnumerable<System.Web.Mvc.SelectListItem> ProgramList
+        {
+            get {
+                foreach (Program program in programs)
+                    program.ProgramName = program.ProgramName + " - " + program.ProgramOption;
+
+
+                
+                return new System.Web.Mvc.SelectList(programs, "ProgramId", "ProgramName"); 
+            }
+        }
+
     }
 
     public class ResetPasswordViewModel

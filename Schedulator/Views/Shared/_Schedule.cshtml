@@ -1,0 +1,75 @@
+﻿@model Schedulator.Models.Schedule
+
+<style>
+    #scheduleblock {
+        border-radius: 10px;
+        border-style: solid;
+        border-color: white grey grey;
+        height: 1040px;
+        max-width :800px;
+        min-width : 500px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        z-index: -1;
+
+    }
+    #scheduleblockheader {
+        
+        background-color: grey;
+        text-align:center;
+        height: 20px;
+        width : 20%;
+        position: absolute;
+
+    }
+    #Lect {
+        vertical-align: middle;
+        border-color: cadetblue;
+        border-style: solid;
+        background-color: lightskyblue;
+        height: 20px;
+        width : 20%;
+        position: absolute;
+        border-radius: 10px;
+        z-index: -1;
+        
+    }
+    #Tut {
+        vertical-align: middle;
+        background-color: lightgreen;
+        border-color: cadetblue;
+        border-style: solid;
+        height: 20px;
+        width : 20%;
+        position: absolute;
+        border-radius: 10px;
+        z-index: -1;
+        
+    }
+    h1 {
+        color: white;
+        margin-left: 40px;
+    }
+</style>
+<div id="scheduleblock">
+    <div id="scheduleblockheader" style="left:0%">
+        Monday
+    </div>
+    <div id="scheduleblockheader" style="left:20%">
+        Tuesday
+    </div>
+    <div id="scheduleblockheader" style="left:40%">
+        Wednesday
+    </div>
+    <div id="scheduleblockheader" style="left:60%">
+        Thursday
+    </div>
+    <div id="scheduleblockheader" style="left:80%">
+        Friday
+    </div>
+        @foreach(var Enrollments in Model.Enrollments)
+        {
+           @Html.Raw(Enrollments.CreateDivBlock());
+        }
+</div>

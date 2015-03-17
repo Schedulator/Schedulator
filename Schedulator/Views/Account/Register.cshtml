@@ -42,7 +42,19 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+        @Html.LabelFor(m => m.ProgramDirector, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(m => m.ProgramDirector, new { @class = "col-md-2 control-label" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedProgramId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedProgramId, Model.ProgramSelectViewModel.ProgramList)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>
     </div>

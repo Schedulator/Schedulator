@@ -17,7 +17,7 @@ namespace Schedulator.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        private ApplicationDbContext db = new ApplicationDbContext();
         public AccountController()
         {
         }
@@ -76,10 +76,12 @@ namespace Schedulator.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
             switch (result)
             {
+                    
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                        return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -139,7 +141,9 @@ namespace Schedulator.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            RegisterViewModel model = new RegisterViewModel { ProgramSelectViewModel = new ProgramSelectViewModel { programs = db.Program.ToList()} };
+            model.SelectedProgramId = model.ProgramSelectViewModel.programs.FirstOrDefault().ProgramId;
+            return View(model);
         }
 
         //
@@ -151,19 +155,33 @@ namespace Schedulator.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName};
                 var result = await UserManager.CreateAsync(user, model.Password);
+                
                 if (result.Succeeded)
                 {
+                    if (model.ProgramDirector)
+                        UserManager.AddToRole(user.Id, "Program Director");
+                    else
+                        UserManager.AddToRole(user.Id, "Student");
+
+                    var program = db.Program.Where(n => n.ProgramId == model.SelectedProgramId).FirstOrDefault();
+
+                    UserManager.Users.Where(n => n.Email == model.Email).FirstOrDefault().Program = program;
+
+                    db.Users.Where(n => n.Email == model.Email).FirstOrDefault().Program = program;
+                    db.SaveChanges();
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home");
+                    
                 }
                 AddErrors(result);
             }
@@ -175,16 +193,15 @@ namespace Schedulator.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(int userId, string code)
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == default(int) || code == null)
+            if (userId == null || code == null)
             {
                 return View("Error");
             }
-
-            IdentityResult result = await UserManager.ConfirmEmailAsync(userId, code);
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        } 
+        }
 
         //
         // GET: /Account/ForgotPassword
@@ -289,7 +306,7 @@ namespace Schedulator.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == default(int))
+            if (userId == null)
             {
                 return View("Error");
             }
@@ -450,6 +467,7 @@ namespace Schedulator.Controllers
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
 

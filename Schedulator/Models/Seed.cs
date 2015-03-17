@@ -105,69 +105,90 @@ namespace Schedulator.Models
         }
         public void SeedDatabase()
         {
-            
-                var fallSemester = new Semester { Season = Season.Fall, SemesterStart = new DateTime(2014, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) };
-                var winterSemester = new Semester { Season = Season.Winter, SemesterStart = new DateTime(2015, 1, 7), SemesterEnd = new DateTime(2015, 5, 2) };
-                var summerOneSemester = new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2015, 5, 4), SemesterEnd = new DateTime(2015, 6, 23) };
-                var summerTwoSemester = new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2015, 6, 25), SemesterEnd = new DateTime(2015, 7, 19) };
+            ApplicationDbContext context = new ApplicationDbContext();
+            context.Enrollment.ToList().ForEach(s => context.Enrollment.Remove(s));
+            context.Section.ToList().ForEach(s => context.Section.Remove(s));
+            context.Schedule.ToList().ForEach(s => context.Schedule.Remove(s));
+            context.Labs.ToList().ForEach(s => context.Labs.Remove(s));
+            context.Tutorials.ToList().ForEach(s => context.Tutorials.Remove(s));
+            context.Lectures.ToList().ForEach(s => context.Lectures.Remove(s));
+            context.Courses.ToList().ForEach(s => context.Courses.Remove(s));
+            context.Semesters.ToList().ForEach(s => context.Semesters.Remove(s));
 
-                var courses = new List<Course>();
-                var lectures = new List<Lecture>();
-                var tutorials = new List<Tutorial>();
-                var labs = new List<Lab>();
-                var prerequisites = new List<Prerequisite>();
-               
-                foreach (var worksheet in Workbook.Worksheets(@"C:\Users\Harley\Desktop\Schedulator\Schedulator\SoftwareAndCompCourseList.xlsx"))
+
+            context.SaveChanges();
+
+            var fallSemester = new Semester { Season = Season.Fall, SemesterStart = new DateTime(2014, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) };
+            var winterSemester = new Semester { Season = Season.Winter, SemesterStart = new DateTime(2015, 1, 7), SemesterEnd = new DateTime(2015, 5, 2) };
+            var summerOneSemester = new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2015, 5, 4), SemesterEnd = new DateTime(2015, 6, 23) };
+            var summerTwoSemester = new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2015, 6, 25), SemesterEnd = new DateTime(2015, 7, 19) };
+
+            context.Semesters.Add(fallSemester);
+            context.Semesters.Add(winterSemester);
+            context.Semesters.Add(summerOneSemester);
+            context.Semesters.Add(summerTwoSemester);
+
+            var courses = new List<Course>();
+            var lectures = new List<Lecture>();
+            var tutorials = new List<Tutorial>();
+            var labs = new List<Lab>();
+            var prerequisites = new List<Prerequisite>();
+            var sections = new List<Section>();
+
+            foreach (var worksheet in Workbook.Worksheets(@"C:\Users\Harley\Desktop\Schedulator\Schedulator\SoftwareAndCompCourseList.xlsx"))
+            {
+                var row = worksheet.Rows;
+                int count = 0;
+
+                int max = row.Count();
+                while (count < row.Count())
                 {
-                    var row = worksheet.Rows;
-                    int count = 0;
-                    
-                    int max = row.Count();
-                    while (count < row.Count())
+                    string currentCell = row[count].Cells[0].Text;
 
+                    if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
-                        string currentCell = row[count].Cells[0].Text;
+                        courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").ToString(), CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").ToString()), Title = row[count].Cells[1].Text });
 
-                        if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
+                        System.Diagnostics.Debug.WriteLine(courses.LastOrDefault().CourseLetters + courses.LastOrDefault().CourseNumber);
+                        count++;
+                        if (count < row.Count() && row[count].Cells[0] != null && row[count].Cells[0].Text == "Prerequisite:")
                         {
-                            courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").Value, CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").Value), Title = row[count].Cells[1].Text });
-
-                            System.Diagnostics.Debug.WriteLine(courses.LastOrDefault().CourseLetters + courses.LastOrDefault().CourseNumber);
                             count++;
-                            if (count < row.Count() && row[count].Cells[0] != null && row[count].Cells[0].Text == "Prerequisite:")
+                        }
+                        if (count < row.Count() && row[count].Cells[0] != null && row[count].Cells[0].Text == "Special Note:")
+                        {
+                            courses.LastOrDefault().SpecialNote = row[count].Cells[1].Text;
+                            count++;
+                        }
+                        while (count < row.Count() && row[count].Cells[0] != null && (row[count].Cells[0].Text == "Fall" || row[count].Cells[0].Text == "Winter" || row[count].Cells[0].Text == "Summer"))
+                        {
+                            Semester temp = null;
+
+                            if (count < row.Count() && row[count].Cells[0].Text == "Fall")
                             {
+                                temp = fallSemester;
                                 count++;
                             }
-                            if (count < row.Count() && row[count].Cells[0] != null && row[count].Cells[0].Text == "Special Note:")
+                            else if (count < row.Count() && row[count].Cells[0].Text == "Winter")
                             {
-                                courses.LastOrDefault().SpecialNote = row[count].Cells[1].Text;
+                                temp = winterSemester;
                                 count++;
                             }
-                            while (count < row.Count() && row[count].Cells[0] != null && (row[count].Cells[0].Text == "Fall" || row[count].Cells[0].Text == "Winter" || row[count].Cells[0].Text == "Summer"))
+                            else if (count < row.Count() && row[count].Cells[0].Text == "Summer" && (Regex.IsMatch(row[count].Cells[1].Text, "May")))
                             {
-                                lectures.Add(new Lecture { Course = courses.LastOrDefault() });
-                                if (count < row.Count() && row[count].Cells[0].Text == "Fall")
-                                {
-                                    lectures.LastOrDefault().Semester = fallSemester;
-                                    count++;
-                                }
-                                else if (count < row.Count() && row[count].Cells[0].Text == "Winter")
-                                {
-                                    lectures.LastOrDefault().Semester = winterSemester;
-                                    count++;
-                                }
-                                else if (count < row.Count() && row[count].Cells[0].Text == "Summer" && (Regex.IsMatch(row[count].Cells[1].Text, "May")))
-                                {
-                                    lectures.LastOrDefault().Semester = summerOneSemester;
-                                    count++;
-                                }
-                                else if (count < row.Count() && row[count].Cells[0].Text == "Summer")
-                                {
-                                    lectures.LastOrDefault().Semester = summerTwoSemester;
-                                    count++;
-                                }
-                                else
-                                    count++;
+                                temp = summerOneSemester;
+                                count++;
+                            }
+                            else if (count < row.Count() && row[count].Cells[0].Text == "Summer")
+                            {
+                                temp = summerTwoSemester;
+                                count++;
+                            }
+                            else
+                                count++;
+                            while (count < row.Count() && row[count].Cells[1] != null && (Regex.IsMatch(row[count].Cells[1].Text, @"Lect\s[A-Z]{1,2}") || row[count].Cells[1].Text == "UgradNSched IE"))
+                            {
+                                lectures.Add(new Lecture { Course = courses.LastOrDefault(), Semester = temp });
                                 if (count < row.Count() && row[count].Cells[1] != null && (row[count].Cells[1].Text == "UgradNSched IE"))
                                 {
                                     lectures.LastOrDefault().LectureLetter = "UgradNSched IE";
@@ -193,7 +214,7 @@ namespace Schedulator.Models
 
                                     while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Tut\s[A-Z]{1,2}"))
                                     {
-                                        tutorials.Add(new Tutorial { Lecture = lectures.LastOrDefault(), TutorialLetter = Regex.Replace(row[count].Cells[1].Text, @"Tut\s", "")});
+                                        tutorials.Add(new Tutorial { Lecture = lectures.LastOrDefault(), TutorialLetter = Regex.Replace(row[count].Cells[1].Text, @"Tut\s", "") });
                                         timeToSet = ParseTime(row[count].Cells[2].Text);
 
                                         tutorials.LastOrDefault().StartTime = timeToSet.startTime;
@@ -203,10 +224,11 @@ namespace Schedulator.Models
                                         tutorials.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
 
                                         count++;
-
+                                        if (!(count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}")))
+                                            sections.Add(new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault() });
                                         while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
                                         {
-                                            labs.Add(new Lab { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "")});
+                                            labs.Add(new Lab { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "") });
                                             timeToSet = ParseTime(row[count].Cells[2].Text);
 
                                             labs.LastOrDefault().StartTime = timeToSet.startTime;
@@ -216,6 +238,7 @@ namespace Schedulator.Models
                                             labs.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
 
                                             count++;
+                                            sections.Add(new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), Lab = labs.LastOrDefault() });
                                         }
                                     }
                                     while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
@@ -230,18 +253,41 @@ namespace Schedulator.Models
                                         labs.LastOrDefault().ClassRoomNumber = row[count].Cells[3].Text;
 
                                         count++;
+                                        sections.Add(new Section { Lecture = lectures.LastOrDefault(), Lab = labs.LastOrDefault() });
                                     }
 
                                 }
                             }
-
                         }
-                        else
-                            count++;
+
+
                     }
+                    else
+                        count++;
                 }
-                foreach (Course course in courses)
-                    Console.WriteLine(course.CourseLetters + course.CourseNumber);
+
+            }
+            courses.ForEach(p => context.Courses.Add(p));
+            lectures.ForEach(p => context.Lectures.Add(p));
+            tutorials.ForEach(p => context.Tutorials.Add(p));
+            labs.ForEach(p => context.Labs.Add(p));
+            sections.ForEach(p => context.Section.Add(p));
+
+            Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harley").FirstOrDefault(), Semester = fallSemester };
+            List<Enrollment> enrollments = new List<Enrollment>();
+
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "QA" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = sections.Where( t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA" ).FirstOrDefault(), Grade = "B+" });
+
+            context.Schedule.Add(schedule);
+
+            enrollments.ForEach(p => context.Enrollment.Add(p));
+
+
+            
+         
             }
 
     }
