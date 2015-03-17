@@ -7,5 +7,6 @@ namespace Schedulator.Models
 {
     public class ProgramDirector
     {
+
     }
 }

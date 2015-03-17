@@ -171,6 +171,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProgramDirectorController.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
+    <Compile Include="Controllers\ProgramsManagementController.cs" />
     <Compile Include="Controllers\ScheduleGeneratorController.cs" />
     <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="Controllers\StudentScheduleController.cs" />
@@ -272,6 +273,11 @@
     <Content Include="Views\ProgramDirector\Details.cshtml" />
     <Content Include="Views\ProgramDirector\Edit.cshtml" />
     <Content Include="Views\ProgramDirector\Index.cshtml" />
+    <Content Include="Views\ProgramsManagement\Create.cshtml" />
+    <Content Include="Views\ProgramsManagement\Delete.cshtml" />
+    <Content Include="Views\ProgramsManagement\Details.cshtml" />
+    <Content Include="Views\ProgramsManagement\Edit.cshtml" />
+    <Content Include="Views\ProgramsManagement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
