@@ -92,6 +92,9 @@ namespace Schedulator.Models
         [Display(Name = "Program Director")]
         public bool ProgramDirector { get; set; }
 
+        [Display(Name = "Program")]
+        public int SelectedProgramId { get; set; }
+
         public ProgramSelectViewModel ProgramSelectViewModel;
 
     }
@@ -100,18 +103,19 @@ namespace Schedulator.Models
         public List<Program> programs;
         
         [Display(Name = "Program")]
-        public int SelectedProgramId { get; set; }
-
+        
         public IEnumerable<System.Web.Mvc.SelectListItem> ProgramList
         {
             get {
                 foreach (Program program in programs)
                     program.ProgramName = program.ProgramName + " - " + program.ProgramOption;
-                
+
+
                 
                 return new System.Web.Mvc.SelectList(programs, "ProgramId", "ProgramName"); 
             }
         }
+
     }
 
     public class ResetPasswordViewModel

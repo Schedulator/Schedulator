@@ -48,9 +48,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.ProgramSelectViewModel.SelectedProgramId, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.SelectedProgramId, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.ProgramSelectViewModel.SelectedProgramId, Model.ProgramSelectViewModel.ProgramList)
+            @Html.DropDownListFor(m => m.SelectedProgramId, Model.ProgramSelectViewModel.ProgramList)
         </div>
     </div>
     <div class="form-group">

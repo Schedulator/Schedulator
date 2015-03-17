@@ -17,7 +17,7 @@ namespace Schedulator.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        private ApplicationDbContext db = new ApplicationDbContext();
         public AccountController()
         {
         }
@@ -141,8 +141,8 @@ namespace Schedulator.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ApplicationDbContext db = new ApplicationDbContext();
             RegisterViewModel model = new RegisterViewModel { ProgramSelectViewModel = new ProgramSelectViewModel { programs = db.Program.ToList()} };
+            model.SelectedProgramId = model.ProgramSelectViewModel.programs.FirstOrDefault().ProgramId;
             return View(model);
         }
 
@@ -165,6 +165,12 @@ namespace Schedulator.Controllers
                     else
                         UserManager.AddToRole(user.Id, "Student");
 
+                    var program = db.Program.Where(n => n.ProgramId == model.SelectedProgramId).FirstOrDefault();
+
+                    UserManager.Users.Where(n => n.Email == model.Email).FirstOrDefault().Program = program;
+
+                    db.Users.Where(n => n.Email == model.Email).FirstOrDefault().Program = program;
+                    db.SaveChanges();
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
 
