@@ -186,7 +186,8 @@ namespace Schedulator.Controllers
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
+            model = new RegisterViewModel { ProgramSelectViewModel = new ProgramSelectViewModel { programs = db.Program.ToList() } };
+            model.SelectedProgramId = model.ProgramSelectViewModel.programs.FirstOrDefault().ProgramId;
             return View(model);
         }
 
