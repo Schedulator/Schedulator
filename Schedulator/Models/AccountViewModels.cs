@@ -108,7 +108,7 @@ namespace Schedulator.Models
         {
             get {
                 foreach (Program program in programs)
-                    program.ProgramName = program.ProgramName + " - " + program.ProgramOption;
+                    program.ProgramName = program.ProgramName + " - " + program.ProgramOption + " - " + program.ProgramSemester;
 
 
                 
