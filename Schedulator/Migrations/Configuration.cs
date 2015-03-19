@@ -32,11 +32,16 @@ namespace Schedulator.Migrations
                 System.Diagnostics.Debugger.Launch();
             string currentDirectoryUrl = Directory.GetCurrentDirectory();
 
-            
-            Console.WriteLine(currentDirectoryUrl);
+
+            //Console.WriteLine(currentDirectoryUrl);
 
             context.CourseSequence.ToList().ForEach(s => context.CourseSequence.Remove(s));
             context.Program.ToList().ForEach(s => context.Program.Remove(s));
+            foreach (ApplicationUser user in context.Users.ToList())
+            {
+                user.Program = null;
+                context.Users.AddOrUpdate(user);
+            }
             context.Prerequisite.ToList().ForEach(s => context.Prerequisite.Remove(s));
             context.Enrollment.ToList().ForEach(s => context.Enrollment.Remove(s));
             context.Section.ToList().ForEach(s => context.Section.Remove(s));
@@ -189,7 +194,7 @@ namespace Schedulator.Migrations
 
                                             count++;
                                             sections.Add(new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), Lab = labs.LastOrDefault() });
-                                           // lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
+                                            // lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
                                         }
                                     }
                                     while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
@@ -205,7 +210,7 @@ namespace Schedulator.Migrations
 
                                         count++;
                                         sections.Add(new Section { Lecture = lectures.LastOrDefault(), Lab = labs.LastOrDefault() });
-                                      //  lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
+                                        //  lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
                                     }
 
                                 }
@@ -242,21 +247,32 @@ namespace Schedulator.Migrations
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
 
             AddPrerequisite(courses).ForEach(p => context.Prerequisite.Add(p));
+            List<Program> programs = AddProgramAndCourseSequence(@"C:\Users\Harley\Desktop\Schedulator\Schedulator\Programs.xlsx", context.Courses.ToList());
 
-           // List<Program> programs = AddProgramAndCourseSequence(@"C:\Users\Harley\Desktop\Schedulator\Schedulator\Programs.xlsx", context.Courses.ToList());
-          //  programs.ForEach(p => context.Program.Add(p));
-           // programs.ForEach(p => context.CourseSequence.AddRange(p.courseSequences));
+            programs.ForEach(p => context.Program.Add(p));
+            programs.ForEach(p => context.CourseSequence.AddRange(p.CourseSequences));
+
+            foreach (ApplicationUser user in context.Users.ToList())
+            {
+                user.Program = programs.First();
+                context.Users.AddOrUpdate(user);
+            }
+
             context.SaveChanges();
         }
         List<Program> AddProgramAndCourseSequence (string url, List<Course> courses)
         {
             List<Program> programs = new List<Program>();
-            List<CourseSequence> courseSequences = new List<CourseSequence>();
+            
+            int counter = 0;
             foreach (var worksheet in Workbook.Worksheets(url))
             {
+                List<CourseSequence> courseSequences = new List<CourseSequence>();
+                counter++;
                 int count = 1;
                 var rows = worksheet.Rows;
-                programs.Add(new Program { ProgramName = rows[0].Cells[0].Text, ProgramOption = rows[0].Cells[1].Text, CreditsRequirement = Convert.ToInt32(rows[0].Cells[2].Text) });
+                programs.Add(new Program { ProgramName = rows[0].Cells[0].Text, ProgramOption = rows[0].Cells[1].Text, ProgramSemester = rows[0].Cells[2].Text, CreditsRequirement = Convert.ToInt32(rows[0].Cells[3].Text) });
+                Console.WriteLine(rows[0].Cells[0].Text + " " + rows[0].Cells[1].Text + " " + rows[0].Cells[2].Text);
                 Season season = 0;
                 int year = 0;
                 while (count < rows.Count())
@@ -273,7 +289,7 @@ namespace Schedulator.Migrations
                     {
                         
                         List<CourseSequence> otherCourseOptions = new List<CourseSequence>();
-                        otherCourseOptions.Add(new CourseSequence { Program = programs.LastOrDefault(), OtherOptions = new List<CourseSequence>(), Year = year, Season = season });
+                        otherCourseOptions.Add(new CourseSequence { Program = programs.LastOrDefault(), OtherOptions = new List<CourseSequence>(),  Year = year, Season = season });
                         ElectiveType electiveType = ElectiveType.None;
                        // if (currentCellText.Contains("Elective"))
                            // electiveType = ElectiveType.TechnicalElective;
@@ -281,8 +297,18 @@ namespace Schedulator.Migrations
                         string mergeRows = "";
                         while (Regex.IsMatch(currentCellText,@"([A-Z]{4}\s\d{3} or|Elective)"))
                         {
-                            mergeRows += Regex.Match(currentCellText, @"([A-Z]{4}\s\d{3} or|Elective)").ToString();
-                            currentCellText = rows[++count].Cells[0].Text;
+                            if (Regex.IsMatch(currentCellText, @"([A-Z]{4}\s\d{3} or Elective)"))
+                            {
+                                mergeRows += Regex.Match(currentCellText, @"[A-Z]{4}\s\d{3} or").ToString();
+                                mergeRows += "Elective";
+                                count++;
+                                break;
+                            }
+                            else
+                            {
+                                mergeRows += Regex.Match(currentCellText, @"([A-Z]{4}\s\d{3} or|Elective)").ToString();
+                                currentCellText = rows[++count].Cells[0].Text;
+                            }
                         }
 
                         foreach (Match match in Regex.Matches(mergeRows, @"([A-Z]{4}\s\d{3}|Elective)"))
@@ -293,6 +319,7 @@ namespace Schedulator.Migrations
                             else
                                 temp = new CourseSequence { Program = programs.LastOrDefault(), ElectiveType = ElectiveType.TechnicalElective, Year = year, Season = season};
                             otherCourseOptions.Add(temp);
+                            otherCourseOptions.First().OtherOptions.Add(temp);
                             temp.ContainerSequence = otherCourseOptions.First();
                         }
                         courseSequences.AddRange(otherCourseOptions);
@@ -306,8 +333,9 @@ namespace Schedulator.Migrations
                     else if (currentCellText.Contains("Elective") || currentCellText.Contains("Technical Elective"))
                         courseSequences.Add(new CourseSequence { Program = programs.LastOrDefault(), ElectiveType = Models.ElectiveType.TechnicalElective, Year = year, Season = season });
                     count++;
+
                 }
-                programs.LastOrDefault().courseSequences = courseSequences;
+                programs.LastOrDefault().CourseSequences = courseSequences;
             }
             return programs;
         }

@@ -35,8 +35,6 @@ namespace Schedulator.Models
                 AddUserPreferenceCourses(courses, enrollments, program);
                 GenerateAllSchedulesUsingUserPreferenceCourses();
             }
-            else
-                AddUsersCourseSequence(courses, enrollments, program);
 
             
         }
@@ -186,47 +184,7 @@ namespace Schedulator.Models
             }
 
         }
-        public void AddUsersCourseSequence(List<Course> courses, List<Enrollment> enrollments, Program program)
-        {
-             foreach (CourseSequence courseSequence in program.courseSequences.OrderBy(p => p.CourseSequenceId))
-             {
-                 foreach (Enrollment enrollment in enrollments)
-                 {
-                     if (enrollment.Course == courseSequence.Course) // Check if student has taken the course already
-                         break;
-                     else if (courseSequence.Course.MissingPrequisite(enrollments).Count == 0) // if the student hasn't taken the course already check that he has prereqs
-                     {
-                         if (SecondaryCourseSequencesToTake.Count == 0)
-                             MainCourseSequencesToTake.Add(courseSequence);
-                         else
-                             SecondaryCourseSequencesToTake.Add(courseSequence);
-                     }
-                 }
-                 if (MainCourseSequencesToTake.Count >= 5 && SecondaryCourseSequencesToTake.Count == 0) // 
-                 {
-                     Season season = Season.Fall;
-                     int year = 0;
-                     foreach (CourseSequence courseSequenceSameSemester in MainCourseSequencesToTake)
-                     {
-                         if (year != 0 && courseSequenceSameSemester.Season != season && courseSequenceSameSemester.Year != year) // Need to check if all 5 course sequences are in the same semester, if it's not the case then the student is off sequence and we must adjust
-                         {
-                             MessageToUser = "Please note that you are not fully on Sequence for your Program and your generated schedules have that factored in";
-                             MainCourseSequencesToTake.Remove(courseSequenceSameSemester);
-                             SecondaryCourseSequencesToTake.Add(courseSequenceSameSemester);
-                         }
-                         else if (SecondaryCourseSequencesToTake.Count > 0) // Remove the course sequences we added earlier to secondary 
-                         {
-                             MainCourseSequencesToTake.Remove(courseSequenceSameSemester);
-                             SecondaryCourseSequencesToTake.Add(courseSequenceSameSemester);
-                         }
-                         season = courseSequenceSameSemester.Season;
-                         year = courseSequenceSameSemester.Year;
-                     }
-                 }
-                 else if (SecondaryCourseSequencesToTake.Count >= 5)
-                     break;
-             }
-        }
+ 
 
 
         void GetAllValidSectionCombination(List<List<Section>> keys, int index, List<Section> values, List<List<Section>> sectionsLists)
