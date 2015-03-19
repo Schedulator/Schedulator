@@ -12,8 +12,7 @@ namespace Schedulator.Controllers
         // GET: Seed
         public ActionResult Index()
         {
-            Seed seed = new Seed();
-            seed.SeedDatabase();
+
             return View();
         }
     }

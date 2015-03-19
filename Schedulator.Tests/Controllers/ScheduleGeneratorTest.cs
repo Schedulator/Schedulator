@@ -11,13 +11,24 @@ namespace Schedulator.Tests.Controllers
     public class ScheduleGeneratorTest
     {
         [TestMethod]
-        public void ScheduleGenerate()
+        public void ScheduleGenerateWithStudentManuallyAddedCourses()
         {
             List<Course> course = new List<Course>();
-            
+
             ApplicationDbContext db = new ApplicationDbContext();
-            ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = new Preference { UseCourseSequence = true } };
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.ToList());
+            
+            Preference preference = new Preference { UseCourseSequence = false, Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() };
+            List<Course> courses = db.Courses.ToList();
+            preference.Courses = new List<Course>();
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 232 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 248 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 201 && n.CourseLetters == "ENGR").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 213 && n.CourseLetters == "ENGR").FirstOrDefault());
+            ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
+
+            Program program = db.Program.FirstOrDefault();
+            
+            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.ToList(), program);
         }
     }
 }

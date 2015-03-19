@@ -79,23 +79,24 @@ namespace Schedulator.Models
                          + "</div>";
             return htmlDivString;
         }
-        private int FindHorizontalBlockLocation (string day)
+        private int FindHorizontalBlockLocation (Schedulator.Models.TimeBlock.day day)
         {
-            switch (day)
-            {
-                case "M":
-                    return 0;
-                case "T":
-                    return 20;
-                case "W":
-                    return 40;
-                case "J":
-                    return 60;
-                case "F":
-                    return 80;
+            return (int)day * 20;
+            //switch (day)
+            //{
+            //    case 0:
+            //        return 0;
+            //    case 1:
+            //        return 20;
+            //    case :
+            //        return 40;
+            //    case "J":
+            //        return 60;
+            //    case "F":
+            //        return 80;
                     
-            }
-            return 0;
+            //}
+            //return 0;
         }
     }
 

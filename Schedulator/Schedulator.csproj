@@ -197,6 +197,7 @@
     <Compile Include="Models\Seed.cs" />
     <Compile Include="Models\Semester.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\TimeBlock.cs" />
     <Compile Include="Models\Tutorial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

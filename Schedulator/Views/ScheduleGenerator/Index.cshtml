@@ -49,6 +49,10 @@
         </div>
     </div>
 }
+@foreach( Schedulator.Models.Schedule schedule in Model.Schedules )
+{ 
+    @Html.Partial("_Schedule", schedule)
+}
 
 
 
