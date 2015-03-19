@@ -11,6 +11,7 @@ namespace Schedulator.Models
         public string ProgramName { get; set; }
         public string ProgramOption { get; set; }
         public int CreditsRequirement { get; set; }
+        public Season Season { get; set; }
 
         public virtual ICollection<CourseSequence> courseSequences { get; set; }
     }

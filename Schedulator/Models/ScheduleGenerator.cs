@@ -8,25 +8,170 @@ namespace Schedulator.Models
     public class ScheduleGenerator
     {
         public Preference Preference { get; set; }
-        public ICollection<Schedule> Schedules { get; set; }
-        public ICollection<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
-        
+        public List<Schedule> Schedules { get; set; }
+        public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
+        public string MessageToUser = "";
 
+        private List<Course> CoursesStudentWantAndCanTake = new List<Course>();
+        private List<CourseSequence> MainCourseSequencesToTake = new List<CourseSequence>();
+        private List<CourseSequence> SecondaryCourseSequencesToTake = new List<CourseSequence>();
+        public class ScheduleInformation
+        {
+            public Schedule Schedule { get; set; }
+            private int CourseCounter { get; set; }
+            public bool Recommended { get; set; }
+
+        }
         public class PrequisitesStudentNeedsForCourse
         {
             public Course Course { get; set; }
-            public ICollection<Prerequisite> PrequisitesStudentNeeds { get; set; }
+            public List<Prerequisite> PrequisitesStudentNeeds { get; set; }
         }
         public void GenerateSchedules(List<Course> courses, List<Enrollment> enrollments, Program program)
         {
-            List<Course> coursesStudentCanTake = new List<Course>();
-
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
-            AddUserPreferenceCourses(courses, enrollments, program, coursesStudentCanTake);
+            if (!Preference.UseCourseSequence)
+            {
+                AddUserPreferenceCourses(courses, enrollments, program);
+                GenerateAllSchedulesUsingUserPreferenceCourses();
+            }
+            else
+                AddUsersCourseSequence(courses, enrollments, program);
+
+            
+        }
+        public void GenerateAllSchedulesUsingUserPreferenceCourses()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+          
+            List<List<Section>> sectionsListMaster = new List<List<Section>>();
+            if ( Preference.StartTime == 0 && Preference.EndTime == 0)
+                foreach (Course course in CoursesStudentWantAndCanTake)
+                {
+                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID).ToList());
+                }
+            else
+            foreach (Course course in CoursesStudentWantAndCanTake)
+                sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == course
+                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
+                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
+                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
+
+            List<List<Section>>  sectionList = new List<List<Section>>();
+            GetAllValidSectionCombination(sectionsListMaster, 0, new List<Section>(), sectionList);
+            Schedules = new List<Schedule>();
+            foreach(List<Section> sectionsForSchedule in sectionList )
+            {
+                Schedules.Add(new Schedule {Enrollments = new List<Enrollment>(), Semester = Preference.Semester });
+                foreach( Section sectionForSchedule in sectionsForSchedule)
+                {
+                    Schedules.LastOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault() });
+                }
+            }
+         
+
+
 
 
         }
-        public List<Course> AddUserPreferenceCourses(List<Course> courses, List<Enrollment> enrollments, Program program, List<Course> coursesStudentCanTake)
+        public void GenerateAllSchedules()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<Section> sectionsStudentWantAndCanTake = new List<Section>();
+            List<Section> sections = new List<Section>();
+            foreach (Course course in CoursesStudentWantAndCanTake)
+                sectionsStudentWantAndCanTake.AddRange(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == course
+                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
+                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
+                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
+            foreach (CourseSequence courseSequence in MainCourseSequencesToTake)
+                sections.AddRange(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == courseSequence.Course
+                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
+                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
+                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
+            foreach (CourseSequence courseSequence in SecondaryCourseSequencesToTake)
+                sections.AddRange(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == courseSequence.Course
+                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
+                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
+                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
+
+            List<ScheduleInformation> mainEnrollments = new List<ScheduleInformation>();
+            List<List<ScheduleInformation>> studentsPreferedEnrollmentsList = new List<List<ScheduleInformation>>();
+            List<ScheduleInformation> secondaryEnrollments = new List<ScheduleInformation>();
+
+            List<List<Section>> sectionsListMaster = new List<List<Section>>();
+            foreach ( Course course in CoursesStudentWantAndCanTake)
+            {
+                sectionsListMaster.Add(sectionsStudentWantAndCanTake.Where(n => n.Lecture.Course == course).ToList());
+            }
+            
+          //  IEnumerable<List<Section>> sectionsList = 
+
+            //studentsPreferedEnrollmentsList.Add(new List<Enrollment>());
+
+            //if ( mainEnrollments)
+
+        }
+        public class HoldStartAndEndTime
+        {
+            public double StartTime;
+            public double EndTime;
+            public Schedulator.Models.TimeBlock.day FirstDay;
+            public Schedulator.Models.TimeBlock.day SecondDay;
+        }
+        public bool CheckIfTimeConflict (List<Section> sections, Section sectionToAdd)
+        {
+            
+            List<HoldStartAndEndTime> sectionToAddTimes = new List<HoldStartAndEndTime>() { 
+                new HoldStartAndEndTime { StartTime = sectionToAdd.Lecture.StartTime, EndTime = sectionToAdd.Lecture.EndTime, FirstDay = sectionToAdd.Lecture.FirstDay, SecondDay = sectionToAdd.Lecture.SecondDay}};
+                if (sectionToAdd.Tutorial != null )
+                    sectionToAddTimes.Add(new HoldStartAndEndTime { StartTime = sectionToAdd.Tutorial.StartTime, EndTime = sectionToAdd.Tutorial.EndTime, FirstDay = sectionToAdd.Tutorial.FirstDay, SecondDay = sectionToAdd.Tutorial.SecondDay});
+                if (sectionToAdd.Lab != null)    
+                    sectionToAddTimes.Add(new HoldStartAndEndTime { StartTime = sectionToAdd.Lab.StartTime, EndTime = sectionToAdd.Lab.EndTime, FirstDay = sectionToAdd.Lab.FirstDay, SecondDay = sectionToAdd.Lab.SecondDay});
+            
+            foreach(Section section in sections)
+            {
+                List<HoldStartAndEndTime> sectionTimes = new List<HoldStartAndEndTime>(){
+                    new HoldStartAndEndTime { StartTime = section.Lecture.StartTime, EndTime = section.Lecture.EndTime, FirstDay = section.Lecture.FirstDay, SecondDay = section.Lecture.SecondDay}};
+                if (section.Tutorial != null)
+                    sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Tutorial.StartTime, EndTime = section.Tutorial.EndTime, FirstDay = section.Tutorial.FirstDay, SecondDay = section.Tutorial.SecondDay });
+                if (sectionToAdd.Lab != null)
+                    sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Lab.StartTime, EndTime = section.Lab.EndTime, FirstDay = section.Lab.FirstDay, SecondDay = section.Lab.SecondDay });
+                
+                foreach (HoldStartAndEndTime sectionToAddTime in sectionToAddTimes)
+                {
+                    foreach(HoldStartAndEndTime sectionTime in sectionTimes)
+                    {
+                        if (CheckIfSameDays(sectionToAddTime.FirstDay, sectionToAddTime.SecondDay, sectionTime.FirstDay, sectionTime.SecondDay) && CheckIfTimeOverlap(sectionToAddTime.StartTime, sectionToAddTime.EndTime, sectionTime.StartTime, sectionTime.EndTime))
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public bool CheckIfSameDays(Schedulator.Models.TimeBlock.day firstDay, Schedulator.Models.TimeBlock.day secondDay, Schedulator.Models.TimeBlock.day secondFirstDay, Schedulator.Models.TimeBlock.day secondSecondDay)
+        {
+            if (firstDay == secondFirstDay || (secondSecondDay != TimeBlock.day.NONE && firstDay == secondSecondDay))
+                return true;
+            else if (secondDay != TimeBlock.day.NONE && (secondDay == secondFirstDay || secondDay == secondSecondDay))
+                return true;
+            else
+                return false;
+        }
+        public bool CheckIfTimeOverlap (double startTime, double endTime, double secondStartTime, double secondEndTime)
+        {
+            if (secondStartTime >= startTime && secondStartTime < endTime)
+                return true;
+            else if (secondEndTime > startTime && secondEndTime <= endTime)
+                return true;
+            else if (startTime >= secondStartTime && startTime < secondEndTime)
+                return true;
+            else if (endTime > startTime && endTime <= secondEndTime)
+                return true;
+            else
+                return false;
+        }
+        public void AddUserPreferenceCourses(List<Course> courses, List<Enrollment> enrollments, Program program)
         {
             if (Preference.Courses.Count > 0) // 
             {
@@ -34,35 +179,77 @@ namespace Schedulator.Models
                 {
                     List<Prerequisite> prerequisitesStudentNeeds = course.MissingPrequisite(enrollments);
                     if (prerequisitesStudentNeeds.Count == 0) // Check if student has all prerquisite for the course they want to add
-                        coursesStudentCanTake.Add(course);
+                        CoursesStudentWantAndCanTake.Add(course);
                     else // If they don't then add it to class so we can tell the user what course they can't take and what prerequisites they need
                         PrequisitesStudentNeedsForCourses.Add(new PrequisitesStudentNeedsForCourse { Course = course, PrequisitesStudentNeeds = prerequisitesStudentNeeds });
                 }
             }
-            return coursesStudentCanTake;
+
         }
-        public void AddUsersCourseSequence(List<Course> courses, List<Enrollment> enrollments, Program program, List<Course> coursesStudentCanTake)
+        public void AddUsersCourseSequence(List<Course> courses, List<Enrollment> enrollments, Program program)
         {
-            if (Preference.UseCourseSequence) // Generate from Program sequence passed
+             foreach (CourseSequence courseSequence in program.courseSequences.OrderBy(p => p.CourseSequenceId))
+             {
+                 foreach (Enrollment enrollment in enrollments)
+                 {
+                     if (enrollment.Course == courseSequence.Course) // Check if student has taken the course already
+                         break;
+                     else if (courseSequence.Course.MissingPrequisite(enrollments).Count == 0) // if the student hasn't taken the course already check that he has prereqs
+                     {
+                         if (SecondaryCourseSequencesToTake.Count == 0)
+                             MainCourseSequencesToTake.Add(courseSequence);
+                         else
+                             SecondaryCourseSequencesToTake.Add(courseSequence);
+                     }
+                 }
+                 if (MainCourseSequencesToTake.Count >= 5 && SecondaryCourseSequencesToTake.Count == 0) // 
+                 {
+                     Season season = Season.Fall;
+                     int year = 0;
+                     foreach (CourseSequence courseSequenceSameSemester in MainCourseSequencesToTake)
+                     {
+                         if (year != 0 && courseSequenceSameSemester.Season != season && courseSequenceSameSemester.Year != year) // Need to check if all 5 course sequences are in the same semester, if it's not the case then the student is off sequence and we must adjust
+                         {
+                             MessageToUser = "Please note that you are not fully on Sequence for your Program and your generated schedules have that factored in";
+                             MainCourseSequencesToTake.Remove(courseSequenceSameSemester);
+                             SecondaryCourseSequencesToTake.Add(courseSequenceSameSemester);
+                         }
+                         else if (SecondaryCourseSequencesToTake.Count > 0) // Remove the course sequences we added earlier to secondary 
+                         {
+                             MainCourseSequencesToTake.Remove(courseSequenceSameSemester);
+                             SecondaryCourseSequencesToTake.Add(courseSequenceSameSemester);
+                         }
+                         season = courseSequenceSameSemester.Season;
+                         year = courseSequenceSameSemester.Year;
+                     }
+                 }
+                 else if (SecondaryCourseSequencesToTake.Count >= 5)
+                     break;
+             }
+        }
+
+
+        void GetAllValidSectionCombination(List<List<Section>> keys, int index, List<Section> values, List<List<Section>> sectionsLists)
+        {
+            List<Section> key = keys[index];
+            List<List<Section>> lists = new List<List<Section>>();
+            foreach (Section section in key)
             {
-                List<CourseSequence> courseSequenceToTake = new List<CourseSequence>();
-                foreach (CourseSequence courseSequence in program.courseSequences.OrderBy(p => p.CourseSequenceId))
+                if (!CheckIfTimeConflict(values.GetRange(0,index), section))
                 {
-                    foreach (Enrollment enrollment in enrollments)
+                    if (values.Count() == index)
+                        values.Add(section);
+                    else
+                        values[index] = (section);
+
+                    if (index < keys.Count() - 1)
                     {
-                        if (enrollment.Course == courseSequence.Course) // Check if student has taken the course already
-                            break;
-                        else if (courseSequence.Course.MissingPrequisite(enrollments).Count == 0) // if the student hasn't taken the course already check that he has prereqs
-                            courseSequenceToTake.Add(courseSequence);
-                        if (courseSequenceToTake.Count >= 5)
-                        {
-                            foreach (CourseSequence courseSequenceSameSemester in courseSequenceToTake)
-                            {
-
-                            }
-                        }
+                        GetAllValidSectionCombination(keys, index + 1, values, sectionsLists);
                     }
-
+                    else
+                    {
+                        sectionsLists.Add(values.ToList()); // Clone the array;
+                    }
                 }
             }
         }
