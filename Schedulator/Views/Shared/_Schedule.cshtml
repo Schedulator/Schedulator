@@ -1,10 +1,8 @@
 ﻿@model Schedulator.Models.Schedule
-
 <table width="500" border="1" cellpadding="0" cellspacing="0" bordercolor="#CCCCCC" bgcolor="#FFFFFF" class="schedule">
     <tbody>
         <tr><td colspan="6">@Model.Semester.Season @Model.Semester.SemesterStart.ToString("yyyy")</td></tr>
         <tr><td id="days">Time:</td><td id="days">Mon</td><td id="days">Tue</td><td id="days">Wed</td><td id="days">Thu</td><td id="days">Fri</td></tr>
-        @Html.Raw(Model.RenderSchedule());
+        @Html.Raw(Model.RenderSchedule())
     </tbody>
-
 </table>

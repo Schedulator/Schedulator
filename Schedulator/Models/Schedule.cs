@@ -117,7 +117,7 @@ namespace Schedulator.Models
         public string GetBlockHtml()
         {
             if (RenderType == BlockRenderType.EMPTY)
-                return "<td>&nbsp;</td>";
+                return "<td>&nbsp</td>";
             else if (RenderType == BlockRenderType.DATA)
                 return "<td id =\"" + BlockType + "\" rowspan=\"" + RowSpawn + "\"  style=\"cursor:pointer;\" tilte=\"Test\">" + BlockLetters + "<br>" + BlockNumber + "<br>" + BlockType + "</td>";
             else
