@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Schedulator.Controllers
 {
+    [Authorize]
     public class StudentScheduleController : Controller
     {
         

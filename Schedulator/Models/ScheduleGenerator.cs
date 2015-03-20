@@ -10,62 +10,60 @@ namespace Schedulator.Models
         public Preference Preference { get; set; }
         public List<List<Schedule>> Schedules { get; set; }
         public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
-        public string MessageToUser = "";
 
         private List<Course> CoursesStudentWantAndCanTake = new List<Course>();
-        private List<CourseSequence> MainCourseSequencesToTake = new List<CourseSequence>();
-        private List<CourseSequence> SecondaryCourseSequencesToTake = new List<CourseSequence>();
         public class PrequisitesStudentNeedsForCourse
         {
             public Course Course { get; set; }
             public List<Prerequisite> PrequisitesStudentNeeds { get; set; }
         }
+        private class HoldStartAndEndTime
+        {
+            public double StartTime;
+            public double EndTime;
+            public TimeBlock.day FirstDay;
+            public TimeBlock.day SecondDay;
+        }
         public void GenerateSchedules(List<Course> courses, List<Enrollment> enrollments, Program program)
         {
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
-            if (!Preference.UseCourseSequence)
-            {
-                AddUserPreferenceCourses(courses, enrollments, program);
-                GenerateAllSchedulesUsingUserPreferenceCourses();
-            }  
+            AddUserPreferenceCourses(courses, enrollments, program);
+            GenerateAllSchedulesUsingUserPreferenceCourses();
         }
-        public void GenerateAllSchedulesUsingUserPreferenceCourses()
+        private void GenerateAllSchedulesUsingUserPreferenceCourses()
         {
             ApplicationDbContext db = new ApplicationDbContext();
-          
             List<List<Section>> sectionsListMaster = new List<List<Section>>();
-
+            List<List<Section>>  sectionCombinationsLists = new List<List<Section>>();
             List<Section> sectionns = db.Section.Where(n => ( n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseNumber == 282 && n.Lecture.Course.CourseLetters == "ENCS" ).ToList();
             if (Preference.StartTime == 0 && Preference.EndTime == 0)
             {
                 if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
-                {
                     foreach (Course course in CoursesStudentWantAndCanTake)
-                    {
                         sectionsListMaster.Add(db.Section.Where(n => (n.Lecture.Semester.Season == Season.Summer1 || n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null).ToList());
-                    }
-                }
                 else
-                {
-
                     foreach (Course course in CoursesStudentWantAndCanTake)
-                    {
                         sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null).ToList());
-                    }
-                }
             }
             else
-                foreach (Course course in CoursesStudentWantAndCanTake)
-                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == course
-                        && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
-                        && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
-                        && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
+            {
+                if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
+                    foreach (Course course in CoursesStudentWantAndCanTake)
+                        sectionsListMaster.Add(db.Section.Where(n => (n.Lecture.Semester.Season == Season.Summer1 || n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null
+                                                                && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
+                                                                && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
+                                                                && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime).ToList());
+                else
+                    foreach (Course course in CoursesStudentWantAndCanTake)
+                        sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null
+                                                && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
+                                                && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
+                                                && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime).ToList());
+            }
 
-            List<List<Section>>  sectionList = new List<List<Section>>();
-            GetAllValidSectionCombination(sectionsListMaster, 0, new List<Section>(), sectionList);
-
+            GetAllValidSectionCombination(sectionsListMaster, 0, new List<Section>(), sectionCombinationsLists);
             Schedules = new List<List<Schedule>>();
-            foreach(List<Section> sectionsForSchedule in sectionList )
+            foreach(List<Section> sectionsForSchedule in sectionCombinationsLists )
             {
                 Schedules.Add(new List<Schedule>());
                
@@ -84,14 +82,7 @@ namespace Schedulator.Models
             }
 
         }
-        public class HoldStartAndEndTime
-        {
-            public double StartTime;
-            public double EndTime;
-            public Schedulator.Models.TimeBlock.day FirstDay;
-            public Schedulator.Models.TimeBlock.day SecondDay;
-        }
-        public bool CheckIfTimeConflict (List<Section> sections, Section sectionToAdd)
+        private bool CheckIfTimeConflict (List<Section> sections, Section sectionToAdd)
         {
             
             List<HoldStartAndEndTime> sectionToAddTimes = new List<HoldStartAndEndTime>() { 
@@ -124,7 +115,7 @@ namespace Schedulator.Models
             }
             return false;
         }
-        public bool CheckIfSameDays(Schedulator.Models.TimeBlock.day firstDay, Schedulator.Models.TimeBlock.day secondDay, Schedulator.Models.TimeBlock.day secondFirstDay, Schedulator.Models.TimeBlock.day secondSecondDay)
+        private bool CheckIfSameDays(Schedulator.Models.TimeBlock.day firstDay, Schedulator.Models.TimeBlock.day secondDay, Schedulator.Models.TimeBlock.day secondFirstDay, Schedulator.Models.TimeBlock.day secondSecondDay)
         {
             if (firstDay == secondFirstDay || (secondSecondDay != TimeBlock.day.NONE && firstDay == secondSecondDay))
                 return true;
@@ -133,7 +124,7 @@ namespace Schedulator.Models
             else
                 return false;
         }
-        public bool CheckIfTimeOverlap (double startTime, double endTime, double secondStartTime, double secondEndTime)
+        private bool CheckIfTimeOverlap(double startTime, double endTime, double secondStartTime, double secondEndTime)
         {
             if (secondStartTime >= startTime && secondStartTime < endTime)
                 return true;
@@ -146,7 +137,7 @@ namespace Schedulator.Models
             else
                 return false;
         }
-        public void AddUserPreferenceCourses(List<Course> courses, List<Enrollment> enrollments, Program program)
+        private void AddUserPreferenceCourses(List<Course> courses, List<Enrollment> enrollments, Program program)
         {
             if (Preference.Courses.Count > 0) // 
             {
@@ -161,11 +152,9 @@ namespace Schedulator.Models
             }
 
         }
-        void GetAllValidSectionCombination(List<List<Section>> keys, int index, List<Section> values, List<List<Section>> sectionsLists)
+        private void GetAllValidSectionCombination(List<List<Section>> possibleSectionsList, int index, List<Section> values, List<List<Section>> sectionsLists)
         {
-            List<Section> key = keys[index];
-            List<List<Section>> lists = new List<List<Section>>();
-            foreach (Section section in key)
+            foreach (Section section in possibleSectionsList[index])
             {
                 if (!CheckIfTimeConflict(values.GetRange(0,index), section))
                 {
@@ -174,13 +163,13 @@ namespace Schedulator.Models
                     else
                         values[index] = (section);
 
-                    if (index < keys.Count() - 1)
+                    if (index < possibleSectionsList.Count() - 1)
                     {
-                        GetAllValidSectionCombination(keys, index + 1, values, sectionsLists);
+                        GetAllValidSectionCombination(possibleSectionsList, index + 1, values, sectionsLists);
                     }
                     else
                     {
-                        sectionsLists.Add(values.ToList()); // Clone the array;
+                        sectionsLists.Add(values.ToList());
                     }
                 }
             }
