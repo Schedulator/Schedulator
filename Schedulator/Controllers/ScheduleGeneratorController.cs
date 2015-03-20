@@ -16,13 +16,13 @@ namespace Schedulator.Controllers
             
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference()};
             // Some test data for now to display generated schedules
-            Preference preference = new Preference { UseCourseSequence = false, Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() };
+            Preference preference = new Preference { UseCourseSequence = false, Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault() };
             List<Course> courses = db.Courses.ToList();
             preference.Courses = new List<Course>();
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 232 && n.CourseLetters == "COMP").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 248 && n.CourseLetters == "COMP").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 201 && n.CourseLetters == "ENGR").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 213 && n.CourseLetters == "ENGR").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 348 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 352 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 282 && n.CourseLetters == "ENCS").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 202 && n.CourseLetters == "ENGR").FirstOrDefault());
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
 
             Program program = db.Program.FirstOrDefault();

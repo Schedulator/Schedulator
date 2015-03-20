@@ -34,18 +34,32 @@ namespace Schedulator.Models
             ApplicationDbContext db = new ApplicationDbContext();
           
             List<List<Section>> sectionsListMaster = new List<List<Section>>();
-            if ( Preference.StartTime == 0 && Preference.EndTime == 0)
-                foreach (Course course in CoursesStudentWantAndCanTake)
-                {
-                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null ).ToList());
-                }
 
+            List<Section> sectionns = db.Section.Where(n => ( n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseNumber == 282 && n.Lecture.Course.CourseLetters == "ENCS" ).ToList();
+            if (Preference.StartTime == 0 && Preference.EndTime == 0)
+            {
+                if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
+                {
+                    foreach (Course course in CoursesStudentWantAndCanTake)
+                    {
+                        sectionsListMaster.Add(db.Section.Where(n => (n.Lecture.Semester.Season == Season.Summer1 || n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null).ToList());
+                    }
+                }
+                else
+                {
+
+                    foreach (Course course in CoursesStudentWantAndCanTake)
+                    {
+                        sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null).ToList());
+                    }
+                }
+            }
             else
-            foreach (Course course in CoursesStudentWantAndCanTake)
-                sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == course
-                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
-                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
-                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
+                foreach (Course course in CoursesStudentWantAndCanTake)
+                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == course
+                        && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
+                        && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
+                        && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
 
             List<List<Section>>  sectionList = new List<List<Section>>();
             GetAllValidSectionCombination(sectionsListMaster, 0, new List<Section>(), sectionList);
@@ -54,10 +68,18 @@ namespace Schedulator.Models
             foreach(List<Section> sectionsForSchedule in sectionList )
             {
                 Schedules.Add(new List<Schedule>());
+               
                 Schedules.LastOrDefault().Add(new Schedule {Enrollments = new List<Enrollment>(), Semester = Preference.Semester });
                 foreach( Section sectionForSchedule in sectionsForSchedule)
                 {
-                    Schedules.LastOrDefault().FirstOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault().LastOrDefault() });
+                    if (sectionForSchedule.Lecture.Semester.Season == Season.Summer2)
+                    {
+                        if (Schedules.LastOrDefault().Count == 1)
+                            Schedules.LastOrDefault().Add(new Schedule { Enrollments = new List<Enrollment>(), Semester = db.Semesters.Where(n => n.Season == Season.Summer2).FirstOrDefault()});
+                        Schedules.LastOrDefault().LastOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault().LastOrDefault() });
+                    }
+                    else
+                        Schedules.LastOrDefault().FirstOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault().LastOrDefault() });
                 }
             }
 
@@ -81,19 +103,22 @@ namespace Schedulator.Models
             
             foreach(Section section in sections)
             {
-                List<HoldStartAndEndTime> sectionTimes = new List<HoldStartAndEndTime>(){
-                    new HoldStartAndEndTime { StartTime = section.Lecture.StartTime, EndTime = section.Lecture.EndTime, FirstDay = section.Lecture.FirstDay, SecondDay = section.Lecture.SecondDay}};
-                if (section.Tutorial != null)
-                    sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Tutorial.StartTime, EndTime = section.Tutorial.EndTime, FirstDay = section.Tutorial.FirstDay, SecondDay = section.Tutorial.SecondDay });
-                if (sectionToAdd.Lab != null)
-                    sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Lab.StartTime, EndTime = section.Lab.EndTime, FirstDay = section.Lab.FirstDay, SecondDay = section.Lab.SecondDay });
-                
-                foreach (HoldStartAndEndTime sectionToAddTime in sectionToAddTimes)
+                if (section.Lecture.Semester.Season == sectionToAdd.Lecture.Semester.Season)
                 {
-                    foreach(HoldStartAndEndTime sectionTime in sectionTimes)
+                    List<HoldStartAndEndTime> sectionTimes = new List<HoldStartAndEndTime>(){
+                    new HoldStartAndEndTime { StartTime = section.Lecture.StartTime, EndTime = section.Lecture.EndTime, FirstDay = section.Lecture.FirstDay, SecondDay = section.Lecture.SecondDay}};
+                    if (section.Tutorial != null)
+                        sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Tutorial.StartTime, EndTime = section.Tutorial.EndTime, FirstDay = section.Tutorial.FirstDay, SecondDay = section.Tutorial.SecondDay });
+                    if (sectionToAdd.Lab != null)
+                        sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Lab.StartTime, EndTime = section.Lab.EndTime, FirstDay = section.Lab.FirstDay, SecondDay = section.Lab.SecondDay });
+
+                    foreach (HoldStartAndEndTime sectionToAddTime in sectionToAddTimes)
                     {
-                        if (CheckIfSameDays(sectionToAddTime.FirstDay, sectionToAddTime.SecondDay, sectionTime.FirstDay, sectionTime.SecondDay) && CheckIfTimeOverlap(sectionToAddTime.StartTime, sectionToAddTime.EndTime, sectionTime.StartTime, sectionTime.EndTime))
-                            return true;
+                        foreach (HoldStartAndEndTime sectionTime in sectionTimes)
+                        {
+                            if (CheckIfSameDays(sectionToAddTime.FirstDay, sectionToAddTime.SecondDay, sectionTime.FirstDay, sectionTime.SecondDay) && CheckIfTimeOverlap(sectionToAddTime.StartTime, sectionToAddTime.EndTime, sectionTime.StartTime, sectionTime.EndTime))
+                                return true;
+                        }
                     }
                 }
             }
@@ -116,7 +141,7 @@ namespace Schedulator.Models
                 return true;
             else if (startTime >= secondStartTime && startTime < secondEndTime)
                 return true;
-            else if (endTime > startTime && endTime <= secondEndTime)
+            else if (endTime > secondStartTime && endTime <= secondEndTime)
                 return true;
             else
                 return false;
