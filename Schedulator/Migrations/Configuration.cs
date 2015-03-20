@@ -45,8 +45,8 @@ namespace Schedulator.Migrations
                 user.Program = null;
                 context.Users.AddOrUpdate(user);
             }
-            SeedCoursesFromExcelSheet(context);
-           // SeedProgramsFromExcelSheet(context);
+            //SeedCoursesFromExcelSheet(context);
+           SeedProgramsFromExcelSheet(context);
 
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 

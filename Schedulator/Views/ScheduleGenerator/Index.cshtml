@@ -32,7 +32,8 @@
                 <div class="steps">
                     <p>Step 2: Select your courses</p>
                     Add a course: <input type="text"/>
-                    <input type="button" value="Add"/>
+                    <input type="button" value="Add"/><br />
+                    <input type="button" value="Show Me Courses from Sequence" />
                 </div>
                 <div class="steps">
                     <p>Step 3: Select your preferences</p>
@@ -49,7 +50,7 @@
         </div>
     </div>
 }
-@foreach( Schedulator.Models.Schedule schedule in Model.Schedules )
+@foreach( List<Schedulator.Models.Schedule> schedule in Model.Schedules )
 { 
     <table border="0" align="center">
         <tbody>
@@ -59,7 +60,7 @@
                         <tbody>
                             
                                @{
-                                    foreach (Schedulator.Models.Enrollment enrollment in schedule.Enrollments)
+                                    foreach (Schedulator.Models.Enrollment enrollment in schedule.FirstOrDefault().Enrollments)
                                     {
                                         @enrollment.Course.CourseLetters;
                                         @enrollment.Course.CourseNumber;
@@ -84,6 +85,34 @@
                                             @enrollment.Section.Lecture.ClassRoomNumber
                                         }
                                     }
+                                    if (schedule.Count() > 1)
+                                    { 
+                                        foreach (Schedulator.Models.Enrollment enrollment in schedule.LastOrDefault().Enrollments)
+                                        {
+                                            @enrollment.Course.CourseLetters;
+                                            @enrollment.Course.CourseNumber;
+                                            @enrollment.Course.Title;
+                                            if (enrollment.Section.SectionMaster)
+                                            {
+                                                foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
+                                                {
+                                                    @sectionToShow.Lecture.LectureLetter;<br />
+                                                    @sectionToShow.Lecture.Teacher;
+                                                                                            <br />
+                                                    @sectionToShow.Lecture.ClassRoomNumber;
+                                                }
+                                                
+                                           }
+                                           else
+                                            {
+                                                @enrollment.Section.Lecture.LectureLetter
+                                                <br />
+                                                @enrollment.Section.Lecture.Teacher
+                                                <br />
+                                                @enrollment.Section.Lecture.ClassRoomNumber
+                                            }
+                                        }
+                                    }
                                }
                                         
                     </table>
@@ -94,12 +123,27 @@
                             <tr><td align="center"></td></tr>
                             <tr>
                                 <td valign="top">
-                                    @Html.Partial("_Schedule", schedule)
+                                    @Html.Partial("_Schedule", schedule.FirstOrDefault())
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </td>
+                @if (schedule.Count() > 1)
+                {
+                <td>
+                    <table border="0" cellpadding="3" cellspacing="0">
+                        <tbody>
+                            <tr><td align="center"></td></tr>
+                            <tr>
+                                <td valign="top">
+                                    @Html.Partial("_Schedule", schedule.LastOrDefault())
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                }
             </tr>
         </tbody>
     </table>

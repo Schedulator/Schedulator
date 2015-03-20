@@ -8,7 +8,7 @@ namespace Schedulator.Models
     public class ScheduleGenerator
     {
         public Preference Preference { get; set; }
-        public List<Schedule> Schedules { get; set; }
+        public List<List<Schedule>> Schedules { get; set; }
         public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
         public string MessageToUser = "";
 
@@ -49,13 +49,15 @@ namespace Schedulator.Models
 
             List<List<Section>>  sectionList = new List<List<Section>>();
             GetAllValidSectionCombination(sectionsListMaster, 0, new List<Section>(), sectionList);
-            Schedules = new List<Schedule>();
+
+            Schedules = new List<List<Schedule>>();
             foreach(List<Section> sectionsForSchedule in sectionList )
             {
-                Schedules.Add(new Schedule {Enrollments = new List<Enrollment>(), Semester = Preference.Semester });
+                Schedules.Add(new List<Schedule>());
+                Schedules.LastOrDefault().Add(new Schedule {Enrollments = new List<Enrollment>(), Semester = Preference.Semester });
                 foreach( Section sectionForSchedule in sectionsForSchedule)
                 {
-                    Schedules.LastOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault() });
+                    Schedules.LastOrDefault().FirstOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault().LastOrDefault() });
                 }
             }
 

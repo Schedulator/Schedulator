@@ -13,9 +13,9 @@ namespace Schedulator.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            var schedule = db.Schedule.Where(t => t.ApplicationUser.FirstName=="Harley").FirstOrDefault();
-            db.Courses.ToList();
-            return View(schedule);
+            List<Schedule> schedules = db.Schedule.Where(t => t.ApplicationUser.FirstName == "Harley").ToList();
+
+            return View(schedules);
 
         }
     }
