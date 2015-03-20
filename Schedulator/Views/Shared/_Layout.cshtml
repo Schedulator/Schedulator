@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Schedulator</title>
+    <div><img src="http://i375.photobucket.com/albums/oo197/schedulator/logo_1506675_web_zps6ze325qd.jpg" border="0" alt=" photo logo_1506675_web_zps6ze325qd.jpg" /></div>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -44,10 +45,11 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Schedulator</p>
-        </footer>
     </div>
+        <footer>
+            <div class="footerLayout">&copy; @DateTime.Now.Year - Schedulator</div>
+        </footer>
+    
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

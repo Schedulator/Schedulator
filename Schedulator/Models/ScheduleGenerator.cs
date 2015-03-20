@@ -44,7 +44,7 @@ namespace Schedulator.Models
             if ( Preference.StartTime == 0 && Preference.EndTime == 0)
                 foreach (Course course in CoursesStudentWantAndCanTake)
                 {
-                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID).ToList());
+                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.SectionMaster == null ).ToList());
                 }
 
             else
@@ -65,10 +65,6 @@ namespace Schedulator.Models
                     Schedules.LastOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault() });
                 }
             }
-         
-
-
-
 
         }
         public class HoldStartAndEndTime

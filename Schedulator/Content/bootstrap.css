@@ -26,7 +26,6 @@ aside,
 details,
 figcaption,
 figure,
-footer,
 header,
 hgroup,
 main,
@@ -59,6 +58,15 @@ html {
 
 body {
   margin: 0;
+}
+
+.footerLayout {
+        color: white;
+        padding-top: 2em;
+        background : linear-gradient(black,white);
+        text-align: center;
+        height: 350px;
+        max-height: 500px;
 }
 
 a:focus {
@@ -293,7 +301,7 @@ table {
   }
   .table-bordered th,
   .table-bordered td {
-    border: 1px solid #ddd !important;
+    /*border: 1px solid #ddd !important;*/
   }
 }
 
@@ -5404,13 +5412,13 @@ a.list-group-item:focus {
   color: inherit;
 }
 
-.panel-footer {
+/*.panel-footer {
   padding: 10px 15px;
   background-color: #f5f5f5;
   border-top: 1px solid #dddddd;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-}
+}*/
 
 .panel-group .panel {
   margin-bottom: 0;
@@ -5430,13 +5438,13 @@ a.list-group-item:focus {
   border-top: 1px solid #dddddd;
 }
 
-.panel-group .panel-footer {
+/*.panel-group .panel-footer {
   border-top: 0;
 }
 
 .panel-group .panel-footer + .panel-collapse .panel-body {
   border-bottom: 1px solid #dddddd;
-}
+}*/
 
 .panel-default {
   border-color: #dddddd;
@@ -5452,9 +5460,9 @@ a.list-group-item:focus {
   border-top-color: #dddddd;
 }
 
-.panel-default > .panel-footer + .panel-collapse .panel-body {
+/*.panel-default > .panel-footer + .panel-collapse .panel-body {
   border-bottom-color: #dddddd;
-}
+}*/
 
 .panel-primary {
   border-color: #428bca;
@@ -5470,9 +5478,9 @@ a.list-group-item:focus {
   border-top-color: #428bca;
 }
 
-.panel-primary > .panel-footer + .panel-collapse .panel-body {
+/*.panel-primary > .panel-footer + .panel-collapse .panel-body {
   border-bottom-color: #428bca;
-}
+}*/
 
 .panel-success {
   border-color: #d6e9c6;
@@ -5488,9 +5496,9 @@ a.list-group-item:focus {
   border-top-color: #d6e9c6;
 }
 
-.panel-success > .panel-footer + .panel-collapse .panel-body {
+/*.panel-success > .panel-footer + .panel-collapse .panel-body {
   border-bottom-color: #d6e9c6;
-}
+}*/
 
 .panel-warning {
   border-color: #fbeed5;
@@ -5698,12 +5706,12 @@ body.modal-open,
   padding: 20px;
 }
 
-.modal-footer {
+/*.modal-footer {
   padding: 19px 20px 20px;
   margin-top: 15px;
   text-align: right;
   border-top: 1px solid #e5e5e5;
-}
+}*/
 
 .modal-footer:before,
 .modal-footer:after {
