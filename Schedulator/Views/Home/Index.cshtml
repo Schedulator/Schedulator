@@ -12,14 +12,24 @@
         <h2>Personal Information</h2>
         <p>
             @Html.DisplayNameFor(model => model.FirstName):
-            
+
             @Html.DisplayFor(modelItem => modelItem.FirstName)
             <br />
             @Html.DisplayNameFor(model => model.LastName):
             @Html.DisplayFor(modelItem => modelItem.LastName)
             <br />
-            @Html.DisplayNameFor(model => model.Program):
+            <br />
+            @Html.DisplayNameFor(model => model.Program) Information:
             @Html.DisplayFor(modelItem => modelItem.Program)
+           
+            @*@{
+                    foreach (var programProperty in Model.Program) {
+                        @programProperty
+                    }
+                }*@
+
+            @*Trying to find a way to use a foreach loop that would access the database information on the user's Program. 
+            I'm not quite sure how the property Program is written, but will find out.*@
         </p>
 
     </div>
@@ -31,7 +41,7 @@
                 foreach (var enrollments in schedules.Enrollments)
                 {
                     <li class="list-group-item">
-                        @Html.DisplayFor(modelItem => enrollments.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Course.CourseNumber) 
+                        @Html.DisplayFor(modelItem => enrollments.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Course.CourseNumber)
                         @Html.DisplayFor(model => enrollments.Grade)
 
                     </li>
@@ -49,5 +59,5 @@
         <p>Personal Stuff</p>
     </div>
 
-    
+
 </div>
