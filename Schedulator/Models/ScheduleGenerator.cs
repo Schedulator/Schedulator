@@ -34,9 +34,7 @@ namespace Schedulator.Models
             {
                 AddUserPreferenceCourses(courses, enrollments, program);
                 GenerateAllSchedulesUsingUserPreferenceCourses();
-            }
-
-            
+            }  
         }
         public void GenerateAllSchedulesUsingUserPreferenceCourses()
         {
@@ -48,6 +46,7 @@ namespace Schedulator.Models
                 {
                     sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID).ToList());
                 }
+
             else
             foreach (Course course in CoursesStudentWantAndCanTake)
                 sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == course
@@ -70,44 +69,6 @@ namespace Schedulator.Models
 
 
 
-
-        }
-        public void GenerateAllSchedules()
-        {
-            ApplicationDbContext db = new ApplicationDbContext();
-            List<Section> sectionsStudentWantAndCanTake = new List<Section>();
-            List<Section> sections = new List<Section>();
-            foreach (Course course in CoursesStudentWantAndCanTake)
-                sectionsStudentWantAndCanTake.AddRange(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == course
-                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
-                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
-                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
-            foreach (CourseSequence courseSequence in MainCourseSequencesToTake)
-                sections.AddRange(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == courseSequence.Course
-                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
-                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
-                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
-            foreach (CourseSequence courseSequence in SecondaryCourseSequencesToTake)
-                sections.AddRange(db.Section.Where(n => n.Lecture.Semester == Preference.Semester && (n.Lecture.Course == courseSequence.Course
-                    && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
-                    && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
-                    && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime)).ToList());
-
-            List<ScheduleInformation> mainEnrollments = new List<ScheduleInformation>();
-            List<List<ScheduleInformation>> studentsPreferedEnrollmentsList = new List<List<ScheduleInformation>>();
-            List<ScheduleInformation> secondaryEnrollments = new List<ScheduleInformation>();
-
-            List<List<Section>> sectionsListMaster = new List<List<Section>>();
-            foreach ( Course course in CoursesStudentWantAndCanTake)
-            {
-                sectionsListMaster.Add(sectionsStudentWantAndCanTake.Where(n => n.Lecture.Course == course).ToList());
-            }
-            
-          //  IEnumerable<List<Section>> sectionsList = 
-
-            //studentsPreferedEnrollmentsList.Add(new List<Enrollment>());
-
-            //if ( mainEnrollments)
 
         }
         public class HoldStartAndEndTime

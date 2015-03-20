@@ -12,5 +12,7 @@ namespace Schedulator.Models
         public virtual Lecture Lecture { get; set; }
         public virtual Tutorial Tutorial { get; set; }
         public virtual Lab Lab { get; set; }
+
+        public virtual ICollection<Section> OtherSimilarSections { get; set; } // Same lecture and same tutorial and lab time
     }
 }
