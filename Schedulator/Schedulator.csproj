@@ -269,7 +269,6 @@
     <Content Include="Views\Programs\Index.cshtml" />
     <Content Include="Views\ScheduleGenerator\Index.cshtml" />
     <Content Include="Views\Shared\_Schedule.cshtml" />
-    <Content Include="Views\Shared\_ScheduleBlock.cshtml" />
     <Content Include="Views\StudentSchedule\Index.cshtml" />
     <Content Include="Views\ProgramDirector\Create.cshtml" />
     <Content Include="Views\ProgramDirector\Delete.cshtml" />

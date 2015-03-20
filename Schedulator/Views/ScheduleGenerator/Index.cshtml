@@ -51,7 +51,58 @@
 }
 @foreach( Schedulator.Models.Schedule schedule in Model.Schedules )
 { 
-    @Html.Partial("_Schedule", schedule)
+    <table border="0" align="center">
+        <tbody>
+            <tr>
+                <td valign="top">
+                    <table border="0" cellspacing="0" cellpadding="2" class="legend">
+                        <tbody>
+                            
+                               @{
+                                    foreach (Schedulator.Models.Enrollment enrollment in schedule.Enrollments)
+                                    {
+                                        @enrollment.Course.CourseLetters;
+                                        @enrollment.Course.CourseNumber;
+                                        @enrollment.Course.Title;
+                                        if (enrollment.Section.SectionMaster)
+                                        {
+                                            foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
+                                            {
+                                                @sectionToShow.Lecture.LectureLetter;<br />
+                                                @sectionToShow.Lecture.Teacher;
+                                                                                        <br />
+                                                @sectionToShow.Lecture.ClassRoomNumber;
+                                            }
+                                                
+                                       }
+                                       else
+                                        {
+                                            @enrollment.Section.Lecture.LectureLetter
+                                            <br />
+                                            @enrollment.Section.Lecture.Teacher
+                                            <br />
+                                            @enrollment.Section.Lecture.ClassRoomNumber
+                                        }
+                                    }
+                               }
+                                        
+                    </table>
+                </td>
+                <td>
+                    <table border="0" cellpadding="3" cellspacing="0">
+                        <tbody>
+                            <tr><td align="center"></td></tr>
+                            <tr>
+                                <td valign="top">
+                                    @Html.Partial("_Schedule", schedule)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 }
 
 

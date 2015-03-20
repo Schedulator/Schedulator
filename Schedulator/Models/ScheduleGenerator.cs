@@ -15,13 +15,6 @@ namespace Schedulator.Models
         private List<Course> CoursesStudentWantAndCanTake = new List<Course>();
         private List<CourseSequence> MainCourseSequencesToTake = new List<CourseSequence>();
         private List<CourseSequence> SecondaryCourseSequencesToTake = new List<CourseSequence>();
-        public class ScheduleInformation
-        {
-            public Schedule Schedule { get; set; }
-            private int CourseCounter { get; set; }
-            public bool Recommended { get; set; }
-
-        }
         public class PrequisitesStudentNeedsForCourse
         {
             public Course Course { get; set; }
@@ -44,7 +37,7 @@ namespace Schedulator.Models
             if ( Preference.StartTime == 0 && Preference.EndTime == 0)
                 foreach (Course course in CoursesStudentWantAndCanTake)
                 {
-                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.SectionMaster == null ).ToList());
+                    sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null ).ToList());
                 }
 
             else
@@ -141,9 +134,6 @@ namespace Schedulator.Models
             }
 
         }
- 
-
-
         void GetAllValidSectionCombination(List<List<Section>> keys, int index, List<Section> values, List<List<Section>> sectionsLists)
         {
             List<Section> key = keys[index];
