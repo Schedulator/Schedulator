@@ -14,6 +14,16 @@ namespace Schedulator.Models
         public virtual ApplicationUser ApplicationUser {get; set;}
         public virtual ICollection<Enrollment> Enrollments { get; set; }
 
+
+        public bool SaveSchedule()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+
+
+            return true;
+        }
+
+
         public string RenderSchedule()
         {
             List<Enrollment> enrollments = Enrollments.ToList();
@@ -97,8 +107,6 @@ namespace Schedulator.Models
     public enum BlockRenderType { EMPTY, NONE, DATA }
     public class ScheduleBlock
     {
-
-
         public BlockRenderType RenderType { get; set; } 
         public int BlockNumber { get; set; }
         public int RowSpawn {get; set;}

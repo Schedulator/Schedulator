@@ -36,30 +36,18 @@ namespace Schedulator.Models
             List<List<Section>> sectionsListMaster = new List<List<Section>>();
             List<List<Section>>  sectionCombinationsLists = new List<List<Section>>();
             List<Section> sectionns = db.Section.Where(n => ( n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseNumber == 282 && n.Lecture.Course.CourseLetters == "ENCS" ).ToList();
-            if (Preference.StartTime == 0 && Preference.EndTime == 0)
-            {
-                if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
-                    foreach (Course course in CoursesStudentWantAndCanTake)
-                        sectionsListMaster.Add(db.Section.Where(n => (n.Lecture.Semester.Season == Season.Summer1 || n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null).ToList());
-                else
-                    foreach (Course course in CoursesStudentWantAndCanTake)
-                        sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null).ToList());
-            }
-            else
-            {
-                if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
+            if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
                     foreach (Course course in CoursesStudentWantAndCanTake)
                         sectionsListMaster.Add(db.Section.Where(n => (n.Lecture.Semester.Season == Season.Summer1 || n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null
-                                                                && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
-                                                                && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
-                                                                && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime).ToList());
+                                                                && n.Lecture.StartTime >= Preference.StartTime && n.Lecture.EndTime <= Preference.EndTime
+                                                                && (n.Tutorial == null || n.Tutorial.StartTime >= Preference.StartTime && n.Tutorial.EndTime <= Preference.EndTime )
+                                                                && (n.Lab == null || n.Lab.StartTime >= Preference.StartTime && n.Lab.EndTime <= Preference.EndTime)).ToList());
                 else
                     foreach (Course course in CoursesStudentWantAndCanTake)
                         sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null
-                                                && n.Lecture.StartTime <= Preference.StartTime && n.Lecture.EndTime >= Preference.EndTime
-                                                && n.Tutorial.StartTime <= Preference.StartTime && n.Tutorial.EndTime >= Preference.EndTime
-                                                && n.Lab.StartTime <= Preference.StartTime && n.Lab.EndTime >= Preference.EndTime).ToList());
-            }
+                                                                && n.Lecture.StartTime >= Preference.StartTime && n.Lecture.EndTime <= Preference.EndTime
+                                                                && (n.Tutorial == null || n.Tutorial.StartTime >= Preference.StartTime && n.Tutorial.EndTime <= Preference.EndTime)
+                                                                && (n.Lab == null || n.Lab.StartTime >= Preference.StartTime && n.Lab.EndTime <= Preference.EndTime)).ToList());
 
             GetAllValidSectionCombination(sectionsListMaster, 0, new List<Section>(), sectionCombinationsLists);
             Schedules = new List<List<Schedule>>();

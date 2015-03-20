@@ -13,6 +13,5 @@ namespace Schedulator.Models
         public Semester Semester { get; set; }
         public ICollection<String> Days { get; set; }
         public ICollection<Course> Courses { get; set; }
-
     }
 }
