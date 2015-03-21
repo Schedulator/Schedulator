@@ -194,7 +194,6 @@
     <Compile Include="Models\ProgramDirector.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduleGenerator.cs" />
-    <Compile Include="Models\ScheduleViewModels.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Seed.cs" />
     <Compile Include="Models\Semester.cs" />
@@ -213,7 +212,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap - Copy.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
