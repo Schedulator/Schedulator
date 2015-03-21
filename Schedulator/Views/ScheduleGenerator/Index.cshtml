@@ -4,18 +4,22 @@
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
-@using (Html.BeginForm()){
+<!-- Title -->
+<h2 id="pageTitle">@ViewBag.Title</h2>
+<hr />
 
-    <div class="form-horizontal">
-        <!-- Title -->
-        <h4>Schedule Maker</h4>
-        <hr />
+<!-- Main Wrapper -->
+<div id="mainWrapper" class="row">
 
-        <!-- Options -->
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+    <!-- Generator Preferences -->
+    <div id="schedGenPref" class="contentBox">
+
+        @using (Html.BeginForm())
+        {
+            <!-- Options -->
+            <div id="prefOptions">
                 <!-- Semesters -->
-                <div class="steps">
+                <div class="prefs">
                     <p>Step 1: Select a semester</p>
                     <ul>
                         <li><input type="radio" name="semester" /> Summer 2015 </li>
@@ -25,17 +29,18 @@
                 </div>
 
                 <!-- Courses -->
-                <div class="steps">
+                <div class="prefs">
                     <p>Step 2: Select your courses</p>
                     <ul>
-                        <li><span>Add a course: </span><input type="text" /></li>
-                        <li><input type="button" value="Add" /></li>
-                        <li><input type="button" value="Show Me Courses from Sequence" /></li>
+                        <li><span>Add a course: </span><input type="text" />
+                            <span style="margin-left:10px;"><input type="button" value="Add" /></span>
+                        </li>
+                        @*<li><input type="button" value="Show Me Courses from Sequence" /></li>*@
                     </ul>
                 </div>
 
                 <!-- Preferences -->
-                <div class="steps">
+                <div class="prefs">
                     <p>Step 3: Select your preferences</p>
                     <ul id="schedPref">
                         <li><input type="checkbox" /> Most days-off</li>
@@ -45,115 +50,17 @@
                     </ul>
                 </div>
 
-                <input type="submit" value="Generate Schedule" class="btn btn-default" />
-            </div><!--EO Options-->
-        </div>
-    </div>
-}
+                <div id="generatePref">
+                    <input type="submit" value="Generate Schedule" class="btn btn-default" />
+                </div>
+            </div><!--EO #prefOptions-->
+        }
+    </div><!-- EO #schedGenPref-->
+</div>
+<!-- EO #mainWrapper-->
 
+   
 
-
-@foreach( List<Schedulator.Models.Schedule> schedule in Model.Schedules )
-{ 
-    <table border="0" align="center">
-        <tbody>
-            <tr>
-                <td valign="top">
-                    <table border="0" cellspacing="0" cellpadding="2" class="legend">
-                        <tbody>
-                            
-                               @{
-                                    foreach (Schedulator.Models.Enrollment enrollment in schedule.FirstOrDefault().Enrollments)
-                                    {
-                                        @enrollment.Course.CourseLetters;
-                                        @enrollment.Course.CourseNumber;
-                                        @enrollment.Course.Title;
-                                        if (enrollment.Section.SectionMaster)
-                                        {
-                                            foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
-                                            {
-                                                @sectionToShow.Lecture.LectureLetter;<br />
-                                                @sectionToShow.Lecture.Teacher;
-                                                                                        <br />
-                                                @sectionToShow.Lecture.ClassRoomNumber;
-                                            }
-                                                
-                                       }
-                                       else
-                                        {
-                                            @enrollment.Section.Lecture.LectureLetter
-                                            <br />
-                                            @enrollment.Section.Lecture.Teacher
-                                            <br />
-                                            @enrollment.Section.Lecture.ClassRoomNumber
-                                        }
-                                    }
-                                    if (schedule.Count() > 1)
-                                    { 
-                                        foreach (Schedulator.Models.Enrollment enrollment in schedule.LastOrDefault().Enrollments)
-                                        {
-                                            @enrollment.Course.CourseLetters;
-                                            @enrollment.Course.CourseNumber;
-                                            @enrollment.Course.Title;
-                                            if (enrollment.Section.SectionMaster)
-                                            {
-                                                foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
-                                                {
-                                                    @sectionToShow.Lecture.LectureLetter;<br />
-                                                    @sectionToShow.Lecture.Teacher;
-                                                                                            <br />
-                                                    @sectionToShow.Lecture.ClassRoomNumber;
-                                                }
-                                                
-                                           }
-                                           else
-                                            {
-                                                @enrollment.Section.Lecture.LectureLetter
-                                                <br />
-                                                @enrollment.Section.Lecture.Teacher
-                                                <br />
-                                                @enrollment.Section.Lecture.ClassRoomNumber
-                                            }
-                                        }
-                                    }
-                               }
-                                        
-                    </table>
-                </td>
-                @if (schedule.FirstOrDefault().Enrollments.Count > 0)
-                { 
-                <td>
-                    <table border="0" cellpadding="3" cellspacing="0">
-                        <tbody>
-                            <tr><td align="center"></td></tr>
-                            <tr>
-                                <td valign="top">
-                                    @Html.Partial("_Schedule", schedule.FirstOrDefault())
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-                }
-                @if (schedule.Count() > 1)
-                {
-                <td>
-                    <table border="0" cellpadding="3" cellspacing="0">
-                        <tbody>
-                            <tr><td align="center"></td></tr>
-                            <tr>
-                                <td valign="top">
-                                    @Html.Partial("_Schedule", schedule.LastOrDefault())
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-                }
-            </tr>
-        </tbody>
-    </table>
-}
 
 
 

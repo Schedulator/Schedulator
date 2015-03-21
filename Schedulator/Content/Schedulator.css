@@ -7,8 +7,44 @@ ul li {
     list-style:none;
 }
 
+.contentBox {
+
+  background: white;
+  border: 1px solid #CECECE;
+  -webkit-box-shadow: 0 0 6px rgba(0,0,0,.12);
+  -moz-box-shadow: 0 0 6px rgba(0,0,0,.12);
+  -o-box-shadow: 0 0 6px rgba(0,0,0,.12);
+  box-shadow: 0 0 6px rgba(0,0,0,.12);
+}
 
 /* Schedule Generator */
-#schedPref li {
-    display:inline-block; 
+#schedGenPref {
+  min-height: 120px;
+  margin-bottom: 40px;
+  padding: 25px;
+  letter-spacing: 1px;
+  background-color: #F6F6EC;
+}
+
+#schedGenPref .prefs {
+    border-bottom: 1px solid #CECECE;
+    padding: 15px;
+}
+
+#schedGenPref .prefs p {
+    font-weight:bold;
+    font-size: large;
+}
+
+#schedGenPref .prefs ul {
+    padding-left: 45px;
+}
+
+#generatePref {
+    padding-top:20px;
+    text-align:right;
+}
+
+
+#prefOptions {
 }
