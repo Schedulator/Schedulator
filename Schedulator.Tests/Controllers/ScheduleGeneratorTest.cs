@@ -17,7 +17,7 @@ namespace Schedulator.Tests.Controllers
 
             ApplicationDbContext db = new ApplicationDbContext();
             
-            Preference preference = new Preference { UseCourseSequence = false, Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() };
+            Preference preference = new Preference {  Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() };
             List<Course> courses = db.Courses.ToList();
             preference.Courses = new List<Course>();
             preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 232 && n.CourseLetters == "COMP").FirstOrDefault());
@@ -29,6 +29,8 @@ namespace Schedulator.Tests.Controllers
             Program program = db.Program.FirstOrDefault();
             
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.ToList(), program);
+
+            
         }
     }
 }

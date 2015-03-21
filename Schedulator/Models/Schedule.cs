@@ -14,6 +14,16 @@ namespace Schedulator.Models
         public virtual ApplicationUser ApplicationUser {get; set;}
         public virtual ICollection<Enrollment> Enrollments { get; set; }
 
+
+        public bool SaveSchedule()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+
+
+            return true;
+        }
+
+
         public string RenderSchedule()
         {
             List<Enrollment> enrollments = Enrollments.ToList();
@@ -97,8 +107,6 @@ namespace Schedulator.Models
     public enum BlockRenderType { EMPTY, NONE, DATA }
     public class ScheduleBlock
     {
-
-
         public BlockRenderType RenderType { get; set; } 
         public int BlockNumber { get; set; }
         public int RowSpawn {get; set;}
@@ -109,7 +117,7 @@ namespace Schedulator.Models
         public string GetBlockHtml()
         {
             if (RenderType == BlockRenderType.EMPTY)
-                return "<td>&nbsp;</td>";
+                return "<td>&nbsp</td>";
             else if (RenderType == BlockRenderType.DATA)
                 return "<td id =\"" + BlockType + "\" rowspan=\"" + RowSpawn + "\"  style=\"cursor:pointer;\" tilte=\"Test\">" + BlockLetters + "<br>" + BlockNumber + "<br>" + BlockType + "</td>";
             else

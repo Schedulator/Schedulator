@@ -120,6 +120,8 @@
                                         
                     </table>
                 </td>
+                @if (schedule.FirstOrDefault().Enrollments.Count > 0)
+                { 
                 <td>
                     <table border="0" cellpadding="3" cellspacing="0">
                         <tbody>
@@ -132,6 +134,7 @@
                         </tbody>
                     </table>
                 </td>
+                }
                 @if (schedule.Count() > 1)
                 {
                 <td>

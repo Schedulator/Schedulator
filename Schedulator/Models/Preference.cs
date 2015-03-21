@@ -13,10 +13,5 @@ namespace Schedulator.Models
         public Semester Semester { get; set; }
         public ICollection<String> Days { get; set; }
         public ICollection<Course> Courses { get; set; }
-        public bool UseCourseSequence { get; set; }
-        [DefaultValueAttribute(5)]
-        public int NumberOfCourses { get; set; }
-
-
     }
 }

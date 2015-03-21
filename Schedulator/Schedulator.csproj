@@ -175,7 +175,6 @@
     <Compile Include="Controllers\ProgramsController.cs" />
     <Compile Include="Controllers\ProgramsManagementController.cs" />
     <Compile Include="Controllers\ScheduleGeneratorController.cs" />
-    <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="Controllers\StudentScheduleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -214,6 +213,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
