@@ -14,8 +14,7 @@
     <!-- Generator Preferences -->
     <div id="schedGenPref" class="contentBox">
 
-        @using (Html.BeginForm())
-        {
+        @using (Ajax.BeginForm("GenerateSchedules",new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "result" })){
             <!-- Options -->
             <div id="prefOptions">
                 <!-- Semesters -->
@@ -32,7 +31,7 @@
                 <div class="prefs">
                     <p>Step 2: Select your courses</p>
                     <ul>
-                        <li><span>Add a course: </span><input type="text" />
+                        <li><span>Add a course: </span>@Html.TextBox("courseName")
                             <span style="margin-left:10px;"><input type="button" value="Add" /></span>
                         </li>
                         @*<li><input type="button" value="Show Me Courses from Sequence" /></li>*@
@@ -56,10 +55,13 @@
             </div><!--EO #prefOptions-->
         }
     </div><!-- EO #schedGenPref-->
-</div>
-<!-- EO #mainWrapper-->
 
-   
+    <!-- Schedules results -->
+    <div id="result"></div><!-- EO #result -->
+
+
+</div><!-- EO #mainWrapper-->
+
 
 
 
