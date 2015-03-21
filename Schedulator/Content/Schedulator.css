@@ -1,0 +1,14 @@
+﻿/* General */
+ul {
+    margin:0;padding:0;
+}
+
+ul li {
+    list-style:none;
+}
+
+
+/* Schedule Generator */
+#schedPref li {
+    display:inline-block; 
+}
