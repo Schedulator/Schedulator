@@ -28,7 +28,6 @@ namespace Schedulator
                       "~/Scripts/respond.js"));
             //CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(
-<<<<<<< HEAD
                       "~/Content/animate.min.css",
                       "~/Content/bootstrap.min.css",
                       "~/Content/font-awesome.css",
@@ -36,11 +35,10 @@ namespace Schedulator
                       "~/Content/main.css",
                       "~/Content/prettyPhoto.css",
                       "~/Content/responsive.css",
-                      "~/Content/Site.css"));
-=======
+                      "~/Content/Site.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css", "~/Content/Schedulator.css"));
->>>>>>> 31964f91712150b40ce027582dbc15f34073b2e3
+
         }
     }
 }
