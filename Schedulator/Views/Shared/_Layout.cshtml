@@ -4,95 +4,82 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Schedulator</title>
-    <div><img src="http://i375.photobucket.com/albums/oo197/schedulator/logo_1506675_web_zps6ze325qd.jpg" border="0" alt=" photo logo_1506675_web_zps6ze325qd.jpg" /></div>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
+
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Schedulator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                @if (User.IsInRole("Student"))
-                { 
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
-                    <li>@Html.ActionLink("Schedule", "Index", "StudentSchedule")</li>
-                    <li>@Html.ActionLink("Schedule Maker", "Index", "ScheduleGenerator")</li>
-                </ul>
-                }
-                else if (User.IsInRole("Program Director"))
-                { 
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Course Management", "Index", "ProgramDirector")</li>
-                    <li>@Html.ActionLink("Student Management", "Index", "ProgramDirector")</li>
-                    <li>@Html.ActionLink("Program Management", "Index", "ProgramsManagement")</li>
-                </ul>
-                }
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                        <!-- Indicators -->
-                        <ol class="carousel-indicators">
-                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                        </ol>
-
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <img src="http://i375.photobucket.com/albums/oo197/schedulator/1d8ef901_zpsjgx5ishx.jpg" border="0" alt="Truck" class="img-responsive center-block" />
-                                <div class="carousel-caption">
-                                    <h3>Plan.</h3>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <img src="http://i375.photobucket.com/albums/oo197/schedulator/photo-1423347834838-5162bb452ca7_zpsmkzcjev1.jpg" border="0" alt="Mountain" class="img-responsive center-block" />
-                                <div class="carousel-caption">
-                                    <h3>Future.</h3>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <img src="http://i375.photobucket.com/albums/oo197/schedulator/photo-1423683249427-8ca22bd873e0_zpsodwwkvpt.jpg" border="0" alt="Jar" class="img-responsive center-block" />
-                                <div class="carousel-caption">
-                                    <h3>Success.</h3>
-                                </div>
-                            </div>
+    <header id="header">
+        <div class="top-bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-4">
+                        <div class="top-number"><p><i class="fa fa-phone-square"></i>1-800-Schedulator</p></div>
+                    </div>
+                    <div class="col-sm-6 col-xs-8">
+                        <div class="social">
+                            <ul class="social-share">
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            </ul>
                         </div>
-                       
-
-                      
                     </div>
                 </div>
-            </div>
+            </div><!--/.container-->
         </div>
-            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"</script>
-            <script src="js/bootstrap.js"></script>
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse">
+                    @if (User.IsInRole("Student"))
+                    {
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
+                            <li>@Html.ActionLink("Schedule", "Index", "StudentSchedule")</li>
+                            <li>@Html.ActionLink("Schedule Maker", "Index", "ScheduleGenerator")</li>
+                        </ul>
+                    }
+                    else if (User.IsInRole("Program Director"))
+                    {
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>@Html.ActionLink("Course Management", "Index", "ProgramDirector")</li>
+                            <li>@Html.ActionLink("Student Management", "Index", "ProgramDirector")</li>
+                            <li>@Html.ActionLink("Program Management", "Index", "ProgramsManagement")</li>
+                        </ul>
+                    }
+                    @Html.Partial("_LoginPartial")
+
+                </div>
+            </div><!--/.container-->
+
+        </nav>
+    </header>
+
     <div class="container body-content">
+        <a href="@Url.Action("Index", "Home")"><img class="hidden-xs" src="http://i375.photobucket.com/albums/oo197/schedulator/Original_transparent_193x75_zpss1a4htsy.png" alt=""></a>
+        <img class="visible-xs" src="http://i375.photobucket.com/albums/oo197/schedulator/Original_transparent_193x75_zpss1a4htsy.png" alt="">
+
         @RenderBody()
         <hr />
+
+
+        <div class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">               
+            <p class="navbar-text">&copy; @DateTime.Now.Year - Schedulator</p>
+            </div>
+        </div>
     </div>
-        <footer>
-            <div class="footerLayout">&copy; @DateTime.Now.Year - Schedulator</div>
-        </footer>
-    
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
