@@ -57,6 +57,8 @@ input[type=checkbox] {
     border-bottom-width: 1px;
     border-left-width: 1px;
     border-spacing: 0px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .schedule td {
