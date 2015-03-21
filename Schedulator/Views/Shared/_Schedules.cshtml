@@ -1,0 +1,14 @@
+﻿@model List<Schedulator.Models.Schedule>
+@if(Model != null && Model.Count > 0)
+{ 
+    @Html.Partial("_Schedule", Model.FirstOrDefault())
+    if (Model.Count() > 1)
+    {
+        @Html.Raw("<p>Schedules</p>")
+        @Html.Partial("_Schedule", Model.LastOrDefault())
+    }
+}
+else
+{
+    <div class="alert alert-danger" role="alert">No Schedules to display</div>
+}
