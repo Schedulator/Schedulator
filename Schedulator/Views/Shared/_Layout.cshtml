@@ -1,18 +1,33 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <title>@ViewBag.Title - Schedulator</title>
+    
+    <!-- Meta -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>@ViewBag.Title - Schedulator</title>
     <div><img src="http://i375.photobucket.com/albums/oo197/schedulator/logo_1506675_web_zps6ze325qd.jpg" border="0" alt=" photo logo_1506675_web_zps6ze325qd.jpg" /></div>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+=======
+>>>>>>> 3346a87101d2661cab1b42e9593c276b7637f6c2
 
+    <!-- CSS -->
+    @Styles.Render("~/Content/css")
 </head>
+
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <!-- LOGO -->
+    <div id="logo">
+        <img src="http://i375.photobucket.com/albums/oo197/schedulator/logo_1506675_web_zps6ze325qd.jpg" border="0" alt=" photo logo_1506675_web_zps6ze325qd.jpg" />
+    </div>
+
+    <!-- Navigation Menu-->
+    <div id="navMenu" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -22,38 +37,55 @@
                 </button>
                 @Html.ActionLink("Schedulator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
+
             <div class="navbar-collapse collapse">
-                @if (User.IsInRole("Student"))
-                { 
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
-                    <li>@Html.ActionLink("Schedule", "Index", "StudentSchedule")</li>
-                    <li>@Html.ActionLink("Schedule Maker", "Index", "ScheduleGenerator")</li>
-                </ul>
+                @* Logged in Student/ Program Director Menu *@
+                @if (User.IsInRole("Student")){ 
+
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
+                        <li>@Html.ActionLink("Schedule", "Index", "StudentSchedule")</li>
+                        <li>@Html.ActionLink("Schedule Maker", "Index", "ScheduleGenerator")</li>
+                    </ul>
                 }
-                else if (User.IsInRole("Program Director"))
-                { 
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Course Management", "Index", "ProgramDirector")</li>
-                    <li>@Html.ActionLink("Student Management", "Index", "ProgramDirector")</li>
-                    <li>@Html.ActionLink("Program Management", "Index", "ProgramsManagement")</li>
-                </ul>
+                else if (User.IsInRole("Program Director")){ 
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Course Management", "Index", "ProgramDirector")</li>
+                        <li>@Html.ActionLink("Student Management", "Index", "ProgramDirector")</li>
+                        <li>@Html.ActionLink("Program Management", "Index", "ProgramsManagement")</li>
+                    </ul>
                 }
+                
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <!-- EO #navMenu-->
+
+    <!-- Main Content-->
+    <div id="mainContent" class="container body-content">
         @RenderBody()
         <hr />
     </div>
-        <footer>
-            <div class="footerLayout">&copy; @DateTime.Now.Year - Schedulator</div>
-        </footer>
+    <!-- EO #mainContent-->
+
+
+<<<<<<< HEAD
+
+=======
+    <footer>
+        <div class="footerLayout">&copy; @DateTime.Now.Year - Schedulator</div>
+    </footer>
     
-
-
+    <!-- Script -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+>>>>>>> 3346a87101d2661cab1b42e9593c276b7637f6c2
     @RenderSection("scripts", required: false)
+    <script src="@Url.Content("~/Scripts/Script.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 </body>
 </html>

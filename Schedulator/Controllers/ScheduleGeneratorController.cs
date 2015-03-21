@@ -12,11 +12,17 @@ namespace Schedulator.Controllers
         
         public ActionResult Index()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GenerateSchedules() {
+
             ApplicationDbContext db = new ApplicationDbContext();
-            
-            ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference()};
+
+            ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
             // Some test data for now to display generated schedules
-            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault(), StartTime = 0, EndTime = 1440  };
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault(), StartTime = 0, EndTime = 1440 };
             List<Course> courses = db.Courses.ToList();
             preference.Courses = new List<Course>();
             preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 348 && n.CourseLetters == "COMP").FirstOrDefault());
@@ -29,8 +35,8 @@ namespace Schedulator.Controllers
 
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.ToList(), program);
 
-            
-            return View(scheduleGenerator);
+
+            return PartialView("GenScheduleResultPartial", scheduleGenerator);
         }
 
     }
