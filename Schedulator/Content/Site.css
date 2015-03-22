@@ -1,6 +1,5 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -57,6 +56,8 @@ input[type=checkbox] {
     border-bottom-width: 1px;
     border-left-width: 1px;
     border-spacing: 0px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .schedule td {

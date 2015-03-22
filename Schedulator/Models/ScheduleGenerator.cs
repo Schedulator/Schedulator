@@ -10,8 +10,8 @@ namespace Schedulator.Models
         public Preference Preference { get; set; }
         public List<List<Schedule>> Schedules { get; set; }
         public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
-
         private List<Course> CoursesStudentWantAndCanTake = new List<Course>();
+        
         public class PrequisitesStudentNeedsForCourse
         {
             public Course Course { get; set; }
