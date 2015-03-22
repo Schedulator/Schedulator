@@ -24,6 +24,7 @@ ul li {
   padding: 25px;
   letter-spacing: 1px;
   background-color: #F6F6EC;
+  width: 800px;
 }
 
 #schedGenPref .prefs {
@@ -33,7 +34,7 @@ ul li {
 
 #schedGenPref .prefs p {
     font-weight:bold;
-    font-size: large;
+    font-size: 16px;
 }
 
 #schedGenPref .prefs ul {
