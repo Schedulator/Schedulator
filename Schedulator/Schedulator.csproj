@@ -211,7 +211,7 @@
     <Content Include="Content\main.css" />
     <Content Include="Content\prettyPhoto.css" />
     <Content Include="Content\responsive.css" />
-    <Content Include="Content\Schedulator.css" />
+    <Content Include="Content\SchedGenerator.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

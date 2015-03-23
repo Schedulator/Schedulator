@@ -19,8 +19,8 @@ namespace Schedulator.Controllers
         public ActionResult GenerateSchedules() {
 
             ApplicationDbContext db = new ApplicationDbContext();
-
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
+
             // Some test data for now to display generated schedules
             Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault(), StartTime = 0, EndTime = 1440 };
             List<Course> courses = db.Courses.ToList();

@@ -47,10 +47,12 @@ namespace Schedulator.Models
                 if (enrollment.Section.Lab != null && enrollment.Section.Lab.EndTime > latestTime)
                     latestTime = enrollment.Section.Lab.EndTime;
             }
+
             earliestTime = 15 * (int)earliestTime / 15;
             latestTime = 15 * (int)latestTime / 15;
             int numberOfRows = (int)(latestTime - earliestTime) / 15;
             ScheduleBlock[][] scheduleBlocks = new ScheduleBlock[numberOfRows][];
+
             for (int i = 0; i < numberOfRows; i++)
             {
                 scheduleBlocks[i] = new ScheduleBlock[5];
@@ -67,6 +69,7 @@ namespace Schedulator.Models
                     AddLectureTutorialLabToScheduleBlock(enrollment.Section.Lab.FirstDay, enrollment.Section.Lab.SecondDay, enrollment.Section.Lab.StartTime, enrollment.Section.Lab.EndTime, earliestTime, "Lab", enrollment.Section.Lecture.LectureID, enrollment.Section.Lecture.Course.CourseLetters, enrollment.Section.Lecture.Course.CourseNumber, scheduleBlocks);
     
             }
+
            int currentTime = (int)earliestTime;
            for (int i = 0; i < numberOfRows; i++)
            {

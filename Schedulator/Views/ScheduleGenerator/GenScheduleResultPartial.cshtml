@@ -1,89 +1,24 @@
 ﻿@model Schedulator.Models.ScheduleGenerator
 
 
-@*@foreach( List<Schedulator.Models.Schedule> schedule in Model.Schedules )
+@foreach( List<Schedulator.Models.Schedule> schedule in Model.Schedules )
 {
-    <table border="0" align="center">
+    <table border="0" align="center" class="genScheduleRslt">
         <tbody>
             <tr>
-                <td valign="top">
-                    <table border="0" cellspacing="0" cellpadding="2" class="legend">
-                        <tbody>
+                <td valign="top"> @GenScheduleLegend(schedule) </td>
 
-                            @{
-                                    foreach (Schedulator.Models.Enrollment enrollment in schedule.FirstOrDefault().Enrollments)
-                                    {
-                            @enrollment.Course.CourseLetters;
-                            @enrollment.Course.CourseNumber;
-                            @enrollment.Course.Title;
-                                        if (enrollment.Section.SectionMaster)
-                                        {
-                                            foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
-                                            {
-                            @sectionToShow.Lecture.LectureLetter;
-                            <br />
-                            @sectionToShow.Lecture.Teacher;
-                            <br />
-                            @sectionToShow.Lecture.ClassRoomNumber;
-                                            }
-
-                                       }
-                                       else
-                                        {
-                            @enrollment.Section.Lecture.LectureLetter
-                            <br />
-                            @enrollment.Section.Lecture.Teacher
-                            <br />
-                            @enrollment.Section.Lecture.ClassRoomNumber
-                                        }
-                                    }
-                                    if (schedule.Count() > 1)
-                                    {
-                                        foreach (Schedulator.Models.Enrollment enrollment in schedule.LastOrDefault().Enrollments)
-                                        {
-                            @enrollment.Course.CourseLetters;
-                            @enrollment.Course.CourseNumber;
-                            @enrollment.Course.Title;
-                                            if (enrollment.Section.SectionMaster)
-                                            {
-                                                foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
-                                                {
-                            @sectionToShow.Lecture.LectureLetter;
-                            <br />
-                            @sectionToShow.Lecture.Teacher;
-                            <br />
-                            @sectionToShow.Lecture.ClassRoomNumber;
-                                                }
-
-                                           }
-                                           else
-                                            {
-                            @enrollment.Section.Lecture.LectureLetter
-                            <br />
-                            @enrollment.Section.Lecture.Teacher
-                            <br />
-                            @enrollment.Section.Lecture.ClassRoomNumber
-                                            }
-                                        }
-                                    }
-                            }
-
-                    </table>
-                </td>
                 <td>
                     <table border="0" cellpadding="3" cellspacing="0">
                         <tbody>
                             <tr><td align="center"></td></tr>
                             <tr>
-                                <td valign="top">
-                                    @Html.Partial("_Schedule", schedule.FirstOrDefault())
-                                </td>
+                                <td valign="top">@Html.Partial("_Schedule", schedule.FirstOrDefault())</td>
                             </tr>
                         </tbody>
                     </table>
                 </td>
-                @if (schedule.Count() > 1)
-                {
+                @if (schedule.Count() > 1){
                 <td>
                     <table border="0" cellpadding="3" cellspacing="0">
                         <tbody>
@@ -100,5 +35,49 @@
             </tr>
         </tbody>
     </table>
-}*@
-hi
+    <hr />
+}
+
+
+@helper GenScheduleLegend(List<Schedulator.Models.Schedule>  schedule){
+    <div class="schedLegend">
+            @{
+                //[Extract enrolments]
+                foreach (Schedulator.Models.Enrollment enrollment in schedule.FirstOrDefault().Enrollments) {
+                    @RenderSchedules(enrollment)
+                }
+
+
+                if (schedule.Count() > 1) {
+                    foreach (Schedulator.Models.Enrollment enrollment in schedule.LastOrDefault().Enrollments) {
+                        @RenderSchedules(enrollment)
+                    }
+                }
+            }
+    </div>
+}
+
+@helper RenderSchedules(Schedulator.Models.Enrollment enrollment){
+    //Course header
+    <div class="courseHead">
+        @enrollment.Course.CourseLetters @enrollment.Course.CourseNumber -- @enrollment.Course.Title
+    </div>
+
+    //Course Sections
+    if (! enrollment.Section.SectionMaster) {
+        @RenderSections(@enrollment.Section)
+    } else {
+                        
+        foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections) {
+            @RenderSections(sectionToShow)
+        }
+    }
+}
+
+@helper RenderSections(Schedulator.Models.Section sectionToShow) {
+    <ul>
+        <li>@sectionToShow.Lecture.LectureLetter</li>
+        <li>@sectionToShow.Lecture.Teacher</li>
+        <li>@sectionToShow.Lecture.ClassRoomNumber</li>
+    </ul>
+}

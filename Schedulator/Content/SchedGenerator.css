@@ -33,11 +33,18 @@
     padding-left: 45px;
 }
 
+#schedGenPref .prefs ul li {
+    list-style:none;
+}
+
 #generatePref {
     padding-top:20px;
     text-align:right;
 }
 
 
-#prefOptions {
+
+/* Sched Gen Legend*/
+.schedLegend {
+    border:1px solid;
 }

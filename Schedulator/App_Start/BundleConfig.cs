@@ -37,7 +37,8 @@ namespace Schedulator
                       "~/Content/responsive.css",
                       "~/Content/Site.css",
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css", "~/Content/Schedulator.css"));
+                      "~/Content/site.css",
+                      "~/Content/SchedGenerator.css"));
 
         }
     }
