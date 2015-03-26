@@ -15,8 +15,7 @@
   margin-bottom: 40px;
   padding: 25px;
   letter-spacing: 1px;
-  background-color: #F6F6EC;
-  width: 800px;
+  background-color:#eee;
 }
 
 #schedGenPref .prefs {
@@ -26,7 +25,7 @@
 
 #schedGenPref .prefs p {
     font-weight:bold;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 #schedGenPref .prefs ul {
@@ -42,9 +41,21 @@
     text-align:right;
 }
 
-
-
 /* Sched Gen Legend*/
 .schedLegend {
-    border:1px solid;
+    margin-top:15px;
+    margin-right:5px;
 }
+
+.courseHeader {
+    padding: 2px;
+}
+
+#schedCount {
+    font-weight:bold;
+    font-size: 22px;
+    background-color:#EEE;
+    padding:10px;
+    margin-bottom: 10px;
+}
+

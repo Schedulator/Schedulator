@@ -1,8 +1,13 @@
 ﻿@model Schedulator.Models.ScheduleGenerator
 
+@{
+    var count = 1;
+}
 
-@foreach( List<Schedulator.Models.Schedule> schedule in Model.Schedules )
-{
+@foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules) {
+    <div id="schedCount">#@count</div>
+    count++;
+
     <table border="0" align="center" class="genScheduleRslt">
         <tbody>
             <tr>
@@ -19,18 +24,18 @@
                     </table>
                 </td>
                 @if (schedule.Count() > 1){
-                <td>
-                    <table border="0" cellpadding="3" cellspacing="0">
-                        <tbody>
-                            <tr><td align="center"></td></tr>
-                            <tr>
-                                <td valign="top">
-                                    @Html.Partial("_Schedule", schedule.LastOrDefault())
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
+                    <td>
+                        <table border="0" cellpadding="3" cellspacing="0">
+                            <tbody>
+                                <tr><td align="center"></td></tr>
+                                <tr>
+                                    <td valign="top">
+                                        @Html.Partial("_Schedule", schedule.LastOrDefault())
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
                 }
             </tr>
         </tbody>
@@ -59,7 +64,9 @@
 
 @helper RenderSchedules(Schedulator.Models.Enrollment enrollment){
     //Course header
-    <div class="courseHead">
+    var courseBlockColor = enrollment.Course.CourseLetters + enrollment.Course.CourseNumber;
+
+    <div class="@courseBlockColor courseHeader">
         @enrollment.Course.CourseLetters @enrollment.Course.CourseNumber -- @enrollment.Course.Title
     </div>
 
@@ -72,6 +79,7 @@
             @RenderSections(sectionToShow)
         }
     }
+    <script>courseAltColor('@courseBlockColor');</script>
 }
 
 @helper RenderSections(Schedulator.Models.Section sectionToShow) {

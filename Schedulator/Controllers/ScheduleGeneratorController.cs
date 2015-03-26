@@ -29,6 +29,9 @@ namespace Schedulator.Controllers
             preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 352 && n.CourseLetters == "COMP").FirstOrDefault());
             preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 282 && n.CourseLetters == "ENCS").FirstOrDefault());
             preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 202 && n.CourseLetters == "ENGR").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 392 && n.CourseLetters == "ENGR").FirstOrDefault());
+            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 201 && n.CourseLetters == "ENGR").FirstOrDefault());
+
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
 
             Program program = db.Program.FirstOrDefault();

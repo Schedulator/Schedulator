@@ -9,11 +9,10 @@
 <hr />
 
 <!-- Main Wrapper -->
-<div id="mainWrapper" class="row">
+<div id="mainWrapper" class="row" style="min-height:700px">
 
     <!-- Generator Preferences -->
     <div id="schedGenPref" class="contentBox">
-
         @using (Ajax.BeginForm("GenerateSchedules",new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "result" })){
             <!-- Options -->
             <div id="prefOptions">
@@ -50,11 +49,15 @@
                 </div>
 
                 <div id="generatePref">
-                    <input type="submit" value="Generate Schedule" class="btn btn-default" />
+                    <input type="submit" value="Generate Schedule" class="btn btn-default" id="generateSch"/>
                 </div>
             </div><!--EO #prefOptions-->
         }
     </div><!-- EO #schedGenPref-->
+
+    <div id="divProcessing" style="display:none;">
+        Processing . . . <img src="~/Content/img/ajax-loader.gif" />
+    </div>
 
     <!-- Schedules results -->
     <div id="result"></div><!-- EO #result -->
@@ -62,7 +65,23 @@
 
 </div><!-- EO #mainWrapper-->
 
+@section Scripts {
+    <script type="text/javascript">
 
+        $(document).ready(function () {
+            $('#generateSch').click(function () {
+                $('#result').html('');
+                $("#divProcessing").show();
+            });
+
+            $('#result').bind("DOMSubtreeModified", function () {
+                $("#divProcessing").hide();
+            });
+        });
+
+
+    </script>
+}
 
 
 

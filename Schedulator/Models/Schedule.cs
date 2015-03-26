@@ -18,8 +18,6 @@ namespace Schedulator.Models
         public bool SaveSchedule()
         {
             ApplicationDbContext db = new ApplicationDbContext();
-
-
             return true;
         }
 
@@ -53,26 +51,53 @@ namespace Schedulator.Models
             int numberOfRows = (int)(latestTime - earliestTime) / 15;
             ScheduleBlock[][] scheduleBlocks = new ScheduleBlock[numberOfRows][];
 
-            for (int i = 0; i < numberOfRows; i++)
-            {
+            for (int i = 0; i < numberOfRows; i++){
                 scheduleBlocks[i] = new ScheduleBlock[5];
                 for (int k = 0; k < 5; k++)
                     scheduleBlocks[i][k] = new ScheduleBlock() { RenderType = BlockRenderType.EMPTY };
             }
 
-            foreach(Enrollment enrollment in enrollments)
-            {
-                AddLectureTutorialLabToScheduleBlock(enrollment.Section.Lecture.FirstDay, enrollment.Section.Lecture.SecondDay, enrollment.Section.Lecture.StartTime, enrollment.Section.Lecture.EndTime, earliestTime, "Lec", enrollment.Section.Lecture.LectureID, enrollment.Section.Lecture.Course.CourseLetters, enrollment.Section.Lecture.Course.CourseNumber, scheduleBlocks);
+            foreach(Enrollment enrollment in enrollments){
+
+                AddLectureTutorialLabToScheduleBlock(enrollment.Section.Lecture.FirstDay,
+                                                     enrollment.Section.Lecture.SecondDay, 
+                                                     enrollment.Section.Lecture.StartTime, 
+                                                     enrollment.Section.Lecture.EndTime, 
+                                                     earliestTime, 
+                                                     "Lec", 
+                                                     enrollment.Section.Lecture.LectureID, 
+                                                     enrollment.Section.Lecture.Course.CourseLetters, 
+                                                     enrollment.Section.Lecture.Course.CourseNumber, 
+                                                     scheduleBlocks);
+
                 if ( enrollment.Section.Tutorial != null)
-                    AddLectureTutorialLabToScheduleBlock(enrollment.Section.Tutorial.FirstDay, enrollment.Section.Tutorial.SecondDay, enrollment.Section.Tutorial.StartTime, enrollment.Section.Tutorial.EndTime, earliestTime, "Tut", enrollment.Section.Lecture.LectureID, enrollment.Section.Lecture.Course.CourseLetters, enrollment.Section.Lecture.Course.CourseNumber, scheduleBlocks);
+                    AddLectureTutorialLabToScheduleBlock(enrollment.Section.Tutorial.FirstDay, 
+                                                         enrollment.Section.Tutorial.SecondDay, 
+                                                         enrollment.Section.Tutorial.StartTime, 
+                                                         enrollment.Section.Tutorial.EndTime, 
+                                                         earliestTime, 
+                                                         "Tut", 
+                                                         enrollment.Section.Lecture.LectureID, 
+                                                         enrollment.Section.Lecture.Course.CourseLetters, 
+                                                         enrollment.Section.Lecture.Course.CourseNumber, 
+                                                         scheduleBlocks);
                 if (enrollment.Section.Lab != null)
-                    AddLectureTutorialLabToScheduleBlock(enrollment.Section.Lab.FirstDay, enrollment.Section.Lab.SecondDay, enrollment.Section.Lab.StartTime, enrollment.Section.Lab.EndTime, earliestTime, "Lab", enrollment.Section.Lecture.LectureID, enrollment.Section.Lecture.Course.CourseLetters, enrollment.Section.Lecture.Course.CourseNumber, scheduleBlocks);
+                    AddLectureTutorialLabToScheduleBlock(enrollment.Section.Lab.FirstDay, 
+                                                         enrollment.Section.Lab.SecondDay, 
+                                                         enrollment.Section.Lab.StartTime, 
+                                                         enrollment.Section.Lab.EndTime, 
+                                                         earliestTime, 
+                                                         "Lab", 
+                                                         enrollment.Section.Lecture.LectureID, 
+                                                         enrollment.Section.Lecture.Course.CourseLetters, 
+                                                         enrollment.Section.Lecture.Course.CourseNumber, 
+                                                         scheduleBlocks);
     
             }
 
            int currentTime = (int)earliestTime;
-           for (int i = 0; i < numberOfRows; i++)
-           {
+           for (int i = 0; i < numberOfRows; i++){
+
                htmlToReturn += "<tr><td id=\"time\"> " + TimeSpan.FromMinutes(currentTime).ToString(@"hh\:mm") + "</td>";
                     
                for (int k = 0; k < 5; k++)
@@ -83,22 +108,44 @@ namespace Schedulator.Models
            return htmlToReturn;
             
         }
-        public void AddLectureTutorialLabToScheduleBlock(TimeBlock.day firstDay, TimeBlock.day secondDay, double startTime, double endTime, double earliestTime, string blockType, int blockId, string blockLetters, int blockNumber, ScheduleBlock[][] scheduleBlocks)
-        {
+
+        public void AddLectureTutorialLabToScheduleBlock(TimeBlock.day firstDay, 
+                                                         TimeBlock.day secondDay, 
+                                                         double startTime, 
+                                                         double endTime, 
+                                                         double earliestTime, 
+                                                         string blockType, 
+                                                         int blockId, 
+                                                         string blockLetters, 
+                                                         int blockNumber, 
+                                                         ScheduleBlock[][] scheduleBlocks){
+
             int row = (int)(startTime - earliestTime) / 15;
             int firstColumn = (int)firstDay;
             int rowSpawn = (int)(endTime - startTime) / 15;
-            scheduleBlocks[row][firstColumn] = new ScheduleBlock() { RowSpawn = rowSpawn, RenderType = BlockRenderType.DATA, BlockType = blockType, BlockId = blockId, BlockLetters = blockLetters, BlockNumber = blockNumber };
+            scheduleBlocks[row][firstColumn] = new ScheduleBlock() { RowSpawn = rowSpawn, 
+                                                                     RenderType = BlockRenderType.DATA, 
+                                                                     BlockType = blockType, 
+                                                                     BlockId = blockId, 
+                                                                     BlockLetters = blockLetters, 
+                                                                     BlockNumber = blockNumber 
+                                                                    };
 
             
             for (int i = 1; i < rowSpawn; i++)
                 scheduleBlocks[row + i][firstColumn] = new ScheduleBlock() { RenderType = BlockRenderType.NONE };
 
             int secondColumn;
-            if (secondDay != TimeBlock.day.NONE)
-            {
+
+            if (secondDay != TimeBlock.day.NONE){
                 secondColumn = (int)secondDay;
-                scheduleBlocks[row][secondColumn] = new ScheduleBlock() { RowSpawn = rowSpawn, RenderType = BlockRenderType.DATA, BlockType = blockType, BlockId = blockId, BlockLetters = blockLetters, BlockNumber = blockNumber };
+                scheduleBlocks[row][secondColumn] = new ScheduleBlock() { RowSpawn = rowSpawn, 
+                                                                          RenderType = BlockRenderType.DATA, 
+                                                                          BlockType = blockType, 
+                                                                          BlockId = blockId, 
+                                                                          BlockLetters = blockLetters, 
+                                                                          BlockNumber = blockNumber 
+                                                                        };
 
                 for (int i = 1; i < rowSpawn; i++)
                     scheduleBlocks[row + i][secondColumn] = new ScheduleBlock() { RenderType = BlockRenderType.NONE };
@@ -122,7 +169,7 @@ namespace Schedulator.Models
             if (RenderType == BlockRenderType.EMPTY)
                 return "<td>&nbsp</td>";
             else if (RenderType == BlockRenderType.DATA)
-                return "<td id =\"" + BlockType + "\" rowspan=\"" + RowSpawn + "\"  style=\"cursor:pointer;\" tilte=\"Test\">" + BlockLetters + "<br>" + BlockNumber + "<br>" + BlockType + "</td>";
+                return "<td class =\"" + BlockLetters+BlockNumber+ "\" rowspan=\"" + RowSpawn + "\"  style=\"cursor:pointer;font-size:12px;\" tilte=\"Test\">" + BlockLetters + "<br>" + BlockNumber + "<br>" + BlockType + "</td>";
             else
                 return "";
         }
