@@ -95,7 +95,7 @@ namespace Schedulator.Models
                     new HoldStartAndEndTime { StartTime = section.Lecture.StartTime, EndTime = section.Lecture.EndTime, FirstDay = section.Lecture.FirstDay, SecondDay = section.Lecture.SecondDay}};
                     if (section.Tutorial != null)
                         sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Tutorial.StartTime, EndTime = section.Tutorial.EndTime, FirstDay = section.Tutorial.FirstDay, SecondDay = section.Tutorial.SecondDay });
-                    if (sectionToAdd.Lab != null)
+                    if (section.Lab != null)
                         sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Lab.StartTime, EndTime = section.Lab.EndTime, FirstDay = section.Lab.FirstDay, SecondDay = section.Lab.SecondDay });
 
                     foreach (HoldStartAndEndTime sectionToAddTime in sectionToAddTimes)
