@@ -97,6 +97,13 @@
             <td>@sectionToShow.Tutorial.ClassRoomNumber</td>
         </tr>
         }
+        @if (sectionToShow.Lab != null)
+        {
+            <tr>
+                <td>Lab @sectionToShow.Lab.LabLetter </td>
+                <td>@sectionToShow.Lab.ClassRoomNumber</td>
+            </tr>
+        }
 
     </table>
     if (sectionToShow.SectionMaster)
@@ -114,6 +121,13 @@
                     <tr>
                         <td>Tut @sectionToShowFromMaster.Tutorial.TutorialLetter </td>
                         <td>@sectionToShowFromMaster.Tutorial.ClassRoomNumber</td>
+                    </tr>
+                }
+                @if (sectionToShowFromMaster.Lab != null)
+                {
+                    <tr>
+                        <td>Lab @sectionToShowFromMaster.Lab.LabLetter </td>
+                        <td>@sectionToShowFromMaster.Lab.ClassRoomNumber</td>
                     </tr>
                 }
 
