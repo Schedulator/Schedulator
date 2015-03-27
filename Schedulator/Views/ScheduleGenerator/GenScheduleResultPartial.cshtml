@@ -83,9 +83,42 @@
 }
 
 @helper RenderSections(Schedulator.Models.Section sectionToShow) {
-    <ul>
-        <li>@sectionToShow.Lecture.LectureLetter</li>
-        <li>@sectionToShow.Lecture.Teacher</li>
-        <li>@sectionToShow.Lecture.ClassRoomNumber</li>
-    </ul>
+
+    <table>
+        <tr>
+            <td>Lec @sectionToShow.Lecture.LectureLetter </td>
+            <td>@sectionToShow.Lecture.Teacher</td>
+            <td>@sectionToShow.Lecture.ClassRoomNumber</td>
+        </tr>
+        @if (sectionToShow.Tutorial != null)
+        { 
+        <tr>
+            <td>Tut @sectionToShow.Tutorial.TutorialLetter </td>
+            <td>@sectionToShow.Tutorial.ClassRoomNumber</td>
+        </tr>
+        }
+
+    </table>
+    if (sectionToShow.SectionMaster)
+    {
+        foreach (Schedulator.Models.Section sectionToShowFromMaster in sectionToShow.OtherSimilarSections)
+        {
+            <table>
+                <tr>
+                    <td>Lec @sectionToShowFromMaster.Lecture.LectureLetter </td>
+                    <td>@sectionToShowFromMaster.Lecture.Teacher</td>
+                    <td>@sectionToShowFromMaster.Lecture.ClassRoomNumber</td>
+                </tr>
+                @if (sectionToShowFromMaster.Tutorial != null)
+                {
+                    <tr>
+                        <td>Tut @sectionToShowFromMaster.Tutorial.TutorialLetter </td>
+                        <td>@sectionToShowFromMaster.Tutorial.ClassRoomNumber</td>
+                    </tr>
+                }
+
+            </table>
+        }
+    }
+
 }
