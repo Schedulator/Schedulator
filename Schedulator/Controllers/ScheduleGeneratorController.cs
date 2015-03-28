@@ -4,21 +4,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace Schedulator.Controllers
 {
     public class ScheduleGeneratorController : Controller
     {
-        
+        ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult RegisterSchedule(ICollection<int> sectionIds)
+        {
+            List<string> keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
 
+            Schedule schedule = new Schedule() { ApplicationUser = db.Users.Find(User.Identity.GetUserId()) };
+            foreach( string key in keys)
+            {
+                int sectionId = Convert.ToInt32(Request.Form[key]);
+
+            }
+            
+            if (Request.Form["register"] != null )
+            {
+
+            }
+            else
+            {
+
+            }
+
+            
+               return View();
+        }
         [HttpPost]
         public ActionResult GenerateSchedules() {
 
-            ApplicationDbContext db = new ApplicationDbContext();
+            
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
 
             // Some test data for now to display generated schedules

@@ -8,67 +8,78 @@
 
 </script>
 
-@foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules) {
+@foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules)
+{
     <div id="schedCount">#@count</div>
     count++;
-    <button type="button" class="btn btn-primary">Save</button>
-    <button type="button" class="btn btn-primary">Register</button>
-    <table border="0" align="center" class="genScheduleRslt">
-        <tbody>
-            <tr>
-                <td valign="top"> @GenScheduleLegend(schedule) </td>
+    using (Ajax.BeginForm("RegisterSchedule", new AjaxOptions { HttpMethod = "Post" }))
+    {
+        <input type="submit" name="save" class="btn btn-primary" value="Save">
+        <input type="submit" name="register" class="btn btn-primary" value="Register">
+        <table border="0" align="center" class="genScheduleRslt">
+            <tbody>
+                <tr>
+                    <td valign="top"> @GenScheduleLegend(schedule) </td>
 
-                <td>
-                    <table border="0" cellpadding="3" cellspacing="0">
-                        <tbody>
-                            <tr><td align="center"></td></tr>
-                            <tr>
-                                <td valign="top">@Html.Partial("_Schedule", schedule.FirstOrDefault())</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-                @if (schedule.Count() > 1){
                     <td>
                         <table border="0" cellpadding="3" cellspacing="0">
                             <tbody>
                                 <tr><td align="center"></td></tr>
                                 <tr>
-                                    <td valign="top">
-                                        @Html.Partial("_Schedule", schedule.LastOrDefault())
-                                    </td>
+                                    <td valign="top">@Html.Partial("_Schedule", schedule.FirstOrDefault())</td>
                                 </tr>
                             </tbody>
                         </table>
                     </td>
-                }
-            </tr>
-        </tbody>
-    </table>
+                    @if (schedule.Count() > 1)
+                    {
+                        <td>
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tbody>
+                                    <tr><td align="center"></td></tr>
+                                    <tr>
+                                        <td valign="top">
+                                            @Html.Partial("_Schedule", schedule.LastOrDefault())
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    }
     <hr />
 }
 
 
-@helper GenScheduleLegend(List<Schedulator.Models.Schedule>  schedule){
+@helper GenScheduleLegend(List<Schedulator.Models.Schedule> schedule)
+{
     <div class="schedLegend">
 
-            @{
-                //[Extract enrolments]
-                foreach (Schedulator.Models.Enrollment enrollment in schedule.FirstOrDefault().Enrollments) {
-                    @RenderSchedules(enrollment)
-                }
+        @{
+            //[Extract enrolments]
+            int radioButtonSectionGroup = 1;
+            foreach (Schedulator.Models.Enrollment enrollment in schedule.FirstOrDefault().Enrollments)
+            {
+                @RenderSchedules(enrollment, radioButtonSectionGroup++)
+            }
 
 
-                if (schedule.Count() > 1) {
-                    foreach (Schedulator.Models.Enrollment enrollment in schedule.LastOrDefault().Enrollments) {
-                        @RenderSchedules(enrollment)
-                    }
+            if (schedule.Count() > 1)
+            {
+                foreach (Schedulator.Models.Enrollment enrollment in schedule.LastOrDefault().Enrollments)
+                {
+                    @RenderSchedules(enrollment, radioButtonSectionGroup++)
                 }
             }
+        }
     </div>
 }
 
-@helper RenderSchedules(Schedulator.Models.Enrollment enrollment){
+@helper RenderSchedules(Schedulator.Models.Enrollment enrollment, int radioButtonSectionGroup)
+{
     //Course header
     var courseBlockColor = enrollment.Course.CourseLetters + enrollment.Course.CourseNumber;
 
@@ -77,31 +88,43 @@
     </div>
 
     //Course Sections
-    if (! enrollment.Section.SectionMaster) {
-        @RenderSections(@enrollment.Section)
-    } else {
-                        
-        foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections) {
-            @RenderSections(sectionToShow)
+    if (!enrollment.Section.SectionMaster)
+    {
+        @RenderSections(@enrollment.Section, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+    }
+    else
+    {
+
+        foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
+        {
+            @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
         }
     }
     <script>courseAltColor('@courseBlockColor');</script>
 }
 
-@helper RenderSections(Schedulator.Models.Section sectionToShow) {
-
-    <table>
+@helper RenderSections(Schedulator.Models.Section sectionToShow, string radioButtonGroup)
+{
+    <table sectionid="@sectionToShow.SectionId">
         <tr>
-            <td>Lec @sectionToShow.Lecture.LectureLetter </td>
+            @if (sectionToShow.SectionMaster || sectionToShow.OtherSimilarSectionMaster != null)
+            {
+                <td rowspan="3" width="5%" style="background-color:indianred;"><label>@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
+            }
+            else
+            {
+                <td rowspan="3" width="5%" style="background-color:indianred;"><label style="display:none;">@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
+            }
+            <td width="30%">Lec @sectionToShow.Lecture.LectureLetter </td>
             <td>@sectionToShow.Lecture.Teacher</td>
             <td>@sectionToShow.Lecture.ClassRoomNumber</td>
         </tr>
         @if (sectionToShow.Tutorial != null)
-        { 
-        <tr>
-            <td>Tut @sectionToShow.Tutorial.TutorialLetter </td>
-            <td>@sectionToShow.Tutorial.ClassRoomNumber</td>
-        </tr>
+        {
+            <tr>
+                <td>Tut @sectionToShow.Tutorial.TutorialLetter </td>
+                <td>@sectionToShow.Tutorial.ClassRoomNumber</td>
+            </tr>
         }
         @if (sectionToShow.Lab != null)
         {
@@ -110,35 +133,8 @@
                 <td>@sectionToShow.Lab.ClassRoomNumber</td>
             </tr>
         }
-
     </table>
-    if (sectionToShow.SectionMaster)
-    {
-        foreach (Schedulator.Models.Section sectionToShowFromMaster in sectionToShow.OtherSimilarSections)
-        {
-            <table>
-                <tr>
-                    <td>Lec @sectionToShowFromMaster.Lecture.LectureLetter </td>
-                    <td>@sectionToShowFromMaster.Lecture.Teacher</td>
-                    <td>@sectionToShowFromMaster.Lecture.ClassRoomNumber</td>
-                </tr>
-                @if (sectionToShowFromMaster.Tutorial != null)
-                {
-                    <tr>
-                        <td>Tut @sectionToShowFromMaster.Tutorial.TutorialLetter </td>
-                        <td>@sectionToShowFromMaster.Tutorial.ClassRoomNumber</td>
-                    </tr>
-                }
-                @if (sectionToShowFromMaster.Lab != null)
-                {
-                    <tr>
-                        <td>Lab @sectionToShowFromMaster.Lab.LabLetter </td>
-                        <td>@sectionToShowFromMaster.Lab.ClassRoomNumber</td>
-                    </tr>
-                }
-
-            </table>
-        }
-    }
-
+    <br>
 }
+
+     
