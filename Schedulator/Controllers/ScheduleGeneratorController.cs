@@ -16,28 +16,45 @@ namespace Schedulator.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult RegisterSchedule(ICollection<int> sectionIds)
+        public void RegisterSchedule()
         {
             List<string> keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
 
-            Schedule schedule = new Schedule() { ApplicationUser = db.Users.Find(User.Identity.GetUserId()) };
+            List<Schedule> schedules = new List<Schedule>();
+            bool isRegisteredSchedule = false;
+            if (Request.Form["register"] != null )
+                isRegisteredSchedule = true;
+
             foreach( string key in keys)
             {
                 int sectionId = Convert.ToInt32(Request.Form[key]);
+                Section section = db.Section.Where(n => n.SectionId == sectionId).FirstOrDefault();
+                if (section != null)
+                {
+                    bool noScheduleForSemester = true;
+                    foreach (Schedule schedule in schedules)
+                    {
+                        if (schedule.Semester == section.Lecture.Semester)
+                        {
+                            schedule.Enrollments.Add(new Enrollment { Course = section.Lecture.Course, Section = section });
+                            noScheduleForSemester = false;
+                            break;
+                        }        
+                    }
+                    if (noScheduleForSemester)
+                        schedules.Add(new Schedule { ApplicationUser = db.Users.Find(User.Identity.GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = isRegisteredSchedule, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
 
+                }
             }
-            
-            if (Request.Form["register"] != null )
+            foreach (Schedule schedule in schedules)
             {
-
+                if (isRegisteredSchedule)
+                    schedule.SaveSchedule();
+                else
+                    schedule.RegisterSchedule();
             }
-            else
-            {
 
-            }
-
-            
-               return View();
+           
         }
         [HttpPost]
         public ActionResult GenerateSchedules() {

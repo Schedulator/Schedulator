@@ -20,14 +20,25 @@ namespace Schedulator.Models
             ApplicationDbContext db = new ApplicationDbContext();
             return true;
         }
-        public bool RegisterSchedule(List<Enrollment> studentsEnrollments)
+        public bool RegisterSchedule()
         {
             ApplicationDbContext db = new ApplicationDbContext();
             List<Prerequisite> missingPrequisite = new List<Prerequisite>();
-            foreach(Enrollment enrollmentToRegister in Enrollments )
+            if (IsRegisteredSchedule)
             {
-                missingPrequisite.AddRange(enrollmentToRegister.Course.MissingPrequisite(studentsEnrollments));
+                Schedule currentStudentsSchedule = db.Schedule.Where(n=> n.ApplicationUser == ApplicationUser && n.Semester == Semester).FirstOrDefault();
+                if (currentStudentsSchedule != null)
+                {
+                    db.Schedule.Remove(currentStudentsSchedule);
+                    db.Enrollment.RemoveRange(currentStudentsSchedule.Enrollments);
+                }
             }
+         //   foreach(Enrollment enrollmentToRegister in Enrollments )
+        //    {
+       //         missingPrequisite.AddRange(enrollmentToRegister.Course.MissingPrequisite(studentsEnrollments));
+       //     }
+            db.Schedule.Add(this);
+            db.SaveChanges();
             return true;
         }
 
