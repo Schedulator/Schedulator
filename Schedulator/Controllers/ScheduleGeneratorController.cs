@@ -16,7 +16,7 @@ namespace Schedulator.Controllers
             return View();
         }
         [HttpPost]
-        public void RegisterSchedule()
+        public ActionResult RegisterSchedule()
         {
             List<string> keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
 
@@ -57,7 +57,7 @@ namespace Schedulator.Controllers
                 db.SaveChanges();
             }
 
-           
+            return PartialView("RegisterSuccessPartial");
         }
         [HttpPost]
         public ActionResult GenerateSchedules() {

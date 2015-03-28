@@ -4,7 +4,7 @@
     var count = 1;
 }
 <script>
-
+    
 
 </script>
 
@@ -12,8 +12,10 @@
 {
     <div id="schedCount">#@count</div>
     count++;
-    using (Ajax.BeginForm("RegisterSchedule", new AjaxOptions { HttpMethod = "Post" }))
+    using (Ajax.BeginForm("RegisterSchedule", new AjaxOptions { HttpMethod = "Post", UpdateTargetId= count.ToString() }))
     {
+        <!-- Schedules results -->
+        <div id="@count.ToString()"></div><!-- EO #result -->
         <input type="submit" name="register" class="btn btn-primary" value="Register">
         <table border="0" align="center" class="genScheduleRslt">
             <tbody>
