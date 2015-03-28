@@ -35,9 +35,6 @@ namespace Schedulator.Models
             ApplicationDbContext db = new ApplicationDbContext();
             List<List<Section>> sectionsListMaster = new List<List<Section>>();
             List<List<Section>>  sectionCombinationsLists = new List<List<Section>>();
-            List<Section> sectionns = db.Section.Where(n => ( n.Lecture.Semester.Season == Season.Summer2) && 
-                                                              n.Lecture.Course.CourseNumber == 282 && 
-                                                              n.Lecture.Course.CourseLetters == "ENCS" ).ToList();
 
             if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
             {

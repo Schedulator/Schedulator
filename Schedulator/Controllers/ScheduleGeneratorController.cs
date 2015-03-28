@@ -49,9 +49,12 @@ namespace Schedulator.Controllers
             foreach (Schedule schedule in schedules)
             {
                 if (isRegisteredSchedule)
-                    schedule.SaveSchedule();
-                else
                     schedule.RegisterSchedule();
+                else
+                    schedule.SaveSchedule();
+
+                db.Schedule.Add(schedule);
+                db.SaveChanges();
             }
 
            

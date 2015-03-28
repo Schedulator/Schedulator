@@ -24,21 +24,23 @@ namespace Schedulator.Models
         {
             ApplicationDbContext db = new ApplicationDbContext();
             List<Prerequisite> missingPrequisite = new List<Prerequisite>();
+            Schedule currentStudentsSchedule;
             if (IsRegisteredSchedule)
             {
-                Schedule currentStudentsSchedule = db.Schedule.Where(n=> n.ApplicationUser == ApplicationUser && n.Semester == Semester).FirstOrDefault();
+                currentStudentsSchedule = db.Schedule.Where(n => n.ApplicationUser.Id == ApplicationUser.Id && n.Semester.SemesterID == Semester.SemesterID && n.IsRegisteredSchedule == true).FirstOrDefault();
+
                 if (currentStudentsSchedule != null)
                 {
-                    db.Schedule.Remove(currentStudentsSchedule);
                     db.Enrollment.RemoveRange(currentStudentsSchedule.Enrollments);
+                    db.Schedule.Remove(currentStudentsSchedule);
+                    db.SaveChanges();
                 }
             }
          //   foreach(Enrollment enrollmentToRegister in Enrollments )
         //    {
        //         missingPrequisite.AddRange(enrollmentToRegister.Course.MissingPrequisite(studentsEnrollments));
        //     }
-            db.Schedule.Add(this);
-            db.SaveChanges();
+
             return true;
         }
 
