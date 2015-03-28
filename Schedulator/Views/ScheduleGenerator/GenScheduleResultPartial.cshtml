@@ -3,11 +3,16 @@
 @{
     var count = 1;
 }
+<script>
+
+
+</script>
 
 @foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules) {
     <div id="schedCount">#@count</div>
     count++;
-
+    <button type="button" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-primary">Register</button>
     <table border="0" align="center" class="genScheduleRslt">
         <tbody>
             <tr>
@@ -46,6 +51,7 @@
 
 @helper GenScheduleLegend(List<Schedulator.Models.Schedule>  schedule){
     <div class="schedLegend">
+
             @{
                 //[Extract enrolments]
                 foreach (Schedulator.Models.Enrollment enrollment in schedule.FirstOrDefault().Enrollments) {
