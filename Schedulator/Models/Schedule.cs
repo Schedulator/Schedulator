@@ -20,7 +20,29 @@ namespace Schedulator.Models
             ApplicationDbContext db = new ApplicationDbContext();
             return true;
         }
+        public bool RegisterSchedule()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<Prerequisite> missingPrequisite = new List<Prerequisite>();
+            Schedule currentStudentsSchedule;
+            if (IsRegisteredSchedule)
+            {
+                currentStudentsSchedule = db.Schedule.Where(n => n.ApplicationUser.Id == ApplicationUser.Id && n.Semester.SemesterID == Semester.SemesterID && n.IsRegisteredSchedule == true).FirstOrDefault();
 
+                if (currentStudentsSchedule != null)
+                {
+                    db.Enrollment.RemoveRange(currentStudentsSchedule.Enrollments);
+                    db.Schedule.Remove(currentStudentsSchedule);
+                    db.SaveChanges();
+                }
+            }
+         //   foreach(Enrollment enrollmentToRegister in Enrollments )
+        //    {
+       //         missingPrequisite.AddRange(enrollmentToRegister.Course.MissingPrequisite(studentsEnrollments));
+       //     }
+
+            return true;
+        }
 
         public string RenderSchedule()
         {
@@ -128,7 +150,9 @@ namespace Schedulator.Models
                                                                      BlockType = blockType, 
                                                                      BlockId = blockId, 
                                                                      BlockLetters = blockLetters, 
-                                                                     BlockNumber = blockNumber 
+                                                                     BlockNumber = blockNumber,
+                                                                     StartTime = startTime,
+                                                                     EndTime = endTime
                                                                     };
 
             
@@ -144,7 +168,9 @@ namespace Schedulator.Models
                                                                           BlockType = blockType, 
                                                                           BlockId = blockId, 
                                                                           BlockLetters = blockLetters, 
-                                                                          BlockNumber = blockNumber 
+                                                                          BlockNumber = blockNumber,
+                                                                          StartTime = startTime,
+                                                                          EndTime = endTime
                                                                         };
 
                 for (int i = 1; i < rowSpawn; i++)
@@ -163,13 +189,17 @@ namespace Schedulator.Models
         public string BlockLetters { get; set; }
         public string BlockType { get; set; }
         public int BlockId { get; set; }
+        public double StartTime { get; set; }
+        public double EndTime { get; set; }
 
         public string GetBlockHtml()
         {
             if (RenderType == BlockRenderType.EMPTY)
                 return "<td>&nbsp</td>";
             else if (RenderType == BlockRenderType.DATA)
-                return "<td class =\"" + BlockLetters+BlockNumber+ "\" rowspan=\"" + RowSpawn + "\"  style=\"cursor:pointer;font-size:12px;\" tilte=\"Test\">" + BlockLetters + "<br>" + BlockNumber + "<br>" + BlockType + "</td>";
+                return "<td class =\"" + BlockLetters + BlockNumber + "\" rowspan=\"" + RowSpawn + 
+                        "\"  style=\"cursor:pointer;font-size:12px;\" tilte=\"Test\" data-toggle=\"tooltip\" title=\" " +
+                        TimeSpan.FromMinutes(StartTime).ToString(@"hh\:mm") + " - " + TimeSpan.FromMinutes(EndTime).ToString(@"hh\:mm") + "\" >" + BlockLetters + "<br>" + BlockNumber + "<br>" + BlockType + "</td>";
             else
                 return "";
         }
