@@ -300,6 +300,7 @@
     <Content Include="Views\Shared\_Schedules.cshtml" />
     <Content Include="Views\ScheduleGenerator\GenScheduleResultPartial.cshtml" />
     <Content Include="Views\ScheduleGenerator\RegisterSuccessPartial.cshtml" />
+    <Content Include="Views\Shared\_ScheduleAndLegend.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
