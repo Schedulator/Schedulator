@@ -60,7 +60,7 @@ namespace Schedulator.Controllers
             return PartialView("RegisterSuccessPartial");
         }
         [HttpPost]
-        public ActionResult GenerateSchedules() {
+        public ActionResult GenerateSchedules(Preference preferences) {
 
             
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
