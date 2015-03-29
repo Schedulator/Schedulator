@@ -25,24 +25,6 @@
 
 <body>
     <header id="header">
-        <div class="top-bar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-6 col-xs-4">
-                        <div class="top-number"><p><i class="fa fa-phone-square"></i>1-800-Schedulator</p></div>
-                    </div>
-                    <div class="col-sm-6 col-xs-8">
-                        <div class="social">
-                            <ul class="social-share">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div><!--/.container-->
-        </div>
         <nav class="navbar navbar-inverse">
             <div class="container">
                 <div class="navbar-header">
@@ -83,17 +65,13 @@
     <!-- Main Content-->
     <div id="mainContent" class="container body-content">
         @RenderBody()
-        <hr />
-
-
-        <div class="navbar navbar-default navbar-fixed-bottom">
-            <div class="container">               
-            <p class="navbar-text">&copy; @DateTime.Now.Year - Schedulator</p>
-            </div>
-        </div>
     </div>
 
-
+    <div class="navbar navbar-default navbar-bottom">
+        <div class="container">
+            <p class="navbar-text">&copy; @DateTime.Now.Year - Schedulator</p>
+        </div>
+    </div>
 
 </body>
 </html>
