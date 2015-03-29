@@ -4,7 +4,6 @@
     @Html.Partial("_Schedule", Model.FirstOrDefault())
     if (Model.Count() > 1)
     {
-        @Html.Raw("<p>Schedules</p>")
         @Html.Partial("_Schedule", Model.LastOrDefault())
     }
 }

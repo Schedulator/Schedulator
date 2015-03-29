@@ -4,7 +4,7 @@
 }
 @using Microsoft.AspNet.Identity
 <div class="jumbotron">
-    <h1>My Schedulator</h1>
+    <h1>Schedulator</h1>
 </div>
 
 <div class="row">
@@ -19,17 +19,29 @@
             @Html.DisplayFor(modelItem => modelItem.LastName)
             <br />
             <br />
-            @Html.DisplayNameFor(model => model.Program) Information:
-            @Html.DisplayFor(modelItem => modelItem.Program)
-           
-            @*@{
-                    foreach (var programProperty in Model.Program) {
-                        @programProperty
-                    }
-                }*@
-
-            @*Trying to find a way to use a foreach loop that would access the database information on the user's Program. 
-            I'm not quite sure how the property Program is written, but will find out.*@
+            @{
+            if (Model.Program != null) {
+                @Html.DisplayNameFor(model => model.Program) <span>Information:</span>
+                <ul>
+                    <li>Program Name:
+                        <ul>
+                            <li>@Html.DisplayFor(modelItem => modelItem.Program.ProgramName)</li>
+                        </ul>
+                    </li>
+                    <li>Program Option:
+                        <ul>
+                            <li>@Html.DisplayFor(modelItem => modelItem.Program.ProgramOption)</li>
+                        </ul>
+                    </li>
+                    <li>Program Credits:
+                        <ul>
+                            <li>@Html.DisplayFor(modelItem => modelItem.Program.CreditsRequirement)</li>
+                        </ul>
+                        <br />
+                    </li>
+                </ul>
+            }
+            }
         </p>
 
     </div>

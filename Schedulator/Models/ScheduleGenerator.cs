@@ -35,9 +35,6 @@ namespace Schedulator.Models
             ApplicationDbContext db = new ApplicationDbContext();
             List<List<Section>> sectionsListMaster = new List<List<Section>>();
             List<List<Section>>  sectionCombinationsLists = new List<List<Section>>();
-            List<Section> sectionns = db.Section.Where(n => ( n.Lecture.Semester.Season == Season.Summer2) && 
-                                                              n.Lecture.Course.CourseNumber == 282 && 
-                                                              n.Lecture.Course.CourseLetters == "ENCS" ).ToList();
 
             if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
             {
@@ -95,7 +92,7 @@ namespace Schedulator.Models
                     new HoldStartAndEndTime { StartTime = section.Lecture.StartTime, EndTime = section.Lecture.EndTime, FirstDay = section.Lecture.FirstDay, SecondDay = section.Lecture.SecondDay}};
                     if (section.Tutorial != null)
                         sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Tutorial.StartTime, EndTime = section.Tutorial.EndTime, FirstDay = section.Tutorial.FirstDay, SecondDay = section.Tutorial.SecondDay });
-                    if (sectionToAdd.Lab != null)
+                    if (section.Lab != null)
                         sectionTimes.Add(new HoldStartAndEndTime { StartTime = section.Lab.StartTime, EndTime = section.Lab.EndTime, FirstDay = section.Lab.FirstDay, SecondDay = section.Lab.SecondDay });
 
                     foreach (HoldStartAndEndTime sectionToAddTime in sectionToAddTimes)
