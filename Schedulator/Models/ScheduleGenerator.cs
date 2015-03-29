@@ -74,7 +74,7 @@ namespace Schedulator.Models
 
         }
 
-        private bool CheckIfTimeConflict (List<Section> sections, Section sectionToAdd)
+        public bool CheckIfTimeConflict (List<Section> sections, Section sectionToAdd)
         {
             
             List<HoldStartAndEndTime> sectionToAddTimes = new List<HoldStartAndEndTime>() { 

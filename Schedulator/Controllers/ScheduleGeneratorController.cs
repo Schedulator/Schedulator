@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Schedulator.Controllers
 {
+    [Authorize]
     public class ScheduleGeneratorController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
@@ -24,7 +25,7 @@ namespace Schedulator.Controllers
             {
                 studentEnrollments.AddRange(schedule.Enrollments);
             }
-            return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments).GetRange(0,10));
+            return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments));
         }
         [HttpPost]
         public ActionResult RegisterSchedule()
@@ -35,6 +36,7 @@ namespace Schedulator.Controllers
             bool isRegisteredSchedule = false;
             if (Request.Form["register"] != null )
                 isRegisteredSchedule = true;
+
 
             foreach( string key in keys)
             {

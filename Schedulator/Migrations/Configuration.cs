@@ -52,15 +52,15 @@ namespace Schedulator.Migrations
 
             List<Enrollment> enrollments = new List<Enrollment>();
 
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            context.Schedule.AddOrUpdate(schedule);
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //context.Schedule.AddOrUpdate(schedule);
             
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
 
@@ -488,6 +488,13 @@ namespace Schedulator.Migrations
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 478).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 479).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 233).FirstOrDefault(), OrPrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 371).FirstOrDefault() });
 
+            foreach (Course course in courses)
+            {
+                List<Prerequisite> prerequisiteToAddToCourse = prerequisites.Where(n => n.Course == course).ToList();
+                if (prerequisiteToAddToCourse.Count() > 0)
+                    course.Prerequisites = prerequisiteToAddToCourse;
+
+            }
             return prerequisites;
         }
         public struct time

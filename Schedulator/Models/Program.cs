@@ -18,7 +18,7 @@ namespace Schedulator.Models
         public List<CourseSequence> RecommendedCourseForStudent (List<Enrollment> studentEnrollments)
         {
             List<CourseSequence> recommendedCourseList = new List<CourseSequence>();
-           
+            
             foreach (CourseSequence courseSequence in CourseSequences.OrderBy(n=> n.Year))
             {
                 bool noEnrollment = true;
@@ -26,13 +26,19 @@ namespace Schedulator.Models
                 {
                     if (courseSequence.Course == enrollment.Course)
                     {
-                        studentEnrollments.Remove(enrollment);
                         noEnrollment = false;
                         break;
                     }
                 }
                 if (noEnrollment)
                     recommendedCourseList.Add(courseSequence);
+                if (recommendedCourseList.Count == 10)
+                    break;
+            }
+            foreach (CourseSequence courseSequence in recommendedCourseList.ToList())
+            {
+                if (courseSequence.Course != null && courseSequence.Course.MissingPrequisite(studentEnrollments).Count > 0)
+                    recommendedCourseList.Remove(courseSequence);
             }
 
             return recommendedCourseList;
