@@ -1,0 +1,17 @@
+﻿@model List<Schedulator.Models.CourseSequence>
+<p>Recommended Courses For Program @Model.FirstOrDefault().Program.ProgramName @Model.FirstOrDefault().Program.ProgramOption:</p>
+<ol>
+    @foreach (Schedulator.Models.CourseSequence courseSequence in Model)
+    {
+        if (courseSequence.Course != null)
+        {
+           <li>@courseSequence.Course.CourseLetters @courseSequence.Course.CourseNumber</li>
+        }
+        else
+        { 
+            <li>@courseSequence.ElectiveType</li>
+         }
+    }
+   
+</ol>
+<p>Please Note: The recommended Courses above are based on your current Course progression. The recommended Courses with the lower numbers should ideally be taken first.</p>

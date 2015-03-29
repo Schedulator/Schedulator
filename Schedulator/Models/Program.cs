@@ -14,5 +14,28 @@ namespace Schedulator.Models
         public string ProgramSemester { get; set; }
 
         public virtual ICollection<CourseSequence> CourseSequences { get; set; }
+        
+        public List<CourseSequence> RecommendedCourseForStudent (List<Enrollment> studentEnrollments)
+        {
+            List<CourseSequence> recommendedCourseList = new List<CourseSequence>();
+           
+            foreach (CourseSequence courseSequence in CourseSequences.OrderBy(n=> n.Year))
+            {
+                bool noEnrollment = true;
+                foreach (Enrollment enrollment in studentEnrollments)
+                {
+                    if (courseSequence.Course == enrollment.Course)
+                    {
+                        studentEnrollments.Remove(enrollment);
+                        noEnrollment = false;
+                        break;
+                    }
+                }
+                if (noEnrollment)
+                    recommendedCourseList.Add(courseSequence);
+            }
+
+            return recommendedCourseList;
+        }
     }
 }

@@ -15,6 +15,17 @@ namespace Schedulator.Controllers
         {
             return View();
         }
+        public ActionResult StudentsCourseSequence()
+        {
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+
+            List<Enrollment> studentEnrollments = new List<Enrollment>();
+            foreach (Schedule schedule in user.Schedules)
+            {
+                studentEnrollments.AddRange(schedule.Enrollments);
+            }
+            return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments).GetRange(0,10));
+        }
         [HttpPost]
         public ActionResult RegisterSchedule()
         {
