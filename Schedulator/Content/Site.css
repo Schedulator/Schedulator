@@ -1,6 +1,6 @@
-﻿body {
+﻿html, body {
     background-color:#f5f5f5;
-    width:100%;
+    height:100%;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -117,11 +117,11 @@ input[type=checkbox] {
 }
 
 
-#subMenu li a #btnCalendar{
+#subMenu li a #btnSchedule{
     background-color:#DB5C5C;
 }
 
-#subMenu li a #btnCalendar:hover{
+#subMenu li a #btnSchedule:hover{
     background-color:#FF9292;
 }
 
@@ -149,6 +149,12 @@ input[type=checkbox] {
 
 
 /* Home page Content*/
+#mainContent {
+    margin-bottom:30px; 
+    position:relative;
+    height: 100%;
+}
+
 #homeHeader {
 
 }
@@ -157,9 +163,7 @@ input[type=checkbox] {
     height:120px;
     border:2px dotted #eee;
 }
-#mainContent {
-    margin-bottom:30px;
-}
+
 .homeContent {
   background-color: #fff;
   border: 1.5px solid #e9e9e9;
@@ -171,4 +175,11 @@ input[type=checkbox] {
     margin-bottom:20px;
     padding-bottom:5px;
     border-bottom:1px solid #eee;
+}
+
+footer {
+    text-align:center;
+    padding: 10px 0 10px 0;
+    width:100%;
+    border-top: 1px solid #eee; 
 }
