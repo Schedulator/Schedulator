@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
@@ -13,7 +14,8 @@ namespace Schedulator.Models
         public int CourseNumber { get; set; }
         public string SpecialNote { get; set; }
         public double Credit { get; set; }
-
+        [DefaultValue(ElectiveType.None)]
+        public ElectiveType ElectiveType { get; set; }
         public virtual ICollection<Lecture> Lectures { get; set; }
         public virtual ICollection<Prerequisite> Prerequisites { get; set; }
 
