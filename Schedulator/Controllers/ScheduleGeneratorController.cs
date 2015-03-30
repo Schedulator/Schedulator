@@ -75,10 +75,6 @@ namespace Schedulator.Controllers
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> cLetter, List<int> cNumber) {
 
-        
-
-
-            
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
 
             // Some test data for now to display generated schedules
@@ -100,8 +96,12 @@ namespace Schedulator.Controllers
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 371 && n.CourseLetters == "ENGR").FirstOrDefault());
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 275 && n.CourseLetters == "ELEC").FirstOrDefault());
 
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == cNumber[0] && n.CourseLetters == cLetter[0]).FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == cNumber[1] && n.CourseLetters == cLetter[0]).FirstOrDefault());
+            int courseNumber = cNumber[0];
+            string courseLetter = cLetter[0];
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
+            courseNumber = cNumber[1];
+            courseLetter = cLetter[0];
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
 
             Program program = db.Program.FirstOrDefault();
