@@ -6,7 +6,6 @@
 
 <!-- Title -->
 <h2 id="pageTitle">@ViewBag.Title</h2>
-<hr />
 
 <!-- Main Wrapper -->
 <div id="mainWrapper" class="row" style="min-height:700px">
@@ -47,7 +46,6 @@
                                 </ul>
                             </div>
                         </li>
-                        @*<li><input type="button" value="Show Me Courses from Sequence" /></li>*@
                     </ul>
                 </div>
 
@@ -64,6 +62,10 @@
             
                 <div id="generatePref">
                     <input type="submit" value="Generate Schedule" class="btn btn-default" id="generateSch"/>
+                </div>
+                <input type="button" value="Recommend Me Courses" class="btn btn-default" id="showCourseSequence" />
+                <div id="courseSequenceRecommend" hidden>
+              
                 </div>
             </div><!--EO #prefOptions-->
         }
@@ -83,6 +85,12 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+            var url = '/ScheduleGenerator/StudentsCourseSequence';
+            $("#courseSequenceRecommend").load(url);
+
+            $('#showCourseSequence').click(function () {
+                $('#courseSequenceRecommend').show("slow");
+            });
             $('#generateSch').click(function () {
                 $('#result').html('');
                 $("#divProcessing").show();

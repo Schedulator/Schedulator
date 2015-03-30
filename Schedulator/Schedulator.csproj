@@ -207,7 +207,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\img\ajax-loader.gif" />
+    <Content Include="Content\img\calendar.png" />
+    <Content Include="Content\img\progress.png" />
+    <Content Include="Content\img\sequence.png" />
+    <Content Include="Content\img\transcript.png" />
+    <Content Include="Content\img\user.png" />
     <Content Include="Content\main.css" />
     <Content Include="Content\prettyPhoto.css" />
     <Content Include="Content\responsive.css" />
@@ -295,6 +300,8 @@
     <Content Include="Views\Shared\_Schedules.cshtml" />
     <Content Include="Views\ScheduleGenerator\GenScheduleResultPartial.cshtml" />
     <Content Include="Views\ScheduleGenerator\RegisterSuccessPartial.cshtml" />
+    <Content Include="Views\Shared\_ScheduleAndLegend.cshtml" />
+    <Content Include="Views\Shared\_RecommendedCourseList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

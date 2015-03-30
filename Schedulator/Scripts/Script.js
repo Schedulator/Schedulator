@@ -1,22 +1,4 @@
-﻿/* Loading indicator */
-//$(document).ready(function () {
-//    $.ajaxSetup({
-//        beforeSend: function () {
-//            // show gif here, eg:
-//            $("#loading").show();
-//        },
-//        complete: function () {
-//            // hide gif here, eg:
-//            $("#loading").hide();
-//        }
-//    });
-
-//    $.ajax({
-//        global: false,
-
-//    });
-//});
-
+﻿
 /* Alternating color for each course in schedule
  * @param courseCode class for each diff block
  */
@@ -30,7 +12,7 @@ function courseAltColor(courseCode) {
     }
 
     $("." + courseCode).css({
-        backgroundColor: shadeColor1(randomColor, 25)
+        backgroundColor: shadeColor1(randomColor, 45)
     });
 
 

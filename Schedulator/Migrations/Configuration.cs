@@ -160,7 +160,11 @@ namespace Schedulator.Migrations
 
                     if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
-                        courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").ToString(), CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").ToString()), Title = row[count].Cells[1].Text });
+                        double credit = 0;
+                        if (Regex.IsMatch((row[count].Cells[4].Text), @"\d*"))
+                            credit = Convert.ToDouble(Regex.Match(row[count].Cells[4].Text, @"\d*").ToString());
+                        courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").ToString(), CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").ToString()), Credit = credit,  Title = row[count].Cells[1].Text });
+                        
 
                         System.Diagnostics.Debug.WriteLine(courses.LastOrDefault().CourseLetters + courses.LastOrDefault().CourseNumber);
                         count++;
@@ -488,6 +492,13 @@ namespace Schedulator.Migrations
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 478).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 479).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 233).FirstOrDefault(), OrPrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 371).FirstOrDefault() });
 
+            foreach (Course course in courses)
+            {
+                List<Prerequisite> prerequisiteToAddToCourse = prerequisites.Where(n => n.Course == course).ToList();
+                if (prerequisiteToAddToCourse.Count() > 0)
+                    course.Prerequisites = prerequisiteToAddToCourse;
+
+            }
             return prerequisites;
         }
         public struct time
