@@ -1,18 +1,26 @@
 ﻿@using Schedulator.Models
 @model LoginViewModel
-@{
-    ViewBag.Title = "Log in";
-}
+@{ViewBag.Title = "Log in";}
 
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
+<!-- Title -->
+<h2 id="pageTitle">@ViewBag.Title.</h2> 
+<hr />
+
+<!-- Main Wrapper -->
+<div id="mainWrapper" class="row">
+    <!-- Login Form-->
+    <div class="col-md-8" >
         <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
+            @using (Html.BeginForm("Login", "Account", 
+                                   new { ReturnUrl = ViewBag.ReturnUrl }, 
+                                   FormMethod.Post, 
+                                   new { @class = "form-horizontal", 
+                                          role = "form" })){
+                
                 @Html.AntiForgeryToken()
-                <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                
+                <!-- Email -->
                 <div class="form-group">
                     @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
@@ -20,6 +28,8 @@
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                
+                <!-- Password -->
                 <div class="form-group">
                     @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
@@ -27,6 +37,8 @@
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                
+                <!-- Remember Me -->
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <div class="checkbox">
@@ -35,6 +47,8 @@
                         </div>
                     </div>
                 </div>
+                
+                 <!-- Submit -->
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Log in" class="btn btn-default" />
@@ -44,6 +58,7 @@
         </section>
     </div>
 </div>
+<!-- EO #mainWrapper-->
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

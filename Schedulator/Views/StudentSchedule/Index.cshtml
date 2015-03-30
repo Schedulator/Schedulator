@@ -1,31 +1,22 @@
-﻿@model Schedulator.Models.Schedule
+﻿@model List<Schedulator.Models.Schedule>
 
 @{
     ViewBag.Title = "Schedule Generator";
 }
-<div class="jumbotron">
-    <h2>@Model.Semester.Season @Model.Semester.SemesterStart.ToString("yyyy") @(Model.IsRegisteredSchedule ? "Registered" : "Saved") Schedule</h2>
-    <h4> @Model.Semester.SemesterStart.ToString("MMMM d, yyyy") to @Model.Semester.SemesterEnd.ToString("MMMM d, yyyy")</h4>
+<script src="@Url.Content("~/Scripts/student.schedule.js")" type="text/javascript"></script>
 
-    <div class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">View Saved Schedules</a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li><a tabindex="-1" href="#">Fall 2014</a></li>
-            <li><a tabindex="-1" href="#">Winter 2015</a></li>
-            <li><a tabindex="-1" href="#">Summer One 2015</a></li>
-            <li><a tabindex="-1" href="#">Summer Two 2015</a></li>
-        </ul>
-    </div>
+<div class="jumbotron">
+   
     <div class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">View Registered Schedules</a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li><a tabindex="-1" href="#">Fall 2014</a></li>
-            <li><a tabindex="-1" href="#">Winter 2015</a></li>
-            <li><a tabindex="-1" href="#">Summer One 2015</a></li>
-            <li><a tabindex="-1" href="#">Summer Two 2015</a></li>
+            <li class="schedule-semester" semester="RegisteredFall2014"><a tabindex="-1" href="#">Fall 2014</a></li>
+            <li class="schedule-semester" semester="RegisteredWinter2015"><a tabindex="-1" href="#">Winter 2015</a></li>
+            <li class="schedule-semester" semester="RegisteredSummer2015"><a tabindex="-1" href="#">Summer 2015</a></li>
         </ul>
     </div>
 </div>
-@Html.Partial("_Schedule", Model)
+<div id="schedule-div">
 
+</div>
 

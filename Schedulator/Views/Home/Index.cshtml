@@ -3,51 +3,91 @@
     ViewBag.Title = "Home Page";
 }
 @using Microsoft.AspNet.Identity
-<div class="jumbotron">
+<div class="jumbotron" id="homeHeader">
     <h1>Schedulator</h1>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Personal Information</h2>
-        <p>
-            @Html.DisplayNameFor(model => model.FirstName):
-            
-            @Html.DisplayFor(modelItem => modelItem.FirstName)
-            <br />
-            @Html.DisplayNameFor(model => model.LastName):
-            @Html.DisplayFor(modelItem => modelItem.LastName)
-            <br />
-            @Html.DisplayNameFor(model => model.Program):
-            @Html.DisplayFor(modelItem => modelItem.Program)
-        </p>
+<!-- SubMenu -->
+<div id="subMenu">
+    <ul>
+        <li>
+            <a href="">
+                <div id="btnSchedule">
+                    <img src="~/Content/img/calendar.png" />
+                    <p>View Schedule</p>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="">
+                <div id="btnProgress">
+                    <img src="~/Content/img/progress.png" />
+                    <p>View Progression</p>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="">
+                <div id="btnTranscript">
+                    <img src="~/Content/img/transcript.png" />
+                    <p>View Transcript</p>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="">
+                <div id="btnSequence">
+                    <img src="~/Content/img/sequence.png" />
+                    <p>View Course Sequence</p>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div><!-- EO #subMenu -->
 
-    </div>
-    <div class="col-md-4">
-        <h2>Academics</h2>
-        <ul class="list-group">
-            @foreach (var schedules in Model.Schedules)
-            {
-                foreach (var enrollments in schedules.Enrollments)
-                {
-                    <li class="list-group-item">
-                        @Html.DisplayFor(modelItem => enrollments.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Course.CourseNumber) 
-                        @Html.DisplayFor(model => enrollments.Grade)
 
-                    </li>
+<!-- Personal info-->
+<div id="optPerso" class="homeContent">
+    <h2>Personal Information</h2>
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="userPicture"><img src="~/Content/img/user.png" /></div>
+            <span>@Html.DisplayNameFor(model => model.FirstName):</span>
+            <span>@Html.DisplayFor(modelItem => modelItem.FirstName)</span>
+            <br />
+            <span>@Html.DisplayNameFor(model => model.LastName):</span>
+            <span>@Html.DisplayFor(modelItem => modelItem.LastName)</span>
+        </div>
+
+        <div class="col-xs-6" style="border-left:1px solid #eee">
+            @{
+                if (Model.Program != null) {
+                    @Html.DisplayNameFor(model => model.Program) <span>Information:</span>
+                    <ul>
+                        <li>Program Name: @Html.DisplayFor(modelItem => modelItem.Program.ProgramName)</li>
+                        <li>Program Option: @Html.DisplayFor(modelItem => modelItem.Program.ProgramOption)</li>
+                        <li>Program Credits: @Html.DisplayFor(modelItem => modelItem.Program.CreditsRequirement)</li>
+                    </ul>
                 }
-
             }
-        </ul>
-
+        </div>
     </div>
-    <div class="col-md-4">
-        <button type="button" class="btn btn-primary">View Progression</button>
-        <button type="button" class="btn btn-primary">View Transcript</button>
-        <button type="button" class="btn btn-primary">View Course Sequence</button>
-        <h2>Other info</h2>
-        <p>Personal Stuff</p>
-    </div>
-
-    
 </div>
+
+<!--Academic -->
+<div id="academicInfo" class="homeContent">
+    <h2>Academics</h2>
+    <ul class="list-group">
+        @foreach (var schedules in Model.Schedules) {
+            foreach (var enrollments in schedules.Enrollments) {
+                <li class="list-group-item">
+                    @Html.DisplayFor(modelItem => enrollments.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollments.Course.CourseNumber)
+                    @Html.DisplayFor(model => enrollments.Grade)
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+
+

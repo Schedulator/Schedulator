@@ -35,8 +35,8 @@ namespace Schedulator.Migrations
 
         protected override void Seed(Schedulator.Models.ApplicationDbContext context)
         {
-            //if (System.Diagnostics.Debugger.IsAttached == false) // Uncomment if you want to debug
-            //    System.Diagnostics.Debugger.Launch();
+            if (System.Diagnostics.Debugger.IsAttached == false) // Uncomment if you want to debug
+                System.Diagnostics.Debugger.Launch();
             string currentDirectoryUrl = Directory.GetCurrentDirectory();
 
             
@@ -45,8 +45,8 @@ namespace Schedulator.Migrations
                 user.Program = null;
                 context.Users.AddOrUpdate(user);
             }
-           // SeedCoursesFromExcelSheet(context);
-            SeedProgramsFromExcelSheet(context);
+            SeedCoursesFromExcelSheet(context);
+           SeedProgramsFromExcelSheet(context);
 
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
@@ -160,7 +160,11 @@ namespace Schedulator.Migrations
 
                     if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
-                        courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").ToString(), CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").ToString()), Title = row[count].Cells[1].Text });
+                        double credit = 0;
+                        if (Regex.IsMatch((row[count].Cells[4].Text), @"\d*"))
+                            credit = Convert.ToDouble(Regex.Match(row[count].Cells[4].Text, @"\d*").ToString());
+                        courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").ToString(), CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").ToString()), Credit = credit,  Title = row[count].Cells[1].Text });
+                        
 
                         System.Diagnostics.Debug.WriteLine(courses.LastOrDefault().CourseLetters + courses.LastOrDefault().CourseNumber);
                         count++;
@@ -225,6 +229,7 @@ namespace Schedulator.Migrations
                                     lectures.LastOrDefault().Teacher = row[count].Cells[4].Text;
                                     count++;
 
+
                                     while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Tut\s[A-Z]{1,2}"))
                                     {
                                         tutorials.Add(new Tutorial { Lecture = lectures.LastOrDefault(), TutorialLetter = Regex.Replace(row[count].Cells[1].Text, @"Tut\s", "") });
@@ -240,16 +245,7 @@ namespace Schedulator.Migrations
                                         if (!(count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}")))
                                         {
                                             Section section = new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault() };
-                                            if (sections.Count > 0 && CheckIfSectionHasSameTimes(section, sections.LastOrDefault()))
-                                            {
-                                                if (sections.LastOrDefault().OtherSimilarSectionMaster == null)
-                                                {
-                                                    sections.LastOrDefault().OtherSimilarSectionMaster = new Section() { SectionMaster = true, OtherSimilarSection = new List<Section>() };
-                                                    sections.LastOrDefault().OtherSimilarSectionMaster.OtherSimilarSection.Add(sections.LastOrDefault());
-                                                }
-                                                section.OtherSimilarSectionMaster = sections.LastOrDefault().OtherSimilarSectionMaster;
-                                                sections.LastOrDefault().OtherSimilarSectionMaster.OtherSimilarSection.Add(section);
-                                            }
+                                            CheckIfSectionHasSameTimes(section, context);
                                             sections.Add(section);
                                         }
                                         while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
@@ -265,16 +261,7 @@ namespace Schedulator.Migrations
 
                                             count++;
                                             Section section = new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), Lab = labs.LastOrDefault() };
-                                            if (sections.Count > 0 && CheckIfSectionHasSameTimes(section, sections.LastOrDefault()))
-                                            {
-                                                if (sections.LastOrDefault().OtherSimilarSectionMaster == null)
-                                                {
-                                                    sections.LastOrDefault().OtherSimilarSectionMaster = new Section() { SectionMaster = true, OtherSimilarSection = new List<Section>() };
-                                                    sections.LastOrDefault().OtherSimilarSectionMaster.OtherSimilarSection.Add(sections.LastOrDefault());
-                                                }
-                                                section.OtherSimilarSectionMaster = sections.LastOrDefault().OtherSimilarSectionMaster;
-                                                sections.LastOrDefault().OtherSimilarSectionMaster.OtherSimilarSection.Add(section);
-                                            }
+                                            CheckIfSectionHasSameTimes(section, context);
                                             sections.Add(section);
 
                                             // lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
@@ -293,18 +280,15 @@ namespace Schedulator.Migrations
 
                                         count++;
                                         Section section = new Section { Lecture = lectures.LastOrDefault(), Lab = labs.LastOrDefault() };
-                                        if (sections.Count > 0 && CheckIfSectionHasSameTimes(section, sections.LastOrDefault()))
-                                        {
-                                            if (sections.LastOrDefault().OtherSimilarSectionMaster == null)
-                                            {
-                                                sections.LastOrDefault().OtherSimilarSectionMaster = new Section() { SectionMaster = true, OtherSimilarSection = new List<Section>() };
-                                                sections.LastOrDefault().OtherSimilarSectionMaster.OtherSimilarSection.Add(sections.LastOrDefault());
-                                            }
-                                            section.OtherSimilarSectionMaster = sections.LastOrDefault().OtherSimilarSectionMaster;
-                                            sections.LastOrDefault().OtherSimilarSectionMaster.OtherSimilarSection.Add(section);
-                                        }
+                                        CheckIfSectionHasSameTimes(section, context);
                                         sections.Add(section);
                                         //  lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
+                                    }
+                                    if (sections.LastOrDefault().Lecture != lectures.LastOrDefault())
+                                    {
+                                        Section section = new Section { Lecture = lectures.LastOrDefault() };
+                                        CheckIfSectionHasSameTimes(section, context);
+                                        sections.Add(section);
                                     }
 
                                 }
@@ -319,7 +303,6 @@ namespace Schedulator.Migrations
                 }
 
             }
-            SeedCoursesFromExcelSheet(context);
             courses.ForEach(p => context.Courses.AddOrUpdate(p));
             lectures.ForEach(p => context.Lectures.AddOrUpdate(p));
             tutorials.ForEach(p => context.Tutorials.AddOrUpdate(p));
@@ -406,17 +389,29 @@ namespace Schedulator.Migrations
             }
             return programs;
         }
-        bool CheckIfSectionHasSameTimes(Section section, Section sectionToAdd)
+        void CheckIfSectionHasSameTimes(Section section, ApplicationDbContext context)
         {
-            if (section.Lecture.Course != sectionToAdd.Lecture.Course)
-                return false;
-            if (section.Lecture.FirstDay != sectionToAdd.Lecture.FirstDay || section.Lecture.SecondDay != sectionToAdd.Lecture.SecondDay || section.Lecture.StartTime != sectionToAdd.Lecture.StartTime || section.Lecture.EndTime != sectionToAdd.Lecture.EndTime )
-                return false;
-            if (section.Tutorial != null && (section.Tutorial.FirstDay != sectionToAdd.Tutorial.FirstDay || section.Tutorial.SecondDay != sectionToAdd.Tutorial.SecondDay || section.Tutorial.StartTime != sectionToAdd.Tutorial.StartTime || section.Tutorial.EndTime != sectionToAdd.Tutorial.EndTime) )
-                return false;
-            if (section.Lab != null && (section.Lab.FirstDay != sectionToAdd.Lab.FirstDay || section.Lab.SecondDay != sectionToAdd.Lab.SecondDay || section.Lab.StartTime != sectionToAdd.Lab.StartTime || section.Lab.EndTime != sectionToAdd.Lab.EndTime) )
-                return false;
-            return true;
+            List<Section> sameTimeSections = sections.Where(n => n.Lecture.Course == section.Lecture.Course && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.FirstDay == section.Lecture.FirstDay && n.Lecture.SecondDay == section.Lecture.SecondDay && n.Lecture.StartTime == section.Lecture.StartTime && n.Lecture.EndTime == section.Lecture.EndTime).ToList();
+            if (sameTimeSections.Count > 0 && section.Tutorial != null)
+                sameTimeSections = sections.Where(n => n.Lecture.Course == section.Lecture.Course && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.FirstDay == section.Lecture.FirstDay && n.Lecture.SecondDay == section.Lecture.SecondDay && n.Lecture.StartTime == section.Lecture.StartTime && n.Lecture.EndTime == section.Lecture.EndTime && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.Course == section.Lecture.Course && n.Tutorial.FirstDay == section.Tutorial.FirstDay && n.Tutorial.SecondDay == section.Tutorial.SecondDay && n.Tutorial.StartTime == section.Tutorial.StartTime && n.Tutorial.EndTime == section.Tutorial.EndTime).ToList();
+            if (sameTimeSections.Count > 0 && section.Lab != null)
+                sameTimeSections = sections.Where(n => n.Lecture.Course == section.Lecture.Course && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.FirstDay == section.Lecture.FirstDay && n.Lecture.SecondDay == section.Lecture.SecondDay && n.Lecture.StartTime == section.Lecture.StartTime && n.Lecture.EndTime == section.Lecture.EndTime && n.Lecture.Course == section.Lecture.Course && n.Lab.FirstDay == section.Lab.FirstDay && n.Lab.SecondDay == section.Lab.SecondDay && n.Lab.StartTime == section.Lab.StartTime && n.Lab.EndTime == section.Lab.EndTime).ToList();
+            
+            if (sameTimeSections.Count > 0)
+            {
+                Section sectionMaster = sameTimeSections.Where(n => n.SectionMaster).FirstOrDefault();
+                if (sectionMaster == null)
+                {
+                    sameTimeSections.FirstOrDefault().SectionMaster = true;
+                    sameTimeSections.FirstOrDefault().OtherSimilarSections = new List<Section>();
+                    section.OtherSimilarSectionMaster = sameTimeSections.FirstOrDefault();
+                }
+                else
+                {
+                    sectionMaster.OtherSimilarSections.Add(section);
+                    section.OtherSimilarSectionMaster = sectionMaster;
+                }
+            }
         }
         List<Prerequisite> AddPrerequisite(List<Course> courses)
         {
@@ -497,6 +492,13 @@ namespace Schedulator.Migrations
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 478).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 479).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 233).FirstOrDefault(), OrPrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 371).FirstOrDefault() });
 
+            foreach (Course course in courses)
+            {
+                List<Prerequisite> prerequisiteToAddToCourse = prerequisites.Where(n => n.Course == course).ToList();
+                if (prerequisiteToAddToCourse.Count() > 0)
+                    course.Prerequisites = prerequisiteToAddToCourse;
+
+            }
             return prerequisites;
         }
         public struct time

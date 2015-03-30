@@ -1,0 +1,61 @@
+﻿
+.contentBox {
+
+  background: white;
+  border: 1px solid #CECECE;
+  -webkit-box-shadow: 0 0 6px rgba(0,0,0,.12);
+  -moz-box-shadow: 0 0 6px rgba(0,0,0,.12);
+  -o-box-shadow: 0 0 6px rgba(0,0,0,.12);
+  box-shadow: 0 0 6px rgba(0,0,0,.12);
+}
+
+/* Schedule Generator */
+#schedGenPref {
+  min-height: 120px;
+  margin-bottom: 40px;
+  padding: 25px;
+  letter-spacing: 1px;
+  background-color:#eee;
+}
+
+#schedGenPref .prefs {
+    border-bottom: 1px solid #CECECE;
+    padding: 15px;
+}
+
+#schedGenPref .prefs p {
+    font-weight:bold;
+    font-size: 15px;
+}
+
+#schedGenPref .prefs ul {
+    padding-left: 45px;
+}
+
+#schedGenPref .prefs ul li {
+    list-style:none;
+}
+
+#generatePref {
+    padding-top:20px;
+    text-align:right;
+}
+
+/* Sched Gen Legend*/
+.schedLegend {
+    margin-top:15px;
+    margin-right:5px;
+}
+
+.courseHeader {
+    padding: 2px;
+}
+
+#schedCount {
+    font-weight:bold;
+    font-size: 22px;
+    background-color:#EEE;
+    padding:10px;
+    margin-bottom: 10px;
+}
+

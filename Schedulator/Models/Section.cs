@@ -18,6 +18,6 @@ namespace Schedulator.Models
 
 
         public virtual Section OtherSimilarSectionMaster { get; set; } // groups same lecture and same tutorial and lab time
-        public virtual ICollection<Section> OtherSimilarSection { get; set; }
+        public virtual ICollection<Section> OtherSimilarSections { get; set; }
     }
 }

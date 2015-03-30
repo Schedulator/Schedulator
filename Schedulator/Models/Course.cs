@@ -12,6 +12,7 @@ namespace Schedulator.Models
         public string CourseLetters { get; set; }
         public int CourseNumber { get; set; }
         public string SpecialNote { get; set; }
+        public double Credit { get; set; }
 
         public virtual ICollection<Lecture> Lectures { get; set; }
         public virtual ICollection<Prerequisite> Prerequisites { get; set; }

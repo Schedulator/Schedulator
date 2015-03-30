@@ -14,7 +14,6 @@
     <RootNamespace>Schedulator</RootNamespace>
     <AssemblyName>Schedulator</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -174,8 +173,8 @@
     <Compile Include="Controllers\ProgramDirectorController.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
     <Compile Include="Controllers\ProgramsManagementController.cs" />
+    <Compile Include="Controllers\ProgressionController.cs" />
     <Compile Include="Controllers\ScheduleGeneratorController.cs" />
-    <Compile Include="Controllers\SeedController.cs" />
     <Compile Include="Controllers\StudentScheduleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -193,6 +192,7 @@
     <Compile Include="Models\Prerequisite.cs" />
     <Compile Include="Models\Program.cs" />
     <Compile Include="Models\ProgramDirector.cs" />
+    <Compile Include="Models\Progression.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduleGenerator.cs" />
     <Compile Include="Models\Section.cs" />
@@ -205,19 +205,36 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\animate.min.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\img\ajax-loader.gif" />
+    <Content Include="Content\img\calendar.png" />
+    <Content Include="Content\img\progress.png" />
+    <Content Include="Content\img\sequence.png" />
+    <Content Include="Content\img\transcript.png" />
+    <Content Include="Content\img\user.png" />
+    <Content Include="Content\main.css" />
+    <Content Include="Content\prettyPhoto.css" />
+    <Content Include="Content\responsive.css" />
+    <Content Include="Content\SchedGenerator.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -225,6 +242,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\student.schedule.js" />
+    <Content Include="Scripts\Script.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -269,7 +288,6 @@
     <Content Include="Views\Programs\Index.cshtml" />
     <Content Include="Views\ScheduleGenerator\Index.cshtml" />
     <Content Include="Views\Shared\_Schedule.cshtml" />
-    <Content Include="Views\Shared\_ScheduleBlock.cshtml" />
     <Content Include="Views\StudentSchedule\Index.cshtml" />
     <Content Include="Views\ProgramDirector\Create.cshtml" />
     <Content Include="Views\ProgramDirector\Delete.cshtml" />
@@ -281,6 +299,11 @@
     <Content Include="Views\ProgramsManagement\Details.cshtml" />
     <Content Include="Views\ProgramsManagement\Edit.cshtml" />
     <Content Include="Views\ProgramsManagement\Index.cshtml" />
+    <Content Include="Views\Shared\_Schedules.cshtml" />
+    <Content Include="Views\ScheduleGenerator\GenScheduleResultPartial.cshtml" />
+    <Content Include="Views\ScheduleGenerator\RegisterSuccessPartial.cshtml" />
+    <Content Include="Views\Shared\_ScheduleAndLegend.cshtml" />
+    <Content Include="Views\Shared\_RecommendedCourseList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -291,6 +314,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Progression\" />
     <Folder Include="Views\Seed\" />
   </ItemGroup>
   <ItemGroup>
