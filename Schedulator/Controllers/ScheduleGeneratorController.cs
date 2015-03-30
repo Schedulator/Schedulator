@@ -60,13 +60,14 @@ namespace Schedulator.Controllers
             return PartialView("RegisterSuccessPartial");
         }
         [HttpPost]
-        public ActionResult GenerateSchedules() {
+        public ActionResult GenerateSchedules(List<String> cLetter, List<int> cNumber) {
 
             
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
 
             // Some test data for now to display generated schedules
-            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault(), StartTime = 0, EndTime = 1440 };
+            //Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault(), StartTime = 0, EndTime = 1440 };
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault(), StartTime = 0, EndTime = 2200 };
             List<Course> courses = db.Courses.ToList();
             preference.Courses = new List<Course>();
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 348 && n.CourseLetters == "COMP").FirstOrDefault());
@@ -76,13 +77,15 @@ namespace Schedulator.Controllers
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 392 && n.CourseLetters == "ENGR").FirstOrDefault());
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 243 && n.CourseLetters == "ENGR").FirstOrDefault());
 
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 348 && n.CourseLetters == "COMP").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 352 && n.CourseLetters == "COMP").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 282 && n.CourseLetters == "ENCS").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 202 && n.CourseLetters == "ENGR").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 371 && n.CourseLetters == "ENGR").FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 275 && n.CourseLetters == "ELEC").FirstOrDefault());
+            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 348 && n.CourseLetters == "COMP").FirstOrDefault());
+            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 352 && n.CourseLetters == "COMP").FirstOrDefault());
+            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 282 && n.CourseLetters == "ENCS").FirstOrDefault());
+            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 202 && n.CourseLetters == "ENGR").FirstOrDefault());
+            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 371 && n.CourseLetters == "ENGR").FirstOrDefault());
+            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 275 && n.CourseLetters == "ELEC").FirstOrDefault());
 
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == cNumber[0] && n.CourseLetters == cLetter[0]).FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == cNumber[1] && n.CourseLetters == cLetter[0]).FirstOrDefault());
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
 
             Program program = db.Program.FirstOrDefault();

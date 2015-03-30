@@ -2525,7 +2525,9 @@ shortcodes page css
   margin-left: 15px;
 }
 
-
+.selected-courses {
+    border: 1px solid black;
+}
 
 
 
