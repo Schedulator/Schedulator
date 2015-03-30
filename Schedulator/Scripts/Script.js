@@ -30,7 +30,10 @@ $(function () {
 function showHint(str) {
     var courses = ["COMP 232", "COMP 352", "COMP 348", "SOEN 341", "SOEN 331"];
     console.log(str);
-    if (str.length == 0) {
+    $("#suggestion").autocomplete({
+        source: courses
+    });
+    /*if (str.length == 0) {
         $(".suggestion").html("");
         return;
     } else {
@@ -51,7 +54,7 @@ function showHint(str) {
             } /*else {
                 console.log("2 else");
                 $(".suggestion").append(" Nothing found");
-            }*/
+            }
         });
-    }
+    }*/
 }

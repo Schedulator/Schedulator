@@ -100,8 +100,8 @@ namespace Schedulator.Controllers
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 371 && n.CourseLetters == "ENGR").FirstOrDefault());
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 275 && n.CourseLetters == "ELEC").FirstOrDefault());
 
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == cNumber[0] && n.CourseLetters == cLetter[0]).FirstOrDefault());
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == cNumber[1] && n.CourseLetters == cLetter[0]).FirstOrDefault());
+            preference.Courses.Add(courses.Where(n => n.CourseNumber == cNumber[0] && n.CourseLetters == cLetter[0]).FirstOrDefault());
+            preference.Courses.Add(courses.Where(n => n.CourseNumber == cNumber[1] && n.CourseLetters == cLetter[0]).FirstOrDefault());
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
 
             Program program = db.Program.FirstOrDefault();

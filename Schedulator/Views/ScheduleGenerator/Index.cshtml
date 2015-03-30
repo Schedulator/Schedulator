@@ -29,8 +29,8 @@
                 <!-- Courses -->
                 <div class="prefs">
                     <p>Step 2: Select your courses</p>
-                    <ul>
-                        <li><span>Add a course: </span>@Html.TextBox("courseName", "", new { onkeyup = "showHint(this.value)" })
+                    <ul class="ui-widget">
+                        <li><span>Add a course: </span>@Html.TextBox("courseName", "", new { id= "suggestion", onkeyup = "showHint(this.value)" })
                             <span style="margin-left:10px;"><input type="button" id="addcourse" value="Add" /></span>
                         </li>
                         <li>
@@ -39,10 +39,10 @@
                         <li>
                             <div class="selected-courses">
                                 <ul>
-                                    <input type="text" name="cLetter[0]" value="COMP" />
+                                    <!--input type="text" name="cLetter[0]" value="COMP" />
                                     <input type="text" name="cLetter[1]" value="COMP" />
                                     <input type="text" name="cNumber[0]" value="232" />
-                                    <input type="text" name="cNumber[1]" value="352" />
+                                    <input type="text" name="cNumber[1]" value="352" /-->
                                 </ul>
                             </div>
                         </li>
