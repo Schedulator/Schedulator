@@ -67,9 +67,9 @@
     </div>
 
     //Course Sections
-    if (!enrollment.Section.SectionMaster && enrollment.Section.OtherSimilarSections.Count() == 0)
+    if (!enrollment.Section.SectionMaster || enrollment.Schedule.IsRegisteredSchedule)
     {
-        @RenderSections(@enrollment.Section, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+        @RenderSections(@enrollment.Section, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString(), true)
     }
     else
     {
@@ -77,32 +77,32 @@
         {
             foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSectionMaster.OtherSimilarSections)
             {
-                @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+                @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString(), false)
             }
         }
         else
         { 
-            @RenderSections(enrollment.Section, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+            @RenderSections(enrollment.Section, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString(), false)
             foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
             {
-                @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+                @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString(), false)
             }
         }
     }
     <script>courseAltColor('@courseBlockColor');</script>
 }
 
-@helper RenderSections(Schedulator.Models.Section sectionToShow, string radioButtonGroup)
+@helper RenderSections(Schedulator.Models.Section sectionToShow, string radioButtonGroup, bool hideRadioButton)
 {
     <table sectionid="@sectionToShow.SectionId">
         <tr>
-            @if (sectionToShow.SectionMaster || sectionToShow.OtherSimilarSectionMaster != null)
+            @if (!hideRadioButton)
             {
-                <td rowspan="3" width="5%" style="background-color:indianred;"><label>@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
+                <td rowspan="3" width="15px" style="background-color:indianred;"><label>@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
             }
             else
             {
-                <td rowspan="3" width="5%" style="background-color:indianred;"><label style="display:none;">@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
+                <td rowspan="3" width="15px" style="background-color:indianred;"><label style="display:none;">@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
             }
             <td width="30%">Lec @sectionToShow.Lecture.LectureLetter </td>
             <td>@sectionToShow.Lecture.Teacher</td>
