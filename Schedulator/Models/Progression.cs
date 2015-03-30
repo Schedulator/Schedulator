@@ -26,6 +26,17 @@ namespace Schedulator.Models
                             InProgressCourse.Add(courseSequence);
                         courseSequencesRemoved.Remove(courseSequence);
                     }
+                    //foreach (CourseSequence option in courseSequence.OtherOptions)
+                    //{
+                    //    if (enrollment.Course == courseSequence.Course)
+                    //    {
+                    //        if (enrollment.Grade != null)
+                    //            CompletedCourse.Add(courseSequence);
+                    //        else
+                    //            InProgressCourse.Add(courseSequence);
+                    //        IncompleteCourse.Add(option);
+                    //    }
+                    //}
                 }
                 courseSequences = courseSequencesRemoved;
             }
