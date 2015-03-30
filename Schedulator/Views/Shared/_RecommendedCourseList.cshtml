@@ -1,4 +1,5 @@
 ﻿@model List<Schedulator.Models.CourseSequence>
+@using EnumExtension
 <p>Recommended Courses For Program @Model.FirstOrDefault().Program.ProgramName @Model.FirstOrDefault().Program.ProgramOption:</p>
 <ol>
     @foreach (Schedulator.Models.CourseSequence courseSequence in Model)
@@ -9,9 +10,11 @@
         }
         else
         { 
-            <li>@courseSequence.ElectiveType</li>
+            
+            <li>@courseSequence.ElectiveType.DisplayName()</li>
          }
     }
    
 </ol>
 <p>Please Note: The recommended Courses above are based on your current Course progression. The recommended Courses with the lower numbers should ideally be taken first.</p>
+
