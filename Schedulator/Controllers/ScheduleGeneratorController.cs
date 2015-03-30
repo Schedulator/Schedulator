@@ -100,7 +100,7 @@ namespace Schedulator.Controllers
             string courseLetter = cLetter[0];
             preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             courseNumber = cNumber[1];
-            courseLetter = cLetter[0];
+            courseLetter = cLetter[1];
             preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
 

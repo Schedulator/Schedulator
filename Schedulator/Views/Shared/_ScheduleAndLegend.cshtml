@@ -67,16 +67,26 @@
     </div>
 
     //Course Sections
-    if (!enrollment.Section.SectionMaster)
+    if (!enrollment.Section.SectionMaster && enrollment.Section.OtherSimilarSections.Count() == 0)
     {
         @RenderSections(@enrollment.Section, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
     }
     else
     {
-
-        foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
+        if (!enrollment.Section.SectionMaster)
         {
-            @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+            foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSectionMaster.OtherSimilarSections)
+            {
+                @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+            }
+        }
+        else
+        { 
+            @RenderSections(enrollment.Section, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+            foreach (Schedulator.Models.Section sectionToShow in enrollment.Section.OtherSimilarSections)
+            {
+                @RenderSections(sectionToShow, "radioButtonSectionGroup" + radioButtonSectionGroup.ToString())
+            }
         }
     }
     <script>courseAltColor('@courseBlockColor');</script>
