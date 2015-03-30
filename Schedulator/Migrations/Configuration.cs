@@ -52,15 +52,15 @@ namespace Schedulator.Migrations
 
             List<Enrollment> enrollments = new List<Enrollment>();
 
-            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
-            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
-            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
-            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
-            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            //context.Schedule.AddOrUpdate(schedule);
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
+            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            context.Schedule.AddOrUpdate(schedule);
             
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
 
@@ -160,7 +160,11 @@ namespace Schedulator.Migrations
 
                     if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
-                        courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").ToString(), CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").ToString()), Title = row[count].Cells[1].Text });
+                        double credit = 0;
+                        if (Regex.IsMatch((row[count].Cells[4].Text), @"\d*"))
+                            credit = Convert.ToDouble(Regex.Match(row[count].Cells[4].Text, @"\d*").ToString());
+                        courses.Add(new Course { CourseLetters = Regex.Match(currentCell, @"[A-Z]{4}").ToString(), CourseNumber = Convert.ToInt32(Regex.Match(currentCell, @"\d{3}").ToString()), Credit = credit,  Title = row[count].Cells[1].Text });
+                        
 
                         System.Diagnostics.Debug.WriteLine(courses.LastOrDefault().CourseLetters + courses.LastOrDefault().CourseNumber);
                         count++;
