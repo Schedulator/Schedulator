@@ -99,6 +99,29 @@
   <ItemGroup>
     <Compile Include="Controllers\ScheduleGeneratorTest.cs" />
     <Compile Include="Controllers\ApplicationUserTest.cs" />
+    <Compile Include="Controllers\CoursesControllerTest.cs" />
+    <Compile Include="Controllers\ProgramDirectorControllerTest.cs" />
+    <Compile Include="Controllers\ProgramsControllerTest.cs" />
+    <Compile Include="Models\CourseTest.cs" />
+    <Compile Include="Models\AccountViewModelsTest.cs" />
+    <Compile Include="Models\CourseSequenceTest.cs" />
+    <Compile Include="Models\EnrollmentTest.cs" />
+    <Compile Include="Models\IdentityModelsTest.cs" />
+    <Compile Include="Models\LabTest.cs" />
+    <Compile Include="Models\LectureTest.cs" />
+    <Compile Include="Models\ManageViewModelsTest.cs" />
+    <Compile Include="Models\PreferenceTest.cs" />
+    <Compile Include="Models\PrerequisiteTest.cs" />
+    <Compile Include="Models\ProgramTest.cs" />
+    <Compile Include="Models\ProgramDirectorTest.cs" />
+    <Compile Include="Models\ProgressionTest.cs" />
+    <Compile Include="Models\ScheduleTest.cs" />
+    <Compile Include="Models\ScheduleGeneratorTest.cs" />
+    <Compile Include="Models\SectionTest.cs" />
+    <Compile Include="Models\SemesterTest.cs" />
+    <Compile Include="Models\StudentTest.cs" />
+    <Compile Include="Models\TimeBlockTest.cs" />
+    <Compile Include="Models\TutorialTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
