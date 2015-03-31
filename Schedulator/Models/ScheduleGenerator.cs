@@ -15,8 +15,8 @@ namespace Schedulator.Models
         public class CourseView
         {
             public int CourseId { get; set; }
-            public string CourseLetter { get; set; }
-            public int CourseNumber { get; set; }
+            public string label { get; set; }
+            
         }
         public class PrequisitesStudentNeedsForCourse
         {

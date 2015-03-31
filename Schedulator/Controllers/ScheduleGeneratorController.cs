@@ -22,10 +22,12 @@ namespace Schedulator.Controllers
             List<Schedulator.Models.ScheduleGenerator.CourseView> coursesView = new List<Schedulator.Models.ScheduleGenerator.CourseView>();
             foreach (Course course in courses)
             {
-                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, CourseLetter = course.CourseLetters, CourseNumber = course.CourseNumber });
+                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, label = course.CourseLetters + " " + course.CourseNumber });
+                
             }
             return Json(coursesView, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult StudentsCourseSequence()
         {
             ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
@@ -83,29 +85,50 @@ namespace Schedulator.Controllers
             return PartialView("RegisterSuccessPartial");
         }
         [HttpPost]
-        public ActionResult GenerateSchedules(List<String> courseCode) {
+        public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
 
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
+            Season sem;
+            switch (semester)
+            {
+                case "Summer": sem = Season.Summer1;
+                    break;
+                case "Fall": sem = Season.Fall;
+                    break;
+                case "Winter": sem = Season.Winter;
+                    break;
+                default: sem = Season.Fall;
+                    break;
+            }
+
+            double startTime = 0;
+            double endTime = 0;
+            foreach (string timeType in timeOption)
+            {
+                if (timeType == "Morning")
+                {
+                    startTime = 1;
+                    endTime = 720;
+                }
+                else if (timeType == "Day")
+                {
+                    startTime = (startTime == 1) ? startTime : 720;
+                    endTime = (endTime < 1080) ? 1080 : endTime;
+                }
+                else if (timeType == "Night")
+                {
+                    startTime = (startTime == 1 || startTime == 720) ? startTime : 1080;
+                    endTime = (endTime < 1440) ? 1440 : endTime;
+                }
+            }
+            endTime = (endTime == 0) ? 1440 : endTime;
 
             // Some test data for now to display generated schedules
             //Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault(), StartTime = 0, EndTime = 1440 };
-            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault(), StartTime = 0, EndTime = 2200 };
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == sem).FirstOrDefault(), StartTime = startTime, EndTime = endTime };
             List<Course> courses = db.Courses.ToList();
             preference.Courses = new List<Course>();
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 348 && n.CourseLetters == "COMP").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 352 && n.CourseLetters == "COMP").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 282 && n.CourseLetters == "ENCS").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 202 && n.CourseLetters == "ENGR").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 392 && n.CourseLetters == "ENGR").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 243 && n.CourseLetters == "ENGR").FirstOrDefault());
-
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 348 && n.CourseLetters == "COMP").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 352 && n.CourseLetters == "COMP").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 282 && n.CourseLetters == "ENCS").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 202 && n.CourseLetters == "ENGR").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 371 && n.CourseLetters == "ENGR").FirstOrDefault());
-            //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 275 && n.CourseLetters == "ELEC").FirstOrDefault());
-
+            
             foreach(var code in courseCode) {
                 String[] courseID = code.Split(' ');
                 var courseLetter = courseID[0];
