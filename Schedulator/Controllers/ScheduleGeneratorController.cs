@@ -22,7 +22,7 @@ namespace Schedulator.Controllers
             List<Schedulator.Models.ScheduleGenerator.CourseView> coursesView = new List<Schedulator.Models.ScheduleGenerator.CourseView>();
             foreach (Course course in courses)
             {
-                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseLetter = course.CourseLetters, CourseNumber = course.CourseNumber });
+                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, CourseLetter = course.CourseLetters, CourseNumber = course.CourseNumber });
             }
             return Json(coursesView, JsonRequestBehavior.AllowGet);
         }
