@@ -50,27 +50,27 @@ namespace Schedulator.Migrations
                 context.Users.AddOrUpdate(user);
             }
             SeedCoursesFromExcelSheet(context);
-           SeedProgramsFromExcelSheet(context);
-           AddScienceElectives(context);
-           AddGeneralElective(context);
-           AddTechnicalElectives(context);
+            SeedProgramsFromExcelSheet(context);
+            AddScienceElectives(context);
+            AddGeneralElective(context);
+            AddTechnicalElectives(context);
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
             List<Enrollment> enrollments = new List<Enrollment>();
 
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            context.Schedule.AddOrUpdate(schedule);
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
+            //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            //context.Schedule.AddOrUpdate(schedule);
             
-            enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
+            //enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
 
-            context.SaveChanges();
+            //context.SaveChanges();
 
             schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harrison").FirstOrDefault(), Semester = context.Semesters.Where(p => p.Season == Season.Fall).First(), IsRegisteredSchedule = true };
 
@@ -94,7 +94,7 @@ namespace Schedulator.Migrations
         private void AddTechnicalElectives(ApplicationDbContext context)
         {
             List<Program> compGamesProgramList = context.Program.Where(n => n.ProgramOption == "Computer Games").ToList();
-            List<Program> realTimeProgramList = context.Program.Where(n => n.ProgramOption == "Real-time Embedded and Aviaonics Software").ToList();
+            List<Program> realTimeProgramList = context.Program.Where(n => n.ProgramOption == "Real-time Embedded and Avionics Software").ToList();
             List<Program> webServicesProgramList = context.Program.Where(n => n.ProgramOption == "Web Services & Applications").ToList();
             List<Program> generalProgramList = context.Program.Where(n => n.ProgramOption == "General Program").ToList();
 
@@ -264,7 +264,9 @@ namespace Schedulator.Migrations
                 while (count < row.Count())
                 {
                     string currentCell = row[count].Cells[0].Text;
-                    
+                    if (currentCell == "MECH 221")
+                        currentCell = currentCell;
+
                     if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
                         double credit = 0;

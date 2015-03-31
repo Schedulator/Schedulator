@@ -19,6 +19,8 @@ namespace Schedulator.Models
         public virtual ICollection<Lecture> Lectures { get; set; }
         public virtual ICollection<Prerequisite> Prerequisites { get; set; }
 
+        public virtual ICollection<Program> TechnicalElectiveForPrograms { get; set; }
+
 
         public List<Prerequisite> MissingPrequisite( List<Enrollment> enrollments)
         {
@@ -28,7 +30,7 @@ namespace Schedulator.Models
                 bool enrollmentContainsPrereq = false;
                 foreach(Enrollment enrollment in enrollments)
                 {
-                    if ( prerequisite.Course == enrollment.Course )
+                    if ( prerequisite.PrerequisiteCourse == enrollment.Course )
                     {
                         enrollmentContainsPrereq = true;
                         break;
