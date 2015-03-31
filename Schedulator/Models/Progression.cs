@@ -13,12 +13,32 @@ namespace Schedulator.Models
 
         public void StudentsProgression(List<Enrollment> studentsEnrollment, List<CourseSequence> courseSequences)
         {
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<Course> BasicScienceCourses = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).ToList();
+            List<Course> GeneralCourses = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).ToList();
             List<CourseSequence> courseSequencesRemoved = courseSequences.ToList();
             foreach (Enrollment enrollment in studentsEnrollment)
             {
                 foreach(CourseSequence courseSequence in courseSequences)
                 {
-                    if (enrollment.Course == courseSequence.Course)
+                    if (courseSequence.OtherOptions.Count() > 0)
+                    {
+                        bool noneFound = true; ;
+                        foreach (CourseSequence courseSequenceOtherOptions in courseSequence.OtherOptions)
+                        {
+                            if (enrollment.Course == courseSequenceOtherOptions.Course)
+                            {
+                                noneFound = false;
+                                if (enrollment.Grade != null)
+                                    CompletedCourse.Add(courseSequenceOtherOptions);
+                                else
+                                    InProgressCourse.Add(courseSequenceOtherOptions);
+                                courseSequencesRemoved.Remove(courseSequence);
+                            }
+                            if (noneFound)
+                                IncompleteCourse.Add(courseSequence);
+                        }
+                    } else if (enrollment.Course == courseSequence.Course)
                     {
                         if (enrollment.Grade != null)
                             CompletedCourse.Add(courseSequence);

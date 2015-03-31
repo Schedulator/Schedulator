@@ -14,6 +14,7 @@ namespace Schedulator.Models
         public string ProgramSemester { get; set; }
 
         public virtual ICollection<CourseSequence> CourseSequences { get; set; }
+        public virtual ICollection<Course> TechnicalElectiveCourses { get; set; }
         
         public List<CourseSequence> RecommendedCourseForStudent (List<Enrollment> studentEnrollments)
         {

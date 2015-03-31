@@ -1,0 +1,72 @@
+﻿@model List<Schedulator.Models.Schedule>
+
+    @using (Ajax.BeginForm("ManageSchedule", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "schedule", OnSuccess = "ManageScheduleSuccess" }))
+    {
+        <!-- Schedules results -->
+    <div id="schedule">
+        @Html.Partial("_ScheduleAndLegend", Model)
+    </div><!-- EO #result -->
+        
+         
+        
+    <div class="collapse in">
+        
+    </div>
+    <div>
+        <div>
+            <input id="manage-schedule-button" data-toggle="collapse" data-parent="#accordion" href="#collapse2" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
+        </div>
+        <div id="collapse2" class="panel-collapse collapse">
+            <div class="panel-body">
+                <input type="submit" name="addCourse" class="btn btn-primary" value="Add Course">
+                <input id="remove-button" type="button" name="register" class="btn btn-primary" value="Remove Course">
+                <input type="submit" name="register" class="btn btn-primary" value="Switch Sections">
+                <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
+                <input type="hidden" name="scheduleIds" value="@Model.FirstOrDefault().ScheduleId" >
+                @if(Model.Count() > 1)
+                { 
+                    <input type="hidden" name="scheduleIds" value="@Model.LastOrDefault().ScheduleId">
+                }
+            </div>
+        </div>
+    </div>
+    }
+        <hr />
+
+        <script>
+            $(document).ready(function () {
+
+                function ManageScheduleSuccess()
+                {
+                    debugger;
+                    alert("here");
+                }
+                var counter = 0;
+                $('#remove-button').on('click', function () {
+                    if ($('input[type=checkbox]:checked').length) {
+                        $('#form0').submit();
+                        $('#schedule').empty();
+                        $('.collapse').collapse();
+                    }
+                    else
+                        alert("You must select courses to remove!");
+                    
+                });
+                $('#manage-schedule-button').on('click', function () {
+                    if (counter == 0) {
+                        var sectionCounter = 0;
+                        counter = 1;
+                        $('[id^=radioButtonSectionGroup]').each(function () {
+                            $(this).after('<input type="checkbox" class="section-checkbox" name="sectionIds" value="' + $(this).val() + '" >');
+                        });
+                    }
+                    else
+                    {
+                        counter = 0;
+                        $(".section-checkbox").hide();
+                    }
+                });
+
+            });
+
+        </script>

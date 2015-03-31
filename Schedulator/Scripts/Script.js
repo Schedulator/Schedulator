@@ -19,39 +19,39 @@ function courseAltColor(courseCode) {
 
 }
 
+var count = 0;
+var courseList;
+var url = '/ScheduleGenerator/CoursesViewJson';
+
 $(function () {
     $("#addcourse").click(function () {
         var name = $("input[name='courseName']").val();
         $("input[name='courseName']").val("");
-        $(".selected-courses").children().append("<li>"+name+"</li>");
+        $(".selected-courses").children().append("<li>"+name+"<input name='courseCode["+count+"]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
+        count++;
     });
+
+    $(".removeClass").click(function () {
+        this.parent().hide();
+    });
+
+    $.getJSON(url, function (data) {
+        console.log(data);
+        courseList = data;
+        console.log(courseList);
+        
+    });
+
 });
 
+
 function showHint(str) {
-    var courses = ["COMP 232", "COMP 352", "COMP 348", "SOEN 341", "SOEN 331"];
+      
     console.log(str);
-    if (str.length == 0) {
-        $(".suggestion").html("");
-        return;
-    } else {
-        console.log("inside else");
-        str = str.toUpperCase();
-        var len = str.length;
-        console.log(str +"TEST");
-        var chkctr = 0;
-        $(courses).each(function (idx, course) {
-            
-            console.log(course + " in 1");
-            var partial = course.substring(0, len);
-            console.log(partial);
-            if (str == partial) {
-                
-                $(".suggestion").append(course + " ");
-                console.log("here");
-            } /*else {
-                console.log("2 else");
-                $(".suggestion").append(" Nothing found");
-            }*/
-        });
-    }
+    $("#suggestion").autocomplete({
+        source: courseList     
+
+
+    });
+  
 }

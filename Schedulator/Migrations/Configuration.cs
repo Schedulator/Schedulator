@@ -53,6 +53,7 @@ namespace Schedulator.Migrations
            SeedProgramsFromExcelSheet(context);
            AddScienceElectives(context);
            AddGeneralElective(context);
+           AddTechnicalElectives(context);
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
             List<Enrollment> enrollments = new List<Enrollment>();
@@ -87,6 +88,107 @@ namespace Schedulator.Migrations
 
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
             
+            context.SaveChanges();
+        }
+
+        private void AddTechnicalElectives(ApplicationDbContext context)
+        {
+            List<Program> compGamesProgramList = context.Program.Where(n => n.ProgramOption == "Computer Games").ToList();
+            List<Program> realTimeProgramList = context.Program.Where(n => n.ProgramOption == "Real-time Embedded and Aviaonics Software").ToList();
+            List<Program> webServicesProgramList = context.Program.Where(n => n.ProgramOption == "Web Services & Applications").ToList();
+            List<Program> generalProgramList = context.Program.Where(n => n.ProgramOption == "General Program").ToList();
+
+            // Add all Computer Games technical elective courses to all Computer Games programs
+            foreach (Program program in compGamesProgramList)
+            {
+                program.TechnicalElectiveCourses = new List<Course>();
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 345).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 353).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 371).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 376).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 472).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 476).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 477).FirstOrDefault());
+            }
+
+            foreach (Program program in compGamesProgramList)
+            {
+                context.Entry(program).State = EntityState.Modified;
+            }
+            context.SaveChanges();
+
+            // Add all Real Time technical elective courses to all Real Time programs
+            foreach (Program program in realTimeProgramList)
+            {
+                program.TechnicalElectiveCourses = new List<Course>();
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "AERO" && n.CourseNumber == 480).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "AERO" && n.CourseNumber == 482).FirstOrDefault());
+
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COEN" && n.CourseNumber == 320).FirstOrDefault());
+
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 345).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 444).FirstOrDefault());
+
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 422).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 423).FirstOrDefault());
+            }
+
+            foreach (Program program in realTimeProgramList)
+            {
+                context.Entry(program).State = EntityState.Modified;
+            }
+            context.SaveChanges();
+
+            // Add all Web Services technical elective courses to all Web Services programs
+            foreach (Program program in webServicesProgramList)
+            {
+                program.TechnicalElectiveCourses = new List<Course>();
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 353).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 445).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 479).FirstOrDefault());
+
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 387).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 487).FirstOrDefault());
+            }
+
+            foreach (Program program in webServicesProgramList)
+            {
+                context.Entry(program).State = EntityState.Modified;
+            }
+            context.SaveChanges();
+
+            // Add all General Program technical elective courses to General Program programs
+            foreach (Program program in generalProgramList)
+            {
+                program.TechnicalElectiveCourses = new List<Course>();
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 345).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 353).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 371).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 426).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 428).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 442).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 445).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 451).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 465).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 472).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 473).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 474).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 478).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 479).FirstOrDefault());
+
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 298).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 422).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 423).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 448).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "SOEN" && n.CourseNumber == 491).FirstOrDefault());
+
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "ENGR" && n.CourseNumber == 411).FirstOrDefault());
+            }
+
+            foreach (Program program in generalProgramList)
+            {
+                context.Entry(program).State = EntityState.Modified;
+            }
             context.SaveChanges();
         }
         void SeedProgramsFromExcelSheet(ApplicationDbContext context)
@@ -162,8 +264,7 @@ namespace Schedulator.Migrations
                 while (count < row.Count())
                 {
                     string currentCell = row[count].Cells[0].Text;
-                    if (currentCell == "MECH 221")
-                        currentCell = currentCell;
+                    
                     if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
                         double credit = 0;

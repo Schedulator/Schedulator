@@ -3,7 +3,6 @@
 @Html.AntiForgeryToken()
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-
 <!-- Title -->
 <h2 id="pageTitle">@ViewBag.Title</h2>
 
@@ -20,29 +19,27 @@
                 <div class="prefs">
                     <p>Step 1: Select a semester</p>
                     <ul>
-                        <li><input type="radio" name="semester" /> Summer 2015 </li>
-                        <li><input type="radio" name="semester" /> Fall 2015</li>
-                        <li><input type="radio" name="semester" /> Winter 2016</li>
+                        <li><input type="radio" name="semester" value="Summer" checked> Summer 2015 </li>
+                        <li><input type="radio" name="semester" value="Fall"/> Fall 2015</li>
+                        <li><input type="radio" name="semester" value="Winter"/> Winter 2016</li>
                     </ul>
                 </div>
 
                 <!-- Courses -->
                 <div class="prefs">
                     <p>Step 2: Select your courses</p>
-                    <ul>
-                        <li><span>Add a course: </span>@Html.TextBox("courseName", "", new { onkeyup = "showHint(this.value)" })
+                    <ul class="ui-widget">
+                        <li><span>Add a course: </span>@Html.TextBox("courseName", "", new { id= "suggestion", onkeyup = "showHint(this.value)" })
                             <span style="margin-left:10px;"><input type="button" id="addcourse" value="Add" /></span>
                         </li>
-                        <li>
-                            Suggestion:<span class="suggestion"> </span>
-                        </li>
+                       
                         <li>
                             <div class="selected-courses">
                                 <ul>
-                                    <input type="text" name="cLetter[0]" value="COMP" />
+                                    <!--input type="text" name="cLetter[0]" value="COMP" />
                                     <input type="text" name="cLetter[1]" value="COMP" />
                                     <input type="text" name="cNumber[0]" value="232" />
-                                    <input type="text" name="cNumber[1]" value="352" />
+                                    <input type="text" name="cNumber[1]" value="352" /-->
                                 </ul>
                             </div>
                         </li>
@@ -53,10 +50,9 @@
                 <div class="prefs">
                     <p>Step 3: Select your preferences</p>
                     <ul id="schedPref">
-                        <li><input type="checkbox" /> Most days-off</li>
-                        <li><input type="checkbox" /> Morning class</li>
-                        <li><input type="checkbox" /> Mid-day class</li>
-                        <li><input type="checkbox" /> Night class</li>
+                        <li><input type="checkbox" name="timeOption" value="Morning"/> Morning class</li>
+                        <li><input type="checkbox" name="timeOption" value="Day" /> Mid-day class</li>
+                        <li><input type="checkbox" name="timeOption" value="Night" /> Night class</li>
                     </ul>
                 </div>
             
@@ -86,7 +82,9 @@
 
         $(document).ready(function () {
             var url = '/ScheduleGenerator/StudentsCourseSequence';
+            
             $("#courseSequenceRecommend").load(url);
+            
 
             $('#showCourseSequence').click(function () {
                 $('#courseSequenceRecommend').show("slow");

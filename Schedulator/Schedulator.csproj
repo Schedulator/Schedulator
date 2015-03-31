@@ -233,6 +233,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -304,6 +305,7 @@
     <Content Include="Views\ScheduleGenerator\RegisterSuccessPartial.cshtml" />
     <Content Include="Views\Shared\_ScheduleAndLegend.cshtml" />
     <Content Include="Views\Shared\_RecommendedCourseList.cshtml" />
+    <Content Include="Views\StudentSchedule\StudentScheduleResultPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -314,7 +316,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Progression\" />
     <Folder Include="Views\Seed\" />
   </ItemGroup>
   <ItemGroup>
