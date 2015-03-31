@@ -10,12 +10,12 @@ namespace Schedulator.Controllers
     [Authorize]
     public class StudentScheduleController : Controller
     {
-        
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
             return View();
         }
+
         public ActionResult GetSchedule(string semester)
         {   
             List<Schedule> schedules = new List<Schedule>();

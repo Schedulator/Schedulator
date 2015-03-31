@@ -16,14 +16,16 @@ namespace Schedulator.Controllers
         {
             return View();
         }
-
-        public JsonResult GetAllCourses()
+        public JsonResult CoursesViewJson()
         {
-            List<Course> model = db.Courses.ToList();
-
-            var test = Json(model);
+            List<Course> courses = db.Courses.ToList();
+            List<Schedulator.Models.ScheduleGenerator.CourseView> coursesView = new List<Schedulator.Models.ScheduleGenerator.CourseView>();
+            foreach (Course course in courses)
+            {
+                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, CourseCode = course.CourseLetters + " " + course.CourseNumber });
                 
-            return test;
+            }
+            return Json(coursesView, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult StudentsCourseSequence()

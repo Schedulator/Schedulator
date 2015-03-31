@@ -20,6 +20,9 @@ function courseAltColor(courseCode) {
 }
 
 var count = 0;
+var courseList;
+var url = '/ScheduleGenerator/CoursesViewJson';
+
 $(function () {
     $("#addcourse").click(function () {
         var name = $("input[name='courseName']").val();
@@ -27,13 +30,26 @@ $(function () {
         $(".selected-courses").children().append("<li><input name='courseCode["+count+"]' value='" + name + "' /></li>");
         count++;
     });
+
+    
+    $.getJSON(url, function (data) {
+        console.log(data);
+        courseList = data;
+        console.log(courseList);
+        
+    });
+
 });
 
+
 function showHint(str) {
+    
     var courses = ["COMP 232", "COMP 352", "COMP 348", "SOEN 341", "SOEN 331"];
+   
     console.log(str);
     $("#suggestion").autocomplete({
-        source: courses
+        source: courseList
+
     });
     /*if (str.length == 0) {
         $(".suggestion").html("");
