@@ -303,6 +303,7 @@
     <Content Include="Views\ScheduleGenerator\RegisterSuccessPartial.cshtml" />
     <Content Include="Views\Shared\_ScheduleAndLegend.cshtml" />
     <Content Include="Views\Shared\_RecommendedCourseList.cshtml" />
+    <Content Include="Views\StudentSchedule\StudentScheduleResultPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
