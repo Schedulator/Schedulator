@@ -27,11 +27,14 @@ $(function () {
     $("#addcourse").click(function () {
         var name = $("input[name='courseName']").val();
         $("input[name='courseName']").val("");
-        $(".selected-courses").children().append("<li>"+name+"<input name='courseCode["+count+"]' value='" + name + "' hidden></li>");
+        $(".selected-courses").children().append("<li>"+name+"<input name='courseCode["+count+"]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
         count++;
     });
 
-    
+    $(".removeClass").click(function () {
+        this.parent().hide();
+    });
+
     $.getJSON(url, function (data) {
         console.log(data);
         courseList = data;

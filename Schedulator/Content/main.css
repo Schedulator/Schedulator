@@ -2532,10 +2532,18 @@ shortcodes page css
     padding: 0;
 }
 
-.ui-menu-item:hover {
+.ui-menu-item:hover, .ui-menu-item::selection {
     background-color: lightblue;
 }
 
+.selected-courses li {
+    background-color: rgb(173, 230, 178);
+    border: 1px solid rgb(156, 213, 161);
+    margin: 5px 0;
+    padding: 0 7px;
+    border-radius: 5px;
+
+}
 
 
 
