@@ -83,7 +83,7 @@ namespace Schedulator.Controllers
             return PartialView("RegisterSuccessPartial");
         }
         [HttpPost]
-        public ActionResult GenerateSchedules(List<String> cLetter, List<int> cNumber) {
+        public ActionResult GenerateSchedules(List<String> courseCode) {
 
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
 
@@ -106,12 +106,17 @@ namespace Schedulator.Controllers
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 371 && n.CourseLetters == "ENGR").FirstOrDefault());
             //preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 275 && n.CourseLetters == "ELEC").FirstOrDefault());
 
-            int courseNumber = cNumber[0];
-            string courseLetter = cLetter[0];
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
-            courseNumber = cNumber[1];
-            courseLetter = cLetter[1];
-            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
+            foreach(var code in courseCode) {
+                String[] courseID = code.Split(' ');
+                var courseLetter = courseID[0];
+                int courseNumber = Int32.Parse(courseID[1]);
+
+                preference.Courses.Add(courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
+            }
+            
+            //preference.Courses.Add(courses.Where(n => n.CourseNumber == cNumber[1] && n.CourseLetters == cLetter[0]).FirstOrDefault());
+
+            
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
 
             Program program = db.Program.FirstOrDefault();

@@ -173,7 +173,6 @@
     <Compile Include="Controllers\ProgramDirectorController.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
     <Compile Include="Controllers\ProgramsManagementController.cs" />
-    <Compile Include="Controllers\ProgressionController.cs" />
     <Compile Include="Controllers\ScheduleGeneratorController.cs" />
     <Compile Include="Controllers\StudentScheduleController.cs" />
     <Compile Include="Global.asax.cs">
@@ -192,7 +191,6 @@
     <Compile Include="Models\Prerequisite.cs" />
     <Compile Include="Models\Program.cs" />
     <Compile Include="Models\ProgramDirector.cs" />
-    <Compile Include="Models\Progression.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduleGenerator.cs" />
     <Compile Include="Models\Section.cs" />
@@ -233,6 +231,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -315,7 +314,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Progression\" />
     <Folder Include="Views\Seed\" />
   </ItemGroup>
   <ItemGroup>

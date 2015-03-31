@@ -19,18 +19,23 @@ function courseAltColor(courseCode) {
 
 }
 
+var count = 0;
 $(function () {
     $("#addcourse").click(function () {
         var name = $("input[name='courseName']").val();
         $("input[name='courseName']").val("");
-        $(".selected-courses").children().append("<li>"+name+"</li>");
+        $(".selected-courses").children().append("<li><input name='courseCode["+count+"]' value='" + name + "' /></li>");
+        count++;
     });
 });
 
 function showHint(str) {
     var courses = ["COMP 232", "COMP 352", "COMP 348", "SOEN 341", "SOEN 331"];
     console.log(str);
-    if (str.length == 0) {
+    $("#suggestion").autocomplete({
+        source: courses
+    });
+    /*if (str.length == 0) {
         $(".suggestion").html("");
         return;
     } else {
@@ -51,7 +56,7 @@ function showHint(str) {
             } /*else {
                 console.log("2 else");
                 $(".suggestion").append(" Nothing found");
-            }*/
+            }
         });
-    }
+    }*/
 }
