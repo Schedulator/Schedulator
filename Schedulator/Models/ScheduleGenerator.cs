@@ -11,7 +11,13 @@ namespace Schedulator.Models
         public List<List<Schedule>> Schedules { get; set; }
         public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
         private List<Course> CoursesStudentWantAndCanTake = new List<Course>();
-        
+
+        public class CourseView
+        {
+            public int CourseId { get; set; }
+            public string CourseLetter { get; set; }
+            public int CourseNumber { get; set; }
+        }
         public class PrequisitesStudentNeedsForCourse
         {
             public Course Course { get; set; }
