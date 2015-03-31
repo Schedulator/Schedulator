@@ -26,6 +26,10 @@ namespace Schedulator.Migrations
         List<Prerequisite> prerequisites = new List<Prerequisite>();
         List<Section> sections = new List<Section>();
 
+        Semester fallSemester;
+        Semester winterSemester;
+        Semester summerOneSemester;
+        Semester summerTwoSemester;
 
         public Configuration()
         {
@@ -47,7 +51,8 @@ namespace Schedulator.Migrations
             }
             SeedCoursesFromExcelSheet(context);
            SeedProgramsFromExcelSheet(context);
-
+           AddScienceElectives(context);
+           AddGeneralElective(context);
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
             List<Enrollment> enrollments = new List<Enrollment>();
@@ -81,7 +86,7 @@ namespace Schedulator.Migrations
             context.Schedule.AddOrUpdate(schedule);
 
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
-
+            
             context.SaveChanges();
         }
         void SeedProgramsFromExcelSheet(ApplicationDbContext context)
@@ -137,10 +142,10 @@ namespace Schedulator.Migrations
             }
 
 
-            var fallSemester = new Semester { Season = Season.Fall, SemesterStart = new DateTime(2014, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) };
-            var winterSemester = new Semester { Season = Season.Winter, SemesterStart = new DateTime(2015, 1, 7), SemesterEnd = new DateTime(2015, 5, 2) };
-            var summerOneSemester = new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2015, 5, 4), SemesterEnd = new DateTime(2015, 6, 23) };
-            var summerTwoSemester = new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2015, 6, 25), SemesterEnd = new DateTime(2015, 7, 19) };
+            fallSemester = new Semester { Season = Season.Fall, SemesterStart = new DateTime(2014, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) };
+            winterSemester = new Semester { Season = Season.Winter, SemesterStart = new DateTime(2015, 1, 7), SemesterEnd = new DateTime(2015, 5, 2) };
+            summerOneSemester = new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2015, 5, 4), SemesterEnd = new DateTime(2015, 6, 23) };
+            summerTwoSemester = new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2015, 6, 25), SemesterEnd = new DateTime(2015, 7, 19) };
 
             context.Semesters.AddOrUpdate(fallSemester);
             context.Semesters.AddOrUpdate(winterSemester);
@@ -157,7 +162,8 @@ namespace Schedulator.Migrations
                 while (count < row.Count())
                 {
                     string currentCell = row[count].Cells[0].Text;
-
+                    if (currentCell == "MECH 221")
+                        currentCell = currentCell;
                     if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
                         double credit = 0;
@@ -245,9 +251,10 @@ namespace Schedulator.Migrations
                                         if (!(count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}")))
                                         {
                                             Section section = new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault() };
-                                            CheckIfSectionHasSameTimes(section, context);
+                                            CheckIfSectionHasSameTimes(section);
                                             sections.Add(section);
                                         }
+
                                         while (count < row.Count() && row[count].Cells[1] != null && Regex.IsMatch(row[count].Cells[1].Text, @"Lab\s([A-Z]|\d){1,2}"))
                                         {
                                             labs.Add(new Lab { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), LabLetter = Regex.Replace(row[count].Cells[1].Text, @"Lab\s", "") });
@@ -261,7 +268,7 @@ namespace Schedulator.Migrations
 
                                             count++;
                                             Section section = new Section { Lecture = lectures.LastOrDefault(), Tutorial = tutorials.LastOrDefault(), Lab = labs.LastOrDefault() };
-                                            CheckIfSectionHasSameTimes(section, context);
+                                            CheckIfSectionHasSameTimes(section);
                                             sections.Add(section);
 
                                             // lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
@@ -280,14 +287,14 @@ namespace Schedulator.Migrations
 
                                         count++;
                                         Section section = new Section { Lecture = lectures.LastOrDefault(), Lab = labs.LastOrDefault() };
-                                        CheckIfSectionHasSameTimes(section, context);
+                                        CheckIfSectionHasSameTimes(section);
                                         sections.Add(section);
                                         //  lectures.LastOrDefault().Sections.Add(sections.LastOrDefault());
                                     }
                                     if (sections.LastOrDefault().Lecture != lectures.LastOrDefault())
                                     {
                                         Section section = new Section { Lecture = lectures.LastOrDefault() };
-                                        CheckIfSectionHasSameTimes(section, context);
+                                        CheckIfSectionHasSameTimes(section);
                                         sections.Add(section);
                                     }
 
@@ -389,9 +396,10 @@ namespace Schedulator.Migrations
             }
             return programs;
         }
-        void CheckIfSectionHasSameTimes(Section section, ApplicationDbContext context)
+        void CheckIfSectionHasSameTimes(Section section)
         {
-            List<Section> sameTimeSections = sections.Where(n => n.Lecture.Course == section.Lecture.Course && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.FirstDay == section.Lecture.FirstDay && n.Lecture.SecondDay == section.Lecture.SecondDay && n.Lecture.StartTime == section.Lecture.StartTime && n.Lecture.EndTime == section.Lecture.EndTime).ToList();
+
+            List<Section> sameTimeSections =  sections.Where(n => n.Lecture.Course == section.Lecture.Course && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.FirstDay == section.Lecture.FirstDay && n.Lecture.SecondDay == section.Lecture.SecondDay && n.Lecture.StartTime == section.Lecture.StartTime && n.Lecture.EndTime == section.Lecture.EndTime).ToList();
             if (sameTimeSections.Count > 0 && section.Tutorial != null)
                 sameTimeSections = sections.Where(n => n.Lecture.Course == section.Lecture.Course && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.FirstDay == section.Lecture.FirstDay && n.Lecture.SecondDay == section.Lecture.SecondDay && n.Lecture.StartTime == section.Lecture.StartTime && n.Lecture.EndTime == section.Lecture.EndTime && n.Lecture.Semester == section.Lecture.Semester && n.Lecture.Course == section.Lecture.Course && n.Tutorial.FirstDay == section.Tutorial.FirstDay && n.Tutorial.SecondDay == section.Tutorial.SecondDay && n.Tutorial.StartTime == section.Tutorial.StartTime && n.Tutorial.EndTime == section.Tutorial.EndTime).ToList();
             if (sameTimeSections.Count > 0 && section.Lab != null)
@@ -412,6 +420,154 @@ namespace Schedulator.Migrations
                     section.OtherSimilarSectionMaster = sectionMaster;
                 }
             }
+        }
+        void AddGeneralElective (ApplicationDbContext context)
+        {
+            List<Course> generalCourses = new List<Course>();
+            List<Lecture> generalLectures = new List<Lecture>();
+
+            generalCourses.Add(new Course { CourseLetters = "ADMI", CourseNumber = 201, Credit = 3, ElectiveType = ElectiveType.GeneralElective, Title = "INTRO TO ADMINISTRATION" });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.270", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = fallSemester, LectureLetter = "A", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-3.270", FirstDay = TimeBlock.day.J, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = winterSemester, LectureLetter = "B", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.430", FirstDay = TimeBlock.day.J, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = winterSemester, LectureLetter = "AA", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+
+
+            generalCourses.Add(new Course { CourseLetters = "ADMI", CourseNumber = 202, Credit = 3, ElectiveType = ElectiveType.GeneralElective, Title = "PERSPECTIVE ON CANADIAN BUS" });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-5.270", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = fallSemester, LectureLetter = "A", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-5.270", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = winterSemester, LectureLetter = "B", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+
+
+            generalCourses.Add(new Course { CourseLetters = "MANA", CourseNumber = 201, Credit = 3, ElectiveType = ElectiveType.GeneralElective, Title = "INTRO BUSINESS & MANAGEMENT" });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.210", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 1110, EndTime = 1260, Semester = summerOneSemester, LectureLetter = "AA", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-5.210", FirstDay = TimeBlock.day.J, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = fallSemester, LectureLetter = "BB", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-5.210", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = fallSemester, LectureLetter = "AA", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-5.210", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = winterSemester, LectureLetter = "CC", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+
+            generalCourses.Add(new Course { CourseLetters = "MANA", CourseNumber = 202, Credit = 3, ElectiveType = ElectiveType.GeneralElective, Title = "HUMAN BEHAVIOUR IN ORGS" });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.270", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = fallSemester, LectureLetter = "AA", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-3.210", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = winterSemester, LectureLetter = "BB", Teacher = "T.B.A" });
+
+            generalCourses.Add(new Course { CourseLetters = "MANA", CourseNumber = 300, Credit = 3, ElectiveType = ElectiveType.GeneralElective, Title = "ENTRPSHP:LAUNCH'G YOUR BSNSS" });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-5.275", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = fallSemester, LectureLetter = "A", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-S1.430", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.NONE, StartTime = 705, EndTime = 870, Semester = winterSemester, LectureLetter = "B", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "EV-1.615", FirstDay = TimeBlock.day.F, SecondDay = TimeBlock.day.NONE, StartTime = 525, EndTime = 690, Semester = winterSemester, LectureLetter = "C", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.210", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = winterSemester, LectureLetter = "AA", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+
+            generalCourses.Add(new Course { CourseLetters = "MARK", CourseNumber = 201, Credit = 3, ElectiveType = ElectiveType.GeneralElective, Title = "INTRODUCTION TO MARKETING" });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-3.270", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 1110, EndTime = 1260, Semester = summerOneSemester, LectureLetter = "CA", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.270", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 705, EndTime = 870, Semester = fallSemester, LectureLetter = "A", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-3.270", FirstDay = TimeBlock.day.F, SecondDay = TimeBlock.day.NONE, StartTime = 525, EndTime = 690, Semester = fallSemester, LectureLetter = "C", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.270", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = fallSemester, LectureLetter = "B", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "HB-130", FirstDay = TimeBlock.day.J, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1050, Semester = fallSemester, LectureLetter = "01", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.270", FirstDay = TimeBlock.day.J, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = fallSemester, LectureLetter = "AA", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "HB-130", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = fallSemester, LectureLetter = "51", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-3.270", FirstDay = TimeBlock.day.F, SecondDay = TimeBlock.day.NONE, StartTime = 705, EndTime = 855, Semester = winterSemester, LectureLetter = "F", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.270", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.NONE, StartTime = 705, EndTime = 855, Semester = winterSemester, LectureLetter = "E", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.270", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 525, EndTime = 690, Semester = winterSemester, LectureLetter = "D", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "HB-130", FirstDay = TimeBlock.day.J, SecondDay = TimeBlock.day.NONE, StartTime = 885, EndTime = 1035, Semester = winterSemester, LectureLetter = "02", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "MB-2.210", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 1065, EndTime = 1215, Semester = winterSemester, LectureLetter = "BB", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+
+            generalCourses.Add(new Course { CourseLetters = "URBS", CourseNumber = 230, Credit = 3, ElectiveType = ElectiveType.GeneralElective, Title = " URBAN DEVELOPMENT" });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "N/A", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.W, StartTime = 975, EndTime = 1050, Semester = fallSemester, LectureLetter = "A", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+            generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "N/A", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 705, EndTime = 780, Semester = winterSemester, LectureLetter = "A", Teacher = "T.B.A" });
+            context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
+
+            context.Courses.AddRange(generalCourses);
+            context.Lectures.AddRange(generalLectures);
+
+            context.SaveChanges();
+
+
+        }
+        List<Course> AddScienceElectives (ApplicationDbContext context)
+        {
+            List<Course> scienceCourses = new List<Course>();
+            List<Lecture> scienceLectures = new List<Lecture>();
+            List<Tutorial> tutorialLectures = new List<Tutorial>();
+            scienceCourses.Add(new Course { CourseLetters = "BIOL", CourseNumber = 206, Credit = 3, ElectiveType = ElectiveType.BasicScience, Title = "Elementary Genetics" });
+            scienceLectures.Add(new Lecture { Course = scienceCourses.LastOrDefault(), ClassRoomNumber = "HC-155", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 855, EndTime = 960, Semester = winterSemester, LectureLetter = "01", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = scienceLectures.LastOrDefault() });
+
+            scienceCourses.Add(new Course { CourseLetters = "BIOL", CourseNumber = 261, Credit = 3, ElectiveType = ElectiveType.BasicScience, Title = "MOLECULAR & GENERAL GENETICS" });
+            scienceLectures.Add(new Lecture { Course = scienceCourses.LastOrDefault(), ClassRoomNumber = "	SP-S110", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 705, EndTime = 780, Semester = fallSemester, LectureLetter = "01", Teacher = "N/A" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.W, StartTime = 810, EndTime = 930, TutorialLetter = "03" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.125", FirstDay = TimeBlock.day.J, StartTime = 810, EndTime = 930, TutorialLetter = "05" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CC-425", FirstDay = TimeBlock.day.J, StartTime = 810, EndTime = 930, TutorialLetter = "07" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CC-312", FirstDay = TimeBlock.day.T, StartTime = 810, EndTime = 930, TutorialLetter = "01" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.W, StartTime = 930, EndTime = 1050, TutorialLetter = "04" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.J, StartTime = 930, EndTime = 1050, TutorialLetter = "06" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.J, StartTime = 930, EndTime = 1050, TutorialLetter = "08" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.T, StartTime = 930, EndTime = 1050, TutorialLetter = "02" });
+
+            scienceLectures.Add(new Lecture { Course = scienceCourses.LastOrDefault(), ClassRoomNumber = "	SP-S110", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 705, EndTime = 780, Semester = winterSemester, LectureLetter = "02", Teacher = "N/A" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.W, StartTime = 810, EndTime = 930, TutorialLetter = "03" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.125", FirstDay = TimeBlock.day.J, StartTime = 810, EndTime = 930, TutorialLetter = "05" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CC-425", FirstDay = TimeBlock.day.J, StartTime = 810, EndTime = 930, TutorialLetter = "07" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CC-312", FirstDay = TimeBlock.day.T, StartTime = 810, EndTime = 930, TutorialLetter = "01" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.W, StartTime = 930, EndTime = 1050, TutorialLetter = "04" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.J, StartTime = 930, EndTime = 1050, TutorialLetter = "06" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.J, StartTime = 930, EndTime = 1050, TutorialLetter = "08" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "CJ-1.121", FirstDay = TimeBlock.day.T, StartTime = 930, EndTime = 1050, TutorialLetter = "02" });
+
+            scienceCourses.Add(new Course { CourseLetters = "CHEM", CourseNumber = 217, Credit = 3, ElectiveType = ElectiveType.BasicScience, Title = "INTRO ANALYTICAL CHEMISTRY I" });
+            scienceLectures.Add(new Lecture { Course = scienceCourses.LastOrDefault(), ClassRoomNumber = "CC-321", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 615, EndTime = 690, Semester = fallSemester, LectureLetter = "01", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = scienceLectures.LastOrDefault() });
+            scienceLectures.Add(new Lecture { Course = scienceCourses.LastOrDefault(), ClassRoomNumber = "CC-321", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 1080, EndTime = 1230, Semester = fallSemester, LectureLetter = "51", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = scienceLectures.LastOrDefault() });
+
+            scienceCourses.Add(new Course { CourseLetters = "CIVI", CourseNumber = 231, Credit = 3, ElectiveType = ElectiveType.BasicScience, Title = "GEOLOGY FOR CIVIL ENGINEERS" });
+            scienceLectures.Add(new Lecture { Course = scienceCourses.LastOrDefault(), ClassRoomNumber = "H-937", FirstDay = TimeBlock.day.M,  StartTime = 1065, EndTime = 1215, Semester = fallSemester, LectureLetter = "LL", Teacher = "N/A" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "H-605", FirstDay = TimeBlock.day.M, StartTime = 1230, EndTime = 1290, TutorialLetter = "LA" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "H-401", FirstDay = TimeBlock.day.T, StartTime = 1110, EndTime = 1170, TutorialLetter = "LB" });
+            tutorialLectures.Add(new Tutorial { Lecture = scienceLectures.LastOrDefault(), ClassRoomNumber = "H-539", FirstDay = TimeBlock.day.W, StartTime = 1170, EndTime = 1230, TutorialLetter = "LC" });
+            List<Section> scienceSection = new List<Section>();
+            foreach (Tutorial tutorial in tutorialLectures)
+            {
+                Section section = new Section { Tutorial = tutorial, Lecture = tutorial.Lecture };
+                CheckIfSectionHasSameTimes(section);
+                sections.Add(section);
+                context.Section.Add(sections.LastOrDefault());
+            }
+            
+            context.Courses.AddRange(scienceCourses);
+            context.Lectures.AddRange(scienceLectures);
+            context.Tutorials.AddRange(tutorialLectures);
+            context.Section.AddRange(scienceSection);
+            context.Courses.Where(n => n.CourseLetters == "ENGR" && n.CourseNumber == 242).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
+            context.Courses.Where(n => n.CourseLetters == "ENGR" && n.CourseNumber == 243).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
+            context.Courses.Where(n => n.CourseLetters == "ENGR" && n.CourseNumber == 251).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
+            context.Courses.Where(n => n.CourseLetters == "ENGR" && n.CourseNumber == 361).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
+            context.Courses.Where(n => n.CourseLetters == "MECH" && n.CourseNumber == 221).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
+
+            context.SaveChanges();
+            return courses;
         }
         List<Prerequisite> AddPrerequisite(List<Course> courses)
         {

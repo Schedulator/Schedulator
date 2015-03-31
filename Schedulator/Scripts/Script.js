@@ -19,11 +19,13 @@ function courseAltColor(courseCode) {
 
 }
 
+var count = 0;
 $(function () {
     $("#addcourse").click(function () {
         var name = $("input[name='courseName']").val();
         $("input[name='courseName']").val("");
-        $(".selected-courses").children().append("<li>"+name+"</li>");
+        $(".selected-courses").children().append("<li><input name='courseCode["+count+"]' value='" + name + "' /></li>");
+        count++;
     });
 });
 
