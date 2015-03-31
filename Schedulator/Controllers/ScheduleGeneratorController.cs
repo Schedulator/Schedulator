@@ -16,6 +16,16 @@ namespace Schedulator.Controllers
         {
             return View();
         }
+
+        public JsonResult GetAllCourses()
+        {
+            List<Course> model = db.Courses.ToList();
+
+            var test = Json(model);
+                
+            return test;
+        }
+
         public ActionResult StudentsCourseSequence()
         {
             ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
