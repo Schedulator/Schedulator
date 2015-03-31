@@ -192,6 +192,7 @@
     <Compile Include="Models\Prerequisite.cs" />
     <Compile Include="Models\Program.cs" />
     <Compile Include="Models\ProgramDirector.cs" />
+    <Compile Include="Models\ProgramManagementViewModel.cs" />
     <Compile Include="Models\Progression.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduleGenerator.cs" />
