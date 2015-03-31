@@ -98,11 +98,15 @@
         <tr>
             @if (!hideRadioButton)
             {
-                <td rowspan="3" width="15px" style="background-color:indianred;"><label>@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
+                <td rowspan="3" width="15px" style="background-color:indianred;">
+                    <input checked="checked" id="radioButtonSectionGroup2" name="@radioButtonGroup" type="radio" value="@sectionToShow.SectionId">
+                </td>
             }
             else
             {
-                <td rowspan="3" width="15px" style="background-color:indianred;"><label style="display:none;">@Html.RadioButton(radioButtonGroup, @sectionToShow.SectionId, true)</label></td>
+                <td rowspan="3" width="15px" style="background-color:indianred;">
+                    <input style="display:none" checked="checked" id="radioButtonSectionGroup2" name="@radioButtonGroup" type="radio" value="@sectionToShow.SectionId">
+                </td>
             }
             <td width="30%">Lec @sectionToShow.Lecture.LectureLetter </td>
             <td>@sectionToShow.Lecture.Teacher</td>
