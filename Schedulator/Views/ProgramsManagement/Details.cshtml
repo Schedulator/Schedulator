@@ -1,4 +1,4 @@
-﻿@model Schedulator.Models.ProgramManagementViewModel
+﻿@model Schedulator.Models.Program
 
 
 @{
@@ -13,76 +13,84 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Program.ProgramName)
+            Program Name: 
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Program.ProgramName)
+            @Html.DisplayFor(model => model.ProgramName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Program.ProgramOption)
+            Program Option: 
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Program.ProgramOption)
+            @Html.DisplayFor(model => model.ProgramOption)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Program.CreditsRequirement)
+            Credits Requirement: 
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Program.CreditsRequirement)
+            @Html.DisplayFor(model => model.CreditsRequirement)
         </dd>
 
     </dl>
 </div>
 
 <div>
-    <h4>Courses</h4>
-    <hr />
-  @foreach (var element in Model.Courses)
-  {
-    <dl class="dl-horizontal">
+    <table>
+        <tr>
+            <th>Year 1 - Fall</th>
+        </tr>
+        <tr>
+            <th>Course Number</th>
+            <th>Course Name</th>
+            <th>Credit</th>
+        </tr>
+        @{
+        var Year = 1;
+        var Season = Schedulator.Models.Season.Fall;
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => element.Title)
-        </dt>
+        @foreach (var item in Model.CourseSequences)
+        {
+            
+            if (item.Season != Season) 
+            {
+                Year = item.Year;
+                Season = item.Season;
 
-        <dd>
-            @Html.DisplayFor(model => element.Title)
-        </dd>
+                <tr>
+                    <th>Year @item.Year - @item.Season</th>
+                </tr>
+                <tr>
+                    <th>Course Number</th>
+                    <th>Course Name</th>
+                    <th>Credit</th>
+                </tr>
+            }            
+            if (item.Course != null)
+            {
+                <tr>                   
+                    <td>@item.Course.CourseNumber</td>
+                    <td>@item.Course.Title</td>
+                    <td>@item.Course.Credit</td>                    
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@item.ElectiveType</td>
+                </tr>
+            }
 
-        <dt>
-            @Html.DisplayNameFor(model => element.CourseLetters)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => element.CourseLetters)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => element.CourseNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => element.CourseNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => element.SpecialNote)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => element.SpecialNote)
-        </dd>
-    </dl>
-      <br />
-  }
-   
+        }
+    </table>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Program.ProgramId }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProgramId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

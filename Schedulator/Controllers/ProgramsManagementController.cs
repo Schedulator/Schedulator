@@ -23,35 +23,22 @@ namespace Schedulator.Controllers
         // GET: ProgramsManagement/Details/5
         public ActionResult Details(int? id)
         {
-            //Program management details view model instance
-            ProgramManagementViewModel details = new ProgramManagementViewModel();
-
-            //Program director instance
-            ProgramDirector progD = new ProgramDirector();
-
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Get the program Id
             Program program = db.Program.Find(id);
-             
-            //Get the program Course IDs from the specified program Id
-            var detailedCourseList = progD.getProgramCourseIDs(program.ProgramId);
-
-
-            //Copy elements from list to details  list
-            details.Courses = detailedCourseList.ToList();
-
-            //Copy program details into details program instance
-            details.Program = program;
-       
 
             if (program == null)
             {
                 return HttpNotFound();
             }
-            return View(details);
+
+            program.CourseSequences = program.CourseSequences.OrderBy(r => r.Year).ThenBy(r => r.Season).ToList();
+
+            return View(program);
         }
 
         // GET: ProgramsManagement/Create
