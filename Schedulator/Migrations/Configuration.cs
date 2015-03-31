@@ -53,6 +53,7 @@ namespace Schedulator.Migrations
            SeedProgramsFromExcelSheet(context);
            AddScienceElectives(context);
            AddGeneralElective(context);
+           AddTechnicalElectives(context);
             Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
             List<Enrollment> enrollments = new List<Enrollment>();
@@ -87,6 +88,31 @@ namespace Schedulator.Migrations
 
             enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
             
+            context.SaveChanges();
+        }
+
+        private void AddTechnicalElectives(ApplicationDbContext context)
+        {
+            List<Program> currentProgramList = context.Program.Where(n => n.ProgramOption == "Computer Games").ToList();
+
+            foreach (Program program in currentProgramList)
+            {
+                program.TechnicalElectiveCourses = new List<Course>();
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 345).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 353).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 371).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 376).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 472).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 476).FirstOrDefault());
+                program.TechnicalElectiveCourses.Add(context.Courses.Where(n => n.CourseLetters == "COMP" && n.CourseNumber == 477).FirstOrDefault());
+            }
+
+
+
+            foreach (Program program in currentProgramList)
+            {
+                context.Entry(program).State = EntityState.Modified;
+            }
             context.SaveChanges();
         }
         void SeedProgramsFromExcelSheet(ApplicationDbContext context)
