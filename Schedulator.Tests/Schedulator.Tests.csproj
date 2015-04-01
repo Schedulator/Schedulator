@@ -102,6 +102,7 @@
     <Compile Include="Controllers\CoursesControllerTest.cs" />
     <Compile Include="Controllers\ProgramDirectorControllerTest.cs" />
     <Compile Include="Controllers\ProgramsControllerTest.cs" />
+    <Compile Include="Controllers\StudentScheduleTest.cs" />
     <Compile Include="Models\CourseTest.cs" />
     <Compile Include="Models\AccountViewModelsTest.cs" />
     <Compile Include="Models\CourseSequenceTest.cs" />
