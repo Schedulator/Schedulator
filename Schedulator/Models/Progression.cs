@@ -5,12 +5,16 @@ using System.Web;
 
 namespace Schedulator.Models
 {
+    public enum ProgressType { CompletedCourse, InProgressCourse, IncompleteCourse };
     public class Progression
     {
-        public List<CourseSequence> CompletedCourse { get; set; }
-        public List<CourseSequence> InProgressCourse { get; set; }
-        public List<CourseSequence> IncompleteCourse { get; set; }
-
+        
+        public List<ProgressionUnit> ProgessionUnitList { get; set; }
+        public class ProgressionUnit
+        {
+            public CourseSequence CourseSequence;
+            public ProgressType ProgressType;
+        }
         public void StudentsProgression(List<Enrollment> studentsEnrollment, List<CourseSequence> courseSequences)
         {
             ApplicationDbContext db = new ApplicationDbContext();
@@ -28,9 +32,9 @@ namespace Schedulator.Models
                             if (courseSequenceOtherOptions.Course != null &&  enrollment.Course == courseSequenceOtherOptions.Course)
                             {
                                 if (enrollment.Grade != null)
-                                    CompletedCourse.Add(courseSequenceOtherOptions);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequenceOtherOptions, ProgressType = ProgressType.CompletedCourse });
                                 else
-                                    InProgressCourse.Add(courseSequenceOtherOptions);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequenceOtherOptions, ProgressType = ProgressType.IncompleteCourse });
                                 courseSequencesRemoved.Remove(courseSequence);
                             }
                         }
@@ -38,9 +42,9 @@ namespace Schedulator.Models
                     else if (courseSequence.Course != null && enrollment.Course == courseSequence.Course)
                     {
                         if (enrollment.Grade != null)
-                            CompletedCourse.Add(courseSequence);
+                            ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
                         else
-                            InProgressCourse.Add(courseSequence);
+                            ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
                         courseSequencesRemoved.Remove(courseSequence);
                         break;
                     }
@@ -51,9 +55,9 @@ namespace Schedulator.Models
                             if (scienceCourse == enrollment.Course)
                             {
                                 if (enrollment.Grade != null)
-                                    CompletedCourse.Add(courseSequence);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
                                 else
-                                    InProgressCourse.Add(courseSequence);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
                                 courseSequencesRemoved.Remove(courseSequence);
                             }
                         }
@@ -65,9 +69,9 @@ namespace Schedulator.Models
                             if (generalCourse == enrollment.Course)
                             {
                                 if (enrollment.Grade != null)
-                                    CompletedCourse.Add(courseSequence);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
                                 else
-                                    InProgressCourse.Add(courseSequence);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
                                 courseSequencesRemoved.Remove(courseSequence);
                             }
                         }
@@ -79,9 +83,9 @@ namespace Schedulator.Models
                             if (technicalCourse == enrollment.Course)
                             {
                                 if (enrollment.Grade != null)
-                                    CompletedCourse.Add(courseSequence);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
                                 else
-                                    InProgressCourse.Add(courseSequence);
+                                    ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
                                 courseSequencesRemoved.Remove(courseSequence);
                             }
                         }
@@ -89,7 +93,7 @@ namespace Schedulator.Models
                 }
                 courseSequences = courseSequencesRemoved;
             }
-            IncompleteCourse.AddRange(courseSequences);
+            courseSequences.ForEach(n => ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = n, ProgressType = ProgressType.IncompleteCourse }));
         }
 
     }
