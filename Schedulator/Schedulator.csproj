@@ -310,6 +310,7 @@
     <Content Include="Views\StudentSchedule\StudentScheduleResultPartial.cshtml" />
     <Content Include="Views\StudentManagement\Index.cshtml" />
     <Content Include="Views\StudentManagement\findStudent.cshtml" />
+    <Content Include="Views\Progression\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
