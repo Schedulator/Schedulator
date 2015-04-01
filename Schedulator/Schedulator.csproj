@@ -175,6 +175,7 @@
     <Compile Include="Controllers\ProgramsManagementController.cs" />
     <Compile Include="Controllers\ProgressionController.cs" />
     <Compile Include="Controllers\ScheduleGeneratorController.cs" />
+    <Compile Include="Controllers\StudentManagementController.cs" />
     <Compile Include="Controllers\StudentScheduleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -307,6 +308,8 @@
     <Content Include="Views\Shared\_ScheduleAndLegend.cshtml" />
     <Content Include="Views\Shared\_RecommendedCourseList.cshtml" />
     <Content Include="Views\StudentSchedule\StudentScheduleResultPartial.cshtml" />
+    <Content Include="Views\StudentManagement\Index.cshtml" />
+    <Content Include="Views\StudentManagement\findStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -317,6 +320,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\App_LocalResources\" />
     <Folder Include="Views\Seed\" />
   </ItemGroup>
   <ItemGroup>
