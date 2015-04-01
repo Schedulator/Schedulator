@@ -30,6 +30,20 @@
         It is also possible that the courses selected do not have any combinations where there isn't a time conflict.
     </div>
 }
+else
+{
+    <div class="alert alert-success">  @Model.Schedules.Count() schedules were successfully generated.</div>
+    if (@Model.Schedules.Count() > 20)
+    {
+        <ul class="pagination">
+            @for(int i = 0; i <= Model.Schedules.Count(); i += 20)
+            { 
+            <li><a>@i - @(i+20)</a></li>
+            }
+        </ul>
+    }
+}
+
 @foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules)
 {
     <div id="schedCount">#@count</div>
