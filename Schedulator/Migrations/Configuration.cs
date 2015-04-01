@@ -679,7 +679,7 @@ namespace Schedulator.Migrations
         {
 
         }
-        void AddPrerequisite(List<Course> courses)
+        List<Prerequisite> AddPrerequisite(List<Course> courses)
         {
             List<Prerequisite> prerequisites = new List<Prerequisite>();
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 287).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault()});
@@ -765,6 +765,7 @@ namespace Schedulator.Migrations
                     course.Prerequisites = prerequisiteToAddToCourse;
 
             }
+            return prerequisites;
         }
         public struct time
         {
