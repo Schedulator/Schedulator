@@ -34,10 +34,11 @@ namespace Schedulator.Controllers
 
             List<Enrollment> studentEnrollments = new List<Enrollment>();
             foreach (Schedule schedule in user.Schedules)
-            {
                 studentEnrollments.AddRange(schedule.Enrollments);
-            }
-            return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments));
+            return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments,
+                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Fall).FirstOrDefault(), 
+                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Winter).FirstOrDefault(), 
+                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Summer1 || n.Semester.Season == Season.Summer2).ToList()));
         }
         [HttpPost]
         public ActionResult RegisterSchedule()

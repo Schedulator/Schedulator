@@ -1,4 +1,7 @@
-﻿
+﻿.course-list-recommend
+{
+    list-style-type: none;
+}
 .contentBox {
 
   background: white;
