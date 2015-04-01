@@ -1,0 +1,48 @@
+﻿@model Schedulator.Models.Progression
+@{
+    ViewBag.Title = "Progression Chart";
+}
+@using Microsoft.AspNet.Identity
+<h2>Progression Chart</h2>
+
+@Html.DisplayFor(model => model.InProgressCourse.FirstOrDefault())
+@*<ul>
+    Completed Courses
+    @{
+        foreach (var course in Model.CompletedCourse)
+        {
+            if (course != null)
+            {
+                <li>course.Course</li>
+            }
+        }
+    }
+</ul>
+
+<ul>
+    Courses In Progress
+    @{
+        foreach (var course in Model.InProgressCourse)
+        {
+            if (course != null)
+            {
+                <li>course.Course</li>
+            }
+        }
+    }
+</ul>
+
+<ul>
+    Courses Not Yet Completed
+    @{
+        foreach (var course in Model.IncompleteCourse)
+        {
+            if (course != null)
+            {
+                <li>course.Course</li>
+            }
+        }
+    }
+</ul>*@
+
+
