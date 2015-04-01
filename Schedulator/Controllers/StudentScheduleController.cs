@@ -15,7 +15,15 @@ namespace Schedulator.Controllers
         {
             return View();
         }
-
+        public void DropAllSchedules ()
+        {
+            List<Schedule> schedules = new List<Schedule>();
+            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            schedules = db.Schedule.Where(t => t.ApplicationUser.Email == user  ).ToList();
+            schedules.ForEach(n => db.Enrollment.RemoveRange(n.Enrollments));
+            db.Schedule.RemoveRange(schedules);
+            db.SaveChanges();
+        }
         public ActionResult GetSchedule(string semester)
         {   
             List<Schedule> schedules = new List<Schedule>();
