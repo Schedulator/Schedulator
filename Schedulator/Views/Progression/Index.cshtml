@@ -5,44 +5,19 @@
 @using Microsoft.AspNet.Identity
 <h2>Progression Chart</h2>
 
-@Html.DisplayFor(model => model.InProgressCourse.FirstOrDefault())
-@*<ul>
-    Completed Courses
-    @{
-        foreach (var course in Model.CompletedCourse)
+@{
+    foreach (var course in Model.ProgessionUnitList)
+    {
+        if (course.ProgressType == Schedulator.Models.ProgressType.IncompleteCourse)
         {
-            if (course != null)
-            {
-                <li>course.Course</li>
-            }
+            <div class="panel-heading">
+
+                <h3 class="panel-title">@course</h3>
+
+            </div>
+        }
+        else if () 
+        {
         }
     }
-</ul>
-
-<ul>
-    Courses In Progress
-    @{
-        foreach (var course in Model.InProgressCourse)
-        {
-            if (course != null)
-            {
-                <li>course.Course</li>
-            }
-        }
-    }
-</ul>
-
-<ul>
-    Courses Not Yet Completed
-    @{
-        foreach (var course in Model.IncompleteCourse)
-        {
-            if (course != null)
-            {
-                <li>course.Course</li>
-            }
-        }
-    }
-</ul>*@
-
-
+}
