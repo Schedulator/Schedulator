@@ -28,9 +28,8 @@ namespace Schedulator.Tests.Controllers
 
             Program program = db.Program.FirstOrDefault();
             
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.ToList(), program);
-
-            
+            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.ToList());
+ 
         }
     }
 }
