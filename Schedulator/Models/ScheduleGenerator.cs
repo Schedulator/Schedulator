@@ -10,7 +10,7 @@ namespace Schedulator.Models
         public Preference Preference { get; set; }
         public List<List<Schedule>> Schedules { get; set; }
         public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
-        private List<Course> CoursesStudentWantAndCanTake = new List<Course>();
+        private List<Course> CoursesStudentCanTake = new List<Course>();
 
         public class CourseView
         {
@@ -30,10 +30,10 @@ namespace Schedulator.Models
             public TimeBlock.day FirstDay;
             public TimeBlock.day SecondDay;
         }
-        public void GenerateSchedules(List<Course> courses, List<Enrollment> enrollments, Program program)
+        public void GenerateSchedules(List<Course> courses, List<Enrollment> enrollments)
         {
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
-            AddUserPreferenceCourses(courses, enrollments, program);
+            AddUserPreferenceCourses(courses, enrollments);
             GenerateAllSchedulesUsingUserPreferenceCourses();
         }
         private void GenerateAllSchedulesUsingUserPreferenceCourses()
@@ -44,13 +44,13 @@ namespace Schedulator.Models
 
             if (Preference.Semester.Season == Season.Summer1 || Preference.Semester.Season == Season.Summer2)
             {
-                foreach (Course course in CoursesStudentWantAndCanTake)
+                foreach (Course course in CoursesStudentCanTake)
                     sectionsListMaster.Add(db.Section.Where(n => (n.Lecture.Semester.Season == Season.Summer1 || n.Lecture.Semester.Season == Season.Summer2) && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null
                                                             && n.Lecture.StartTime >= Preference.StartTime && n.Lecture.EndTime <= Preference.EndTime
                                                             && (n.Tutorial == null || n.Tutorial.StartTime >= Preference.StartTime && n.Tutorial.EndTime <= Preference.EndTime)
                                                             && (n.Lab == null || n.Lab.StartTime >= Preference.StartTime && n.Lab.EndTime <= Preference.EndTime)).ToList());
             }else{
-                foreach (Course course in CoursesStudentWantAndCanTake)
+                foreach (Course course in CoursesStudentCanTake)
                     sectionsListMaster.Add(db.Section.Where(n => n.Lecture.Semester.Season == Preference.Semester.Season && n.Lecture.Course.CourseID == course.CourseID && n.OtherSimilarSectionMaster == null
                                                             && n.Lecture.StartTime >= Preference.StartTime && n.Lecture.EndTime <= Preference.EndTime
                                                             && (n.Tutorial == null || n.Tutorial.StartTime >= Preference.StartTime && n.Tutorial.EndTime <= Preference.EndTime)
@@ -63,20 +63,26 @@ namespace Schedulator.Models
             foreach(List<Section> sectionsForSchedule in sectionCombinationsLists )
             {
                 Schedules.Add(new List<Schedule>());
-               
+                
                 Schedules.LastOrDefault().Add(new Schedule {Enrollments = new List<Enrollment>(), Semester = Preference.Semester });
+                if (Preference.Semester.Season == Season.Summer1)
+                     Schedules.LastOrDefault().Add(new Schedule { Enrollments = new List<Enrollment>(), Semester = db.Semesters.Where(n => n.Season == Season.Summer2).FirstOrDefault() });
                 foreach( Section sectionForSchedule in sectionsForSchedule)
                 {
                     if (sectionForSchedule.Lecture.Semester.Season == Season.Summer2)
-                    {
-                        if (Schedules.LastOrDefault().Count == 1)
-                            Schedules.LastOrDefault().Add(new Schedule { Enrollments = new List<Enrollment>(), Semester = db.Semesters.Where(n => n.Season == Season.Summer2).FirstOrDefault()});
                         Schedules.LastOrDefault().LastOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault().LastOrDefault() });
-                    }
+
                     else
                         Schedules.LastOrDefault().FirstOrDefault().Enrollments.Add(new Enrollment { Course = sectionForSchedule.Lecture.Course, Section = sectionForSchedule, Schedule = Schedules.LastOrDefault().LastOrDefault() });
                 }
+
+                foreach (Schedule schedule in Schedules.LastOrDefault().ToList())
+                {
+                    if (schedule.Enrollments.Count() == 0)
+                        Schedules.LastOrDefault().Remove(schedule);
+                }
             }
+
 
         }
 
@@ -135,20 +141,17 @@ namespace Schedulator.Models
             else
                 return false;
         }
-        private void AddUserPreferenceCourses(List<Course> courses, List<Enrollment> enrollments, Program program)
+        private void AddUserPreferenceCourses(List<Course> courses, List<Enrollment> enrollments)
         {
-            if (Preference.Courses.Count > 0) // 
+            foreach (Course course in Preference.Courses)
             {
-                foreach (Course course in Preference.Courses)
-                {
-                    List<Prerequisite> prerequisitesStudentNeeds = course.MissingPrequisite(enrollments);
-                    if (prerequisitesStudentNeeds.Count == 0) // Check if student has all prerquisite for the course they want to add
-                        CoursesStudentWantAndCanTake.Add(course);
-                    else // If they don't then add it to class so we can tell the user what course they can't take and what prerequisites they need
-                        PrequisitesStudentNeedsForCourses.Add(new PrequisitesStudentNeedsForCourse { Course = course, PrequisitesStudentNeeds = prerequisitesStudentNeeds });
-                }
-            }
+                List<Prerequisite> prerequisitesStudentNeeds = course.MissingPrequisite(enrollments, Preference.Semester);
+                if (prerequisitesStudentNeeds.Count == 0) // Check if student has all prerquisite for the course they want to add
+                    CoursesStudentCanTake.Add(course);
+                else // If they don't then add it to class so we can tell the user what course they can't take and what prerequisites they need
+                    PrequisitesStudentNeedsForCourses.Add(new PrequisitesStudentNeedsForCourse { Course = course, PrequisitesStudentNeeds = prerequisitesStudentNeeds });
 
+            }
         }
         private void GetAllValidSectionCombination(List<List<Section>> possibleSectionsList, int index, List<Section> values, List<List<Section>> sectionsLists)
         {

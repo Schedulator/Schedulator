@@ -86,7 +86,6 @@ namespace Schedulator.Controllers
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
-
             ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
             Season sem;
             switch (semester)
@@ -144,10 +143,8 @@ namespace Schedulator.Controllers
 
             
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
-
-            Program program = db.Program.FirstOrDefault();
-
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.ToList(), program);
+            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
 
 
             return PartialView("GenScheduleResultPartial", scheduleGenerator);
