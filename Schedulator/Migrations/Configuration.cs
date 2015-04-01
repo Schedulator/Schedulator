@@ -602,6 +602,8 @@ namespace Schedulator.Migrations
             generalLectures.Add(new Lecture { Course = generalCourses.LastOrDefault(), ClassRoomNumber = "N/A", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 705, EndTime = 780, Semester = winterSemester, LectureLetter = "A", Teacher = "T.B.A" });
             context.Section.Add(new Section { Lecture = generalLectures.LastOrDefault() });
 
+
+
             context.Courses.AddRange(generalCourses);
             context.Lectures.AddRange(generalLectures);
 
@@ -609,7 +611,7 @@ namespace Schedulator.Migrations
 
 
         }
-        List<Course> AddScienceElectives (ApplicationDbContext context)
+        void AddScienceElectives (ApplicationDbContext context)
         {
             List<Course> scienceCourses = new List<Course>();
             List<Lecture> scienceLectures = new List<Lecture>();
@@ -670,9 +672,14 @@ namespace Schedulator.Migrations
             context.Courses.Where(n => n.CourseLetters == "MECH" && n.CourseNumber == 221).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
 
             context.SaveChanges();
-            return courses;
+           
         }
-        List<Prerequisite> AddPrerequisite(List<Course> courses)
+
+        void AddMathElectives(ApplicationDbContext context)
+        {
+
+        }
+        void AddPrerequisite(List<Course> courses)
         {
             List<Prerequisite> prerequisites = new List<Prerequisite>();
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 287).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault()});
@@ -758,7 +765,6 @@ namespace Schedulator.Migrations
                     course.Prerequisites = prerequisiteToAddToCourse;
 
             }
-            return prerequisites;
         }
         public struct time
         {

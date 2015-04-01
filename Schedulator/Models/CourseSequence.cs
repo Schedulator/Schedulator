@@ -17,7 +17,9 @@ namespace Schedulator.Models
         [Display(Name = "General Elective")]
         GeneralElective,
         [Display(Name = "Technical Elective")]
-        TechnicalElective 
+        TechnicalElective,
+        [Display(Name = "Math Elective")]
+        MathElective
 
     };
     public class CourseSequence
