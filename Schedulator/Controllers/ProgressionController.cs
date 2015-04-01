@@ -25,7 +25,7 @@ namespace Schedulator.Controllers
             Progression studentsProgression = new Progression(){ CompletedCourse = new List<CourseSequence>(), IncompleteCourse  = new List<CourseSequence>(), InProgressCourse = new List<CourseSequence>()};
             studentsProgression.StudentsProgression(studentEnrollments, courseSequences);
 
-            return View();
+            return View(studentsProgression);
         }
     }
 }
