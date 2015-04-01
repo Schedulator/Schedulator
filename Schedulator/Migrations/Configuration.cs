@@ -611,7 +611,7 @@ namespace Schedulator.Migrations
 
 
         }
-        void AddScienceElectives (ApplicationDbContext context)
+        List<Course> AddScienceElectives (ApplicationDbContext context)
         {
             List<Course> scienceCourses = new List<Course>();
             List<Lecture> scienceLectures = new List<Lecture>();
@@ -672,14 +672,34 @@ namespace Schedulator.Migrations
             context.Courses.Where(n => n.CourseLetters == "MECH" && n.CourseNumber == 221).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
 
             context.SaveChanges();
-           
+            return courses;
         }
 
         void AddMathElectives(ApplicationDbContext context)
         {
+            List<Course> mathCourses = new List<Course>();
+            List<Lecture> mathLectures = new List<Lecture>();
+            List<Tutorial> tutorialLectures = new List<Tutorial>();
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 218, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Multivariable Calculus I" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "H-521", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 615, EndTime = 690, Semester = fallSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "MB-S1.401", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 705, EndTime = 780, Semester = fallSemester, LectureLetter = "B", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "H-535", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.NONE, StartTime = 1080, EndTime = 1230, Semester = winterSemester, LectureLetter = "AA", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 219, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Multivariable Calculus II" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "MB-2.210", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.W, StartTime = 885, EndTime = 1080, Semester = fallSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "MB-S1.401", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 705, EndTime = 780, Semester = fallSemester, LectureLetter = "B", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "H-535", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.NONE, StartTime = 1080, EndTime = 1230, Semester = winterSemester, LectureLetter = "AA", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
 
         }
-        void AddPrerequisite(List<Course> courses)
+        List<Prerequisite> AddPrerequisite(List<Course> courses)
         {
             List<Prerequisite> prerequisites = new List<Prerequisite>();
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 287).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault()});
@@ -765,6 +785,7 @@ namespace Schedulator.Migrations
                     course.Prerequisites = prerequisiteToAddToCourse;
 
             }
+            return prerequisites;
         }
         public struct time
         {
