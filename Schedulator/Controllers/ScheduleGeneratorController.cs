@@ -103,22 +103,25 @@ namespace Schedulator.Controllers
 
             double startTime = 0;
             double endTime = 0;
-            foreach (string timeType in timeOption)
+            if (timeOption != null)
             {
-                if (timeType == "Morning")
+                foreach (string timeType in timeOption)
                 {
-                    startTime = 1;
-                    endTime = 720;
-                }
-                else if (timeType == "Day")
-                {
-                    startTime = (startTime == 1) ? startTime : 720;
-                    endTime = (endTime < 1080) ? 1080 : endTime;
-                }
-                else if (timeType == "Night")
-                {
-                    startTime = (startTime == 1 || startTime == 720) ? startTime : 1080;
-                    endTime = (endTime < 1440) ? 1440 : endTime;
+                    if (timeType == "Morning")
+                    {
+                        startTime = 1;
+                        endTime = 720;
+                    }
+                    else if (timeType == "Day")
+                    {
+                        startTime = (startTime == 1) ? startTime : 720;
+                        endTime = (endTime < 1080) ? 1080 : endTime;
+                    }
+                    else if (timeType == "Night")
+                    {
+                        startTime = (startTime == 1 || startTime == 720) ? startTime : 1080;
+                        endTime = (endTime < 1440) ? 1440 : endTime;
+                    }
                 }
             }
             endTime = (endTime == 0) ? 1440 : endTime;

@@ -1,5 +1,6 @@
 ﻿@model Schedulator.Models.Program
 
+
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,7 +13,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ProgramName)
+            Program Name: 
         </dt>
 
         <dd>
@@ -20,7 +21,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ProgramOption)
+            Program Option: 
         </dt>
 
         <dd>
@@ -28,7 +29,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreditsRequirement)
+            Credits Requirement: 
         </dt>
 
         <dd>
@@ -37,6 +38,58 @@
 
     </dl>
 </div>
+
+<div>
+    <table>
+        <tr>
+            <th>Year 1 - Fall</th>
+        </tr>
+        <tr>
+            <th>Course Number</th>
+            <th>Course Name</th>
+            <th>Credit</th>
+        </tr>
+        @{
+        var Year = 1;
+        var Season = Schedulator.Models.Season.Fall;
+        }
+
+        @foreach (var item in Model.CourseSequences)
+        {
+            
+            if (item.Season != Season) 
+            {
+                Year = item.Year;
+                Season = item.Season;
+
+                <tr>
+                    <th>Year @item.Year - @item.Season</th>
+                </tr>
+                <tr>
+                    <th>Course Number</th>
+                    <th>Course Name</th>
+                    <th>Credit</th>
+                </tr>
+            }            
+            if (item.Course != null)
+            {
+                <tr>                   
+                    <td>@item.Course.CourseNumber</td>
+                    <td>@item.Course.Title</td>
+                    <td>@item.Course.Credit</td>                    
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@item.ElectiveType</td>
+                </tr>
+            }
+
+        }
+    </table>
+</div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ProgramId }) |
     @Html.ActionLink("Back to List", "Index")

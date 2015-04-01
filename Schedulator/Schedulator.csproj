@@ -173,6 +173,7 @@
     <Compile Include="Controllers\ProgramDirectorController.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
     <Compile Include="Controllers\ProgramsManagementController.cs" />
+    <Compile Include="Controllers\ProgressionController.cs" />
     <Compile Include="Controllers\ScheduleGeneratorController.cs" />
     <Compile Include="Controllers\StudentScheduleController.cs" />
     <Compile Include="Global.asax.cs">
@@ -191,6 +192,8 @@
     <Compile Include="Models\Prerequisite.cs" />
     <Compile Include="Models\Program.cs" />
     <Compile Include="Models\ProgramDirector.cs" />
+    <Compile Include="Models\ProgramManagementViewModel.cs" />
+    <Compile Include="Models\Progression.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\ScheduleGenerator.cs" />
     <Compile Include="Models\Section.cs" />

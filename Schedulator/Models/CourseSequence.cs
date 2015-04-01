@@ -31,7 +31,7 @@ namespace Schedulator.Models
         public virtual Program Program { get; set; }
         public virtual Course Course { get; set; }
         public virtual CourseSequence ContainerSequence { get; set; }
-        public virtual ICollection<CourseSequence> OtherOptions { get; set; }
+        public virtual List<CourseSequence> OtherOptions { get; set; }
 
 
     }
