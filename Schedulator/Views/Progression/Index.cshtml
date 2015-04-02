@@ -3,8 +3,58 @@
     ViewBag.Title = "Progression Chart";
 }
 @using Microsoft.AspNet.Identity
-<h2>Progression Chart</h2>
+<h1>Progression Chart</h1>
 
+<table>
+    <tr>
+        <td >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Course Completed:</h3>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">TEST 123</h3>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Course in Progress:</h3>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">TEST 123</h3>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Course not enrolled:</h3>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">TEST 123</h3>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
 @{
     foreach (var course in Model.ProgessionUnitList)
     {
