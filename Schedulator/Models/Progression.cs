@@ -8,7 +8,7 @@ namespace Schedulator.Models
     public enum ProgressType { CompletedCourse, InProgressCourse, IncompleteCourse };
     public class Progression
     {
-        
+      
         public List<ProgressionUnit> ProgessionUnitList { get; set; }
         public class ProgressionUnit
         {

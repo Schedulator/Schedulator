@@ -40,26 +40,19 @@ namespace Schedulator.Controllers
                 schedules = db.Schedule.Where(t => (t.Semester.Season == Season.Summer1 || t.Semester.Season == Season.Summer2) && t.ApplicationUser.Email == user && t.IsRegisteredSchedule == registeredSchedule).ToList();
             return PartialView("StudentScheduleResultPartial", schedules);
         }
-        public ActionResult ManageSchedule(List<int> sectionIds, List<int> scheduleIds)
+        public ActionResult ManageSchedule(List<int> sectionIds, List<int> scheduleIds, string submitType)
         {
             List<Schedule> scheduleList = new List<Schedule>();
-            foreach (int scheduleId in scheduleIds)
+            if (submitType == "remove")
             {
-                Schedule schedule = db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault();
-                foreach (int sectionId in sectionIds)
+                foreach (int scheduleId in scheduleIds)
                 {
-                    Enrollment enrollment = schedule.Enrollments.Where(n => n.Section.SectionId == sectionId).FirstOrDefault();
-                    if (enrollment != null)
-                    {
-                        schedule.Enrollments.Remove(enrollment);
-                        db.Enrollment.Remove(enrollment);
-
-                    }
-                    db.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
+                    Schedule schedule = db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault();
+                    schedule.RemoveCourseFromSchedule(sectionIds, db);
                     scheduleList.Add(schedule);
                 }
+                db.SaveChanges();
             }
-            db.SaveChanges();
             return PartialView("_ScheduleAndLegend", scheduleList);
         }
 

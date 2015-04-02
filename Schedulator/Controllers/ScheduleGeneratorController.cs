@@ -87,20 +87,18 @@ namespace Schedulator.Controllers
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
-            ScheduleGenerator scheduler = new ScheduleGenerator { Preference = new Preference() };
-            Season sem;
+            Season season;
             switch (semester)
             {
-                case "Summer": sem = Season.Summer1;
+                case "Summer": season = Season.Summer1;
                     break;
-                case "Fall": sem = Season.Fall;
+                case "Fall": season = Season.Fall;
                     break;
-                case "Winter": sem = Season.Winter;
+                case "Winter": season = Season.Winter;
                     break;
-                default: sem = Season.Fall;
+                default: season = Season.Fall;
                     break;
             }
-
             double startTime = 0;
             double endTime = 0;
             if (timeOption != null)
@@ -125,28 +123,18 @@ namespace Schedulator.Controllers
                 }
             }
             endTime = (endTime == 0) ? 1440 : endTime;
-
-            // Some test data for now to display generated schedules
-            //Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Summer1 || n.Season == Season.Summer2).FirstOrDefault(), StartTime = 0, EndTime = 1440 };
-            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == sem).FirstOrDefault(), StartTime = startTime, EndTime = endTime };
-            List<Course> courses = db.Courses.ToList();
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == season).FirstOrDefault(), StartTime = startTime, EndTime = endTime };
             preference.Courses = new List<Course>();
             
             foreach(var code in courseCode) {
                 String[] courseID = code.Split(' ');
                 var courseLetter = courseID[0];
                 int courseNumber = Int32.Parse(courseID[1]);
-
-                preference.Courses.Add(courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
-            }
-            
-            //preference.Courses.Add(courses.Where(n => n.CourseNumber == cNumber[1] && n.CourseLetters == cLetter[0]).FirstOrDefault());
-
-            
+                preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
+            }            
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
             string user = db.Users.Find(User.Identity.GetUserId()).Email;
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
-
 
             return PartialView("GenScheduleResultPartial", scheduleGenerator);
         }

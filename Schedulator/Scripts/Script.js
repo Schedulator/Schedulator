@@ -36,10 +36,7 @@ $(function () {
     });
 
     $.getJSON(url, function (data) {
-        console.log(data);
-        courseList = data;
-        console.log(courseList);
-        
+        courseList = data;   
     });
 
 });
@@ -47,11 +44,17 @@ $(function () {
 
 function showHint(str) {
       
-    console.log(str);
+
     $("#suggestion").autocomplete({
-        source: courseList     
-
-
+        source: courseList,
+        messages: {
+            noResults: "",
+            results: "",
+            focus: function (event, ui) {
+                $(".ui-helper-hidden-accessible").hide();
+                event.preventDefault();
+            }
+        }
     });
   
 }

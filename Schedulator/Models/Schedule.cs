@@ -20,6 +20,20 @@ namespace Schedulator.Models
             ApplicationDbContext db = new ApplicationDbContext();
             return true;
         }
+        public void RemoveCourseFromSchedule(List<int> sectionIds, ApplicationDbContext db)
+        {
+            foreach (int sectionId in sectionIds)
+            {
+                Enrollment enrollment = this.Enrollments.Where(n => n.Section.SectionId == sectionId).FirstOrDefault();
+                if (enrollment != null)
+                {
+                    this.Enrollments.Remove(enrollment);
+                    db.Enrollment.Remove(enrollment);
+
+                }
+                db.Entry(this).State = System.Data.Entity.EntityState.Modified;
+            }
+        }
         public bool RegisterSchedule()
         {
             ApplicationDbContext db = new ApplicationDbContext();
