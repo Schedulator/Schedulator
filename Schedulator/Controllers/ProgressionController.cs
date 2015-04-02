@@ -22,7 +22,7 @@ namespace Schedulator.Controllers
             List<CourseSequence> courseSequences = db.CourseSequence.Where(n => n.Program.ProgramId == program.ProgramId && n.ContainerSequence == null).ToList();
 
             List<CourseSequence> courseSequences2 = db.CourseSequence.Where(n => n.Program.ProgramId == program.ProgramId ).ToList();
-            Progression studentsProgression = new Progression(){ CompletedCourse = new List<CourseSequence>(), IncompleteCourse  = new List<CourseSequence>(), InProgressCourse = new List<CourseSequence>()};
+            Progression studentsProgression = new Progression() { ProgessionUnitList = new List<Progression.ProgressionUnit>()};
             studentsProgression.StudentsProgression(studentEnrollments, courseSequences);
 
             return View();
