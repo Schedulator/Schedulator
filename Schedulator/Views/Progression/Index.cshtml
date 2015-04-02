@@ -29,11 +29,18 @@
                        {
                             <h3 class="panel-title">Math Elective</h3>
                        }
-                       else if (course.CourseSequence.ElectiveType == Schedulator.Models.ElectiveType.TechnicalElective)
+                       else if (course.CourseSequence.OtherOptions != null)
                        {
-                            <h3 class="panel-title">Technical Elective</h3>
+                            <ul>
+                                @{
+                                    foreach (var option in course.CourseSequence.OtherOptions)
+                                    {
+                                        <li>@Html.DisplayFor(modelItem => option.Course.CourseLetters) @Html.DisplayFor(modelItem => option.Course.CourseNumber)</li>
+                                    }
+                                }
+                            </ul>
                        }
-                    } 
+} 
                 </div>
             </div>
         }
@@ -52,11 +59,6 @@
                     <h3 class="panel-title">@Html.DisplayFor(modelItem => course.CourseSequence.Course.CourseLetters) @Html.DisplayFor(modelItem => course.CourseSequence.Course.CourseNumber)</h3>
                 </div>
             </div>
-        }
-
-        else if (course.CourseSequence.ElectiveType == Schedulator.Models.ElectiveType.GeneralElective)
-        {
-
         }
     }
 }
