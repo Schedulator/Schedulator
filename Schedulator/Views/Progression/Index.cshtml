@@ -14,12 +14,12 @@
                 <div class="panel-heading">
                    @{
                        if (course.CourseSequence.ElectiveType == Schedulator.Models.ElectiveType.None)
-                       {
+                       {   
                             <h3 class="panel-title">@Html.DisplayFor(modelItem => course.CourseSequence.Course.CourseLetters) @Html.DisplayFor(modelItem => course.CourseSequence.Course.CourseNumber)</h3>
                        }
                        else if (course.CourseSequence.ElectiveType == Schedulator.Models.ElectiveType.GeneralElective)
                        {
-                            <h3 class="panel-title">General Elective</h3>
+                           <h3 class="panel-title">General Elective</h3>
                        }
                        else if (course.CourseSequence.ElectiveType == Schedulator.Models.ElectiveType.BasicScience)
                        {
@@ -29,24 +29,28 @@
                        {
                             <h3 class="panel-title">Math Elective</h3>
                        }
-                       else if (course.CourseSequence.OtherOptions != null)
+                       if (course.CourseSequence.OtherOptions.Count() != 0)
                        {
+                           <span>Technical Elective Option</span>
                             <ul>
                                 @{
                                     foreach (var option in course.CourseSequence.OtherOptions)
                                     {
-                                        <li>@Html.DisplayFor(modelItem => option.Course.CourseLetters) @Html.DisplayFor(modelItem => option.Course.CourseNumber)</li>
+                                        if (option.Course != null)
+                                        {
+                                          <li>@Html.DisplayFor(modelItem => option.Course.CourseLetters) @Html.DisplayFor(modelItem => option.Course.CourseNumber)</li>  
+                                        }
                                     }
                                 }
                             </ul>
                        }
-} 
+                    } 
                 </div>
             </div>
         }
         else if (course.ProgressType == Schedulator.Models.ProgressType.InProgressCourse)
         {
-            <div class="panel panel-danger">
+            <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h3 class="panel-title">@Html.DisplayFor(modelItem => course.CourseSequence.Course.CourseLetters) @Html.DisplayFor(modelItem => course.CourseSequence.Course.CourseNumber)</h3>
                 </div>
