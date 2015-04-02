@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Schedulator.Controllers
 {
+    [Authorize]
     public class ProgressionController : Controller
     {
         // GET: Progression
