@@ -34,7 +34,10 @@ namespace Schedulator.Models
         {
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
             AddUserPreferenceCourses(courses, enrollments);
-            GenerateAllSchedulesUsingUserPreferenceCourses();
+            if (CoursesStudentCanTake.Count() > 0)
+            {
+                GenerateAllSchedulesUsingUserPreferenceCourses();
+            }
         }
         private void GenerateAllSchedulesUsingUserPreferenceCourses()
         {

@@ -53,7 +53,7 @@ namespace Schedulator.Models
                 {
                     if (prerequisite.PrerequisiteCourse == enrollment.Course)
                     {
-                        if ( enrollment.Grade != null || (enrollment.Grade == null && (enrollment.Schedule.Semester.SemesterStart <= semester.SemesterStart || prerequisite.Concurrently)))
+                        if ( enrollment.Grade != null || (enrollment.Grade == null && (enrollment.Schedule.Semester.SemesterStart < semester.SemesterStart || (enrollment.Schedule.Semester.SemesterStart < semester.SemesterStart && prerequisite.Concurrently))))
                         {
                             enrollmentContainsPrereq = true;
                             break;
