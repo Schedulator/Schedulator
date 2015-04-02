@@ -611,7 +611,7 @@ namespace Schedulator.Migrations
 
 
         }
-        void AddScienceElectives (ApplicationDbContext context)
+        List<Course> AddScienceElectives (ApplicationDbContext context)
         {
             List<Course> scienceCourses = new List<Course>();
             List<Lecture> scienceLectures = new List<Lecture>();
@@ -672,12 +672,54 @@ namespace Schedulator.Migrations
             context.Courses.Where(n => n.CourseLetters == "MECH" && n.CourseNumber == 221).FirstOrDefault().ElectiveType = ElectiveType.BasicScience;
 
             context.SaveChanges();
-           
+            return courses;
         }
 
         void AddMathElectives(ApplicationDbContext context)
         {
+            List<Course> mathCourses = new List<Course>();
+            List<Lecture> mathLectures = new List<Lecture>();
+            List<Tutorial> tutorialLectures = new List<Tutorial>();
 
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 218, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Multivariable Calculus I" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "H-521", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 615, EndTime = 690, Semester = fallSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "MB-S1.401", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 705, EndTime = 780, Semester = fallSemester, LectureLetter = "B", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "H-535", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.NONE, StartTime = 1080, EndTime = 1215, Semester = winterSemester, LectureLetter = "AA", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 219, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Multivariable Calculus II" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "MB-2.210", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.W, StartTime = 885, EndTime = 1080, Semester = fallSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "MB-2.210", FirstDay = TimeBlock.day.J, SecondDay = TimeBlock.day.NONE, StartTime = 1080, EndTime = 1215, Semester = winterSemester, LectureLetter = "AA", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 224, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Introduction to Optimization" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "H-423", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 885, EndTime = 1080, Semester = winterSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 234, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Linear Algebra and Applications I" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "LB-915", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 615, EndTime = 690, Semester = fallSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "LB-915", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 615, EndTime = 690, Semester = winterSemester, LectureLetter = "B", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 235, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Linear Algebra and Applications II" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "LB-915", FirstDay = TimeBlock.day.W, SecondDay = TimeBlock.day.F, StartTime = 615, EndTime = 690, Semester = winterSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 332, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Techniques in Symbolic Computation" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "H-401", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 705, EndTime = 780, Semester = winterSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            mathCourses.Add(new Course { CourseLetters = "MAST", CourseNumber = 334, Credit = 3, ElectiveType = ElectiveType.MathElective, Title = "Numerical Analysis" });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "MB-3.210", FirstDay = TimeBlock.day.T, SecondDay = TimeBlock.day.J, StartTime = 975, EndTime = 1050, Semester = fallSemester, LectureLetter = "A", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+            mathLectures.Add(new Lecture { Course = mathCourses.LastOrDefault(), ClassRoomNumber = "FG-B030", FirstDay = TimeBlock.day.M, SecondDay = TimeBlock.day.NONE, StartTime = 1080, EndTime = 1215, Semester = fallSemester, LectureLetter = "AA", Teacher = "N/A" });
+            context.Section.Add(new Section { Lecture = mathLectures.LastOrDefault() });
+
+            context.SaveChanges();
         }
         List<Prerequisite> AddPrerequisite(List<Course> courses)
         {
