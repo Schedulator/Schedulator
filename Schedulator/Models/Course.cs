@@ -65,5 +65,41 @@ namespace Schedulator.Models
             }
             return missingPrequisite;
         }
+        public List<Prerequisite> MissingPrequisite(List<Enrollment> enrollments, List<CourseSequence> recommendedCourseSequences, Semester semester)
+        {
+            List<Prerequisite> missingPrequisite = new List<Prerequisite>();
+            foreach (Prerequisite prerequisite in Prerequisites)
+            {
+                bool enrollmentContainsPrereq = false;
+                foreach (CourseSequence courseSequence in recommendedCourseSequences)
+                {
+                    if (prerequisite.PrerequisiteCourse.CourseID == courseSequence.Course.CourseID)
+                    {
+                        if ( prerequisite.Concurrently)
+                        {
+                            enrollmentContainsPrereq = true;
+                            break;
+                        }
+                    }
+                }
+                if (!enrollmentContainsPrereq)
+                {
+                    foreach (Enrollment enrollment in enrollments)
+                    {
+                        if (prerequisite.PrerequisiteCourse == enrollment.Course)
+                        {
+                            if (enrollment.Grade != null || (enrollment.Grade == null && (enrollment.Schedule.Semester.SemesterStart < semester.SemesterStart || (enrollment.Schedule.Semester.SemesterStart < semester.SemesterStart && prerequisite.Concurrently))))
+                            {
+                                enrollmentContainsPrereq = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!enrollmentContainsPrereq)
+                    missingPrequisite.Add(prerequisite);
+            }
+            return missingPrequisite;
+        }
     }
 }

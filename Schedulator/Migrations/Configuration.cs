@@ -49,6 +49,7 @@ namespace Schedulator.Migrations
             //    user.Program = null;
             //    context.Users.AddOrUpdate(user);
             //}
+            AddPrerequisite(courses).ForEach(p => context.Prerequisite.Add(p));
             SeedSemester(context);
          //   SeedCoursesFromExcelSheet(context);
         //    SeedProgramsFromExcelSheet(context);
@@ -197,7 +198,7 @@ namespace Schedulator.Migrations
             context.CourseSequence.ToList().ForEach(s => context.CourseSequence.Remove(s));
             context.Program.ToList().ForEach(s => context.Program.Remove(s));
             context.SaveChanges();
-            AddPrerequisite(courses).ForEach(p => context.Prerequisite.Add(p));
+            
             List<Program> programs = AddProgramAndCourseSequence(@"C:\Users\Harley\Desktop\Schedulator\Schedulator\Programs.xlsx", context.Courses.ToList());
 
             programs.ForEach(p => context.Program.Add(p));
@@ -759,7 +760,6 @@ namespace Schedulator.Migrations
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 345).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 343).FirstOrDefault(), Concurrently = true });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 357).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 342).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 384).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENCS" && m.CourseNumber == 282).FirstOrDefault() });
-            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 384).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 337).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 384).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 341).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 385).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 213).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 385).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENGR" && m.CourseNumber == 233).FirstOrDefault() });
@@ -771,7 +771,7 @@ namespace Schedulator.Migrations
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 422).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 423).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 487).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 387).FirstOrDefault(), Concurrently = true });
-            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 337).FirstOrDefault() });
+
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 342).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 343).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 490).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 344).FirstOrDefault() });
