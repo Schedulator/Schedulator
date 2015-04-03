@@ -25,6 +25,7 @@ var url = '/ScheduleGenerator/CoursesViewJson';
 
 $(function () {
     $("#addcourse").click(function () {
+        debugger;
         var name = $("input[name='courseName']").val();
         $("input[name='courseName']").val("");
         $(".selected-courses").children().append("<li>"+name+"<input name='courseCode["+count+"]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
@@ -36,10 +37,7 @@ $(function () {
     });
 
     $.getJSON(url, function (data) {
-        console.log(data);
-        courseList = data;
-        console.log(courseList);
-        
+        courseList = data;   
     });
 
 });
@@ -47,11 +45,17 @@ $(function () {
 
 function showHint(str) {
       
-    console.log(str);
+
     $("#suggestion").autocomplete({
-        source: courseList     
-
-
+        source: courseList,
+        messages: {
+            noResults: "",
+            results: "",
+            focus: function (event, ui) {
+                $(".ui-helper-hidden-accessible").hide();
+                event.preventDefault();
+            }
+        }
     });
   
 }

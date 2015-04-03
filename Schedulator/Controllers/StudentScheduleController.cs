@@ -40,27 +40,50 @@ namespace Schedulator.Controllers
                 schedules = db.Schedule.Where(t => (t.Semester.Season == Season.Summer1 || t.Semester.Season == Season.Summer2) && t.ApplicationUser.Email == user && t.IsRegisteredSchedule == registeredSchedule).ToList();
             return PartialView("StudentScheduleResultPartial", schedules);
         }
-        public ActionResult ManageSchedule(List<int> sectionIds, List<int> scheduleIds)
+        public ActionResult ManageSchedule(List<int> sectionIds, List<int> scheduleIds, string submitType)
         {
             List<Schedule> scheduleList = new List<Schedule>();
-            foreach (int scheduleId in scheduleIds)
+            if (submitType == "remove")
             {
-                Schedule schedule = db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault();
-                foreach (int sectionId in sectionIds)
+                foreach (int scheduleId in scheduleIds)
                 {
-                    Enrollment enrollment = schedule.Enrollments.Where(n => n.Section.SectionId == sectionId).FirstOrDefault();
-                    if (enrollment != null)
-                    {
-                        schedule.Enrollments.Remove(enrollment);
-                        db.Enrollment.Remove(enrollment);
-
-                    }
-                    db.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
+                    Schedule schedule = db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault();
+                    schedule.RemoveCourseFromSchedule(sectionIds, db);
                     scheduleList.Add(schedule);
                 }
+                db.SaveChanges();
             }
-            db.SaveChanges();
             return PartialView("_ScheduleAndLegend", scheduleList);
+        }
+        public ActionResult GenerateSchedules(List<int> sectionIds, List<string> courseCode, string semester)
+        {
+            Season season;
+            switch (semester)
+            {
+                case "Summer": season = Season.Summer1;
+                    break;
+                case "Fall": season = Season.Fall;
+                    break;
+                case "Winter": season = Season.Winter;
+                    break;
+                default: season = Season.Fall;
+                    break;
+            }
+
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == season).FirstOrDefault(), StartTime = 0, EndTime = 1440 };
+            preference.Courses = new List<Course>();
+            
+            foreach(var code in courseCode) {
+                String[] courseID = code.Split(' ');
+                var courseLetter = courseID[0];
+                int courseNumber = Int32.Parse(courseID[1]);
+                preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
+            }            
+            ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
+            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+
+            return PartialView("GenScheduleResultPartial", scheduleGenerator);
         }
 
     }
