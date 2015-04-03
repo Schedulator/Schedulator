@@ -177,11 +177,14 @@
     <Compile Include="Controllers\ScheduleGeneratorController.cs" />
     <Compile Include="Controllers\StudentManagementController.cs" />
     <Compile Include="Controllers\StudentScheduleController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TranscriptController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Transcript.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\CourseSequence.cs" />
     <Compile Include="Models\Enrollment.cs" />
@@ -312,6 +315,7 @@
     <Content Include="Views\StudentManagement\Index.cshtml" />
     <Content Include="Views\StudentManagement\findStudent.cshtml" />
     <Content Include="Views\Progression\Index.cshtml" />
+    <Content Include="Views\Transcript\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -324,6 +328,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\App_LocalResources\" />
     <Folder Include="Views\Seed\" />
+    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

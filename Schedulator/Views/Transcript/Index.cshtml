@@ -1,0 +1,19 @@
+﻿@model Schedulator.Models.Progression
+
+@{
+    ViewBag.Title = "View Transcript";
+}
+
+<h1>Student Transcript</h1>
+
+@{
+    var courseSequence = Model.ProgessionUnitList;
+
+    while (courseSequence.Count() > 0)
+    {
+        for (var i = 5; i > 0; i--)
+        {
+            courseSequence[i] = null;
+        }
+    }
+}
