@@ -5,88 +5,36 @@ using System.Web;
 
 namespace Schedulator.Models
 {
-    //public enum ProgressType { CompletedCourse, InProgressCourse, IncompleteCourse };
-    //public class Transcript
+    
+    public class Transcript
+    {
+        //public ApplicationDbContext db = new ApplicationDbContext();
+        //public List<TranscriptYear> TranscriptYears = new List<TranscriptYear>();
+
+        //public Transcript()
+        //{
+        //    TranscriptSemester semester = new TranscriptSemester();
+        //    TranscriptYear year = new TranscriptYear();
+        //    TranscriptYears = new List<TranscriptYear>();
+        //}
+        //public double GetSemesterGPA()
+        //{
+            
+        //}
+        //public void getProgression()
+        //}
+        //      StudentEnrollments = null;
+        //}
+    }
+    
+    //public class TranscriptYear
     //{
-    //    public void StudentsProgression(List<Enrollment> studentsEnrollment, List<CourseSequence> courseSequences)
-    //    {
-    //        ApplicationDbContext db = new ApplicationDbContext();
-    //        List<Course> basicScienceCourses = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).ToList();
-    //        List<Course> generalCourses = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).ToList();
-    //        List<CourseSequence> courseSequencesRemoved = courseSequences.ToList();
-    //        foreach (Enrollment enrollment in studentsEnrollment)
-    //        {
-    //            foreach (CourseSequence courseSequence in courseSequences)
-    //            {
-    //                if (courseSequence.OtherOptions.Count() > 0)
-    //                {
-    //                    foreach (CourseSequence courseSequenceOtherOptions in courseSequence.OtherOptions)
-    //                    {
-    //                        if (courseSequenceOtherOptions.Course != null && enrollment.Course == courseSequenceOtherOptions.Course)
-    //                        {
-    //                            if (enrollment.Grade != null)
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequenceOtherOptions, ProgressType = ProgressType.CompletedCourse });
-    //                            else
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequenceOtherOptions, ProgressType = ProgressType.IncompleteCourse });
-    //                            courseSequencesRemoved.Remove(courseSequence);
-    //                        }
-    //                    }
-    //                }
-    //                else if (courseSequence.Course != null && enrollment.Course == courseSequence.Course)
-    //                {
-    //                    if (enrollment.Grade != null)
-    //                        ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
-    //                    else
-    //                        ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
-    //                    courseSequencesRemoved.Remove(courseSequence);
-    //                    break;
-    //                }
-    //                else if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-    //                {
-    //                    foreach (Course scienceCourse in basicScienceCourses)
-    //                    {
-    //                        if (scienceCourse == enrollment.Course)
-    //                        {
-    //                            if (enrollment.Grade != null)
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
-    //                            else
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
-    //                            courseSequencesRemoved.Remove(courseSequence);
-    //                        }
-    //                    }
-    //                }
-    //                else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-    //                {
-    //                    foreach (Course generalCourse in generalCourses)
-    //                    {
-    //                        if (generalCourse == enrollment.Course)
-    //                        {
-    //                            if (enrollment.Grade != null)
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
-    //                            else
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
-    //                            courseSequencesRemoved.Remove(courseSequence);
-    //                        }
-    //                    }
-    //                }
-    //                else if (courseSequence.ElectiveType == ElectiveType.TechnicalElective)
-    //                {
-    //                    foreach (Course technicalCourse in courseSequence.Program.TechnicalElectiveCourses)
-    //                    {
-    //                        if (technicalCourse == enrollment.Course)
-    //                        {
-    //                            if (enrollment.Grade != null)
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
-    //                            else
-    //                                ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
-    //                            courseSequencesRemoved.Remove(courseSequence);
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //            courseSequences = courseSequencesRemoved;
-    //        }
-    //        courseSequences.ForEach(n => ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = n, ProgressType = ProgressType.IncompleteCourse }));
-    //    }
+    //    public int year { get; set; }
+    //    public List<Semester> StudentYearEnrollments { get; set; }
+    //}
+    //public class TranscriptSemester
+    //{
+    //    public Semester Semester { get; set; }
+    //    public List<Enrollment> StudentEnrollments { get; set; }
     //}
 }
