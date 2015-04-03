@@ -43,19 +43,18 @@ namespace Schedulator.Migrations
                 System.Diagnostics.Debugger.Launch();
             string currentDirectoryUrl = Directory.GetCurrentDirectory();
 
-            
-            //foreach (ApplicationUser user in context.Users.ToList())
-            //{
-            //    user.Program = null;
-            //    context.Users.AddOrUpdate(user);
-            //}
-            AddPrerequisite(courses).ForEach(p => context.Prerequisite.Add(p));
+
+            foreach (ApplicationUser user in context.Users.ToList())
+            {
+                user.Program = null;
+                context.Users.AddOrUpdate(user);
+            }
             SeedSemester(context);
-         //   SeedCoursesFromExcelSheet(context);
-        //    SeedProgramsFromExcelSheet(context);
-          //  AddScienceElectives(context);
-        //    AddGeneralElective(context);
-        //    AddTechnicalElectives(context);
+            //SeedCoursesFromExcelSheet(context);
+            //SeedProgramsFromExcelSheet(context);
+            //AddScienceElectives(context);
+            //AddGeneralElective(context);
+            //AddTechnicalElectives(context);
             //Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
             //List<Enrollment> enrollments = new List<Enrollment>();
@@ -90,7 +89,7 @@ namespace Schedulator.Migrations
 
             //enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
             
-            //context.SaveChanges();
+            context.SaveChanges();
         }
 
         private void AddTechnicalElectives(ApplicationDbContext context)

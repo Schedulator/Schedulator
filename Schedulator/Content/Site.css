@@ -183,7 +183,15 @@ footer {
     width:100%;
     border-top: 1px solid #eee; 
 }
-#ui-helper-hidden-accessible
+.ui-helper-hidden-accessible
 {
     display:none;
+}
+.courseBlock
+{
+    border-radius: 10px;
+    color: #3c763d;
+    background-color: #dff0d8;
+    margin-right: 5px;
+    text-align: center;
 }

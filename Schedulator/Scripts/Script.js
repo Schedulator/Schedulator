@@ -19,43 +19,28 @@ function courseAltColor(courseCode) {
 
 }
 
-var count = 0;
-var courseList;
-var url = '/ScheduleGenerator/CoursesViewJson';
+$(document).ready(function () {
+    $("#courseSequenceRecommend").load('/ScheduleGenerator/StudentsCourseSequence');
 
-$(function () {
-    $("#addcourse").click(function () {
-        debugger;
-        var name = $("input[name='courseName']").val();
-        $("input[name='courseName']").val("");
-        $(".selected-courses").children().append("<li>"+name+"<input name='courseCode["+count+"]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
-        count++;
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
     });
 
-    $(".removeClass").click(function () {
-        this.parent().hide();
+    $('#showCourseSequence').click(function () {
+        $('#courseSequenceRecommend').show("slow");
+    });
+    $('#generateSch').click(function () {
+        $('#result').html('');
+        $("#divProcessing").show();
     });
 
-    $.getJSON(url, function (data) {
-        courseList = data;   
+    $('#result').bind("DOMSubtreeModified", function () {
+        $("#divProcessing").hide();
     });
 
 });
 
 
-function showHint(str) {
-      
-
-    $("#suggestion").autocomplete({
-        source: courseList,
-        messages: {
-            noResults: "",
-            results: "",
-            focus: function (event, ui) {
-                $(".ui-helper-hidden-accessible").hide();
-                event.preventDefault();
-            }
-        }
-    });
-  
-}

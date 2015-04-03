@@ -8,7 +8,7 @@
                 <span style="margin-left:10px;"><input type="button" id="add-course-to-list" value="Add" /></span>
                 <br />
                 <input type="button" value="Generate Schedule" class="btn btn-default" id="generate-schedule" />
-                <div class="selected-courses">
+                <div class="selectedCourses">
                     <ul></ul>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 $("#add-course-to-list").click(function () {
                     var name = $("input[name='courseName']").val();
                     $("input[name='courseName']").val("");
-                    $(".selected-courses").children().append("<li>" + name + "<input name='courseCode[" + count + "]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
+                    $(".selectedCourses").children().append("<li>" + name + "<input name='courseCode[" + count + "]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
                     count++;
                 });
 
