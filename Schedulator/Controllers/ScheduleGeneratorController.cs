@@ -36,9 +36,9 @@ namespace Schedulator.Controllers
             foreach (Schedule schedule in user.Schedules)
                 studentEnrollments.AddRange(schedule.Enrollments);
             return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments,
-                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Fall).FirstOrDefault(), 
-                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Winter).FirstOrDefault(), 
-                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Summer1 || n.Semester.Season == Season.Summer2).ToList()));
+                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Fall && n.Semester.SemesterStart.Year == 2014).FirstOrDefault(),
+                                                         user.Schedules.Where(n => n.Semester.Season == Season.Winter && n.Semester.SemesterStart.Year == 2015).FirstOrDefault(), 
+                                                         user.Schedules.Where(n =>(n.Semester.Season == Season.Summer1 || n.Semester.Season == Season.Summer2) && n.Semester.SemesterStart.Year == 2015).ToList()));
         }
         [HttpPost]
         public ActionResult RegisterSchedule()
@@ -136,7 +136,7 @@ namespace Schedulator.Controllers
             string user = db.Users.Find(User.Identity.GetUserId()).Email;
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
 
-            return PartialView("GenScheduleResultPartial", scheduleGenerator);
+            return PartialView("_GenScheduleResultPartial", scheduleGenerator);
         }
 
     }

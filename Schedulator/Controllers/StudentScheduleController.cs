@@ -55,7 +55,7 @@ namespace Schedulator.Controllers
             }
             return PartialView("_ScheduleAndLegend", scheduleList);
         }
-        public ActionResult GenerateSchedules(List<int> sectionIds, List<string> courseCode, string semester)
+        public ActionResult GenerateSchedules(List<int> scheduleIds, List<string> courseCode, string semester)
         {
             Season season;
             switch (semester)
@@ -79,11 +79,15 @@ namespace Schedulator.Controllers
                 int courseNumber = Int32.Parse(courseID[1]);
                 preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             }            
+
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
             string user = db.Users.Find(User.Identity.GetUserId()).Email;
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            List<List<Section>> sections = new List<List<Section>>();
+            foreach( int scheduleId in scheduleIds)
+                db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault().Enrollments.ToList().ForEach(n => sections.Add(new List<Section>(){ n.Section}));
+            scheduleGenerator.GenerateSchedulesUsingSectionsAndCourse(db.Courses.ToList(), sections, db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
 
-            return PartialView("GenScheduleResultPartial", scheduleGenerator);
+            return PartialView("_GenScheduleResultPartial", scheduleGenerator);
         }
 
     }

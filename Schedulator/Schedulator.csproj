@@ -307,7 +307,7 @@
     <Content Include="Views\ProgramsManagement\Edit.cshtml" />
     <Content Include="Views\ProgramsManagement\Index.cshtml" />
     <Content Include="Views\Shared\_Schedules.cshtml" />
-    <Content Include="Views\ScheduleGenerator\GenScheduleResultPartial.cshtml" />
+    <Content Include="Views\Shared\_GenScheduleResultPartial.cshtml" />
     <Content Include="Views\ScheduleGenerator\RegisterSuccessPartial.cshtml" />
     <Content Include="Views\Shared\_ScheduleAndLegend.cshtml" />
     <Content Include="Views\Shared\_RecommendedCourseList.cshtml" />

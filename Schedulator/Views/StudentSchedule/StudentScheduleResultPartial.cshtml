@@ -13,7 +13,6 @@
                 </div>
             </div>
         </div>
-        
     <div>
         <div>
             <input id="manage-schedule-button" data-toggle="collapse" data-parent="#accordion" href="#collapse" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
@@ -21,7 +20,8 @@
         <div id="collapse" class="panel-collapse collapse">
             <div class="panel-body">
                 <input id="add-courses-button" type="button" name="addCourse" class="btn btn-primary" value="Add Courses">
-                <input id="submitType" type="hidden" name="submitType" value="test">
+                <input type="hidden" name="semester" value="@Model.FirstOrDefault().Semester.Season">
+                <input id="submitType" type="hidden" name="submitType" value="">
                 <input id="remove-button" type="button" class="btn btn-primary" value="Remove Selected">
                 <input type="submit" name="register" class="btn btn-primary" value="Switch Sections">
                 <input type="hidden" name="scheduleIds" value="@Model.FirstOrDefault().ScheduleId">
@@ -44,6 +44,11 @@
         <hr />
 
         <script>
+            function ShowSchedules()
+            {
+                debugger;
+                alert("here");
+            }
             function ManageScheduleSuccess(data) {
                 debugger;
                 $('#schedule').empty();
@@ -55,12 +60,11 @@
 
                 $("#generate-schedule").on("click", function (e) {
                     e.preventDefault();
-                    debugger;
-                    $('#contactsForm').attr('action', "/test1").submit();
+                    $('#form0').attr('data-ajax-success', 'ShowSchedules()');
+                    $('#form0').attr('action', "/StudentSchedule/GenerateSchedules").submit();
                 });
 
                 $("#add-course-to-list").click(function () {
-                    debugger;
                     var name = $("input[name='courseName']").val();
                     $("input[name='courseName']").val("");
                     $(".selected-courses").children().append("<li>" + name + "<input name='courseCode[" + count + "]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");

@@ -35,7 +35,7 @@ namespace Schedulator.Models
         public void GenerateSchedules(List<Course> courses, List<Enrollment> enrollments)
         {
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
-            AddUserPreferenceCourses(courses, enrollments);
+            AddUserPreferenceCourses(enrollments);
             if (CoursesStudentCanTake.Count() > 0)
             {
                 GenerateAllSchedulesUsingUserPreferenceCourses(AllPossibleSections());
@@ -44,7 +44,7 @@ namespace Schedulator.Models
         public void GenerateSchedulesUsingSectionsAndCourse(List<Course> courses, List<List<Section>> sectionsListMaster, List<Enrollment> enrollments)
         {
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
-            AddUserPreferenceCourses(courses, enrollments);
+            AddUserPreferenceCourses(enrollments);
             if (CoursesStudentCanTake.Count() > 0)
             {
                 sectionsListMaster.AddRange(AllPossibleSections());
@@ -162,7 +162,7 @@ namespace Schedulator.Models
             else
                 return false;
         }
-        private void AddUserPreferenceCourses(List<Course> courses, List<Enrollment> enrollments)
+        private void AddUserPreferenceCourses(List<Enrollment> enrollments)
         {
             foreach (Course course in Preference.Courses)
             {

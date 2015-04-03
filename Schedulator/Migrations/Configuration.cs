@@ -286,8 +286,7 @@ namespace Schedulator.Migrations
                 while (count < row.Count())
                 {
                     string currentCell = row[count].Cells[0].Text;
-                    if (currentCell == "MECH 221")
-                        currentCell = currentCell;
+
 
                     if (currentCell != null & Regex.IsMatch(currentCell, @"[A-Z]{4}\s\d{3}"))
                     {
