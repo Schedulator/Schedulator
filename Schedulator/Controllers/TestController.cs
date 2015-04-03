@@ -39,7 +39,7 @@ namespace Schedulator.Controllers
             DoABunchOfShit(User.Identity.GetUserId(), 3, 2013);
         }
 
-        public void ForthYearStudent()
+        public void FourthYearStudent()
         {
             DoABunchOfShit(User.Identity.GetUserId(), 1, 2010);
             DoABunchOfShit(User.Identity.GetUserId(), 1, 2011);
