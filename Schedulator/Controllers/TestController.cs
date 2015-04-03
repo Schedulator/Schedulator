@@ -20,17 +20,23 @@ namespace Schedulator.Controllers
 
         public void SecondYearStudent()
         {
-            DoABunchOfShit(User.Identity.GetUserId(), 2, 2014);
+            DoABunchOfShit(User.Identity.GetUserId(), 1, 2012);
+            DoABunchOfShit(User.Identity.GetUserId(), 2, 2013);
         }
 
         public void ThirdYearStudent()
         {
-            DoABunchOfShit(User.Identity.GetUserId(), 3, 2015);
+            DoABunchOfShit(User.Identity.GetUserId(), 1, 2011);
+            DoABunchOfShit(User.Identity.GetUserId(), 2, 2012);
+            DoABunchOfShit(User.Identity.GetUserId(), 3, 2013);
         }
 
         public void ForthYearStudent()
         {
-            DoABunchOfShit(User.Identity.GetUserId(), 4, 2016);
+            DoABunchOfShit(User.Identity.GetUserId(), 1, 2010);
+            DoABunchOfShit(User.Identity.GetUserId(), 1, 2011);
+            DoABunchOfShit(User.Identity.GetUserId(), 2, 2012);
+            DoABunchOfShit(User.Identity.GetUserId(), 3, 2013);
         }
 
         public void DoABunchOfShit(string userId, int progressYear, int year)
@@ -49,42 +55,42 @@ namespace Schedulator.Controllers
                 if (courseSequence.Season == Season.Fall)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault() });
+                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault() });
+                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
-                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault() });
+                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = "A+" });
                     else
                         fallSchedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = "A+" });
                 }
                 else if (courseSequence.Season == Season.Winter)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault() });
+                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault() });
+                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
-                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault() });
+                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = "A+" });
                     else
                         winterSchedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = "A+" });
                 }
                 else if (courseSequence.Season == Season.Summer1)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault() });
+                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault() });
+                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
-                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault() });
+                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = "A+" });
                     else
                         summer1Schedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = "A+" });
                 }
                 else if (courseSequence.Season == Season.Summer2)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault() });
+                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault() });
+                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
                         summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault() });
                     else
