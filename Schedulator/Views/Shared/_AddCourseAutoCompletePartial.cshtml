@@ -1,14 +1,15 @@
 ﻿<script src="@Url.Content("~/Scripts/course.autocomplete.js")" type="text/javascript"></script>
-<ul class="ui-widget">
-    <li>
-        <span>Add a course: </span>@Html.TextBox("courseName", "", new { id = "suggestion", onkeyup = "showHint(this.value)" })
-        <span style="margin-left:10px;"><input type="button" id="addCourse" value="Add" /></span>
-    </li>
-    <li>
-        <br />
-        <div class="container-fluid">
-            <div class="row" id="selectedCourses">
-            </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="form-inline">
+            <label for="course">Add Course</label>
+            <input type="text" class="form-control" name="courseName" id="suggestion" onkeyup="showHint(this.value)" placeholder="Enter Course">
+            <input type="button" id="addCourse" class="btn btn-default" value="Add" />
         </div>
-    </li>
-</ul>
+        
+    </div>
+    <br />
+    <div class="row" id="selectedCourses">
+    </div>
+</div>
+

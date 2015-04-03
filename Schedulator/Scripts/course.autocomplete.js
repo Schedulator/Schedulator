@@ -33,5 +33,11 @@ $(document).ready(function () {
 		courseList = data;
 	});
 
+	$("#amwork").click(function(e) {  
+		alert(1);
 
+	});
+	$(document).on("click", ".courseBlock", function () {
+		$(this).closest("div").remove();
+	});
 });

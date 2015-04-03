@@ -194,4 +194,9 @@ footer {
     background-color: #dff0d8;
     margin-right: 5px;
     text-align: center;
+    cursor: pointer;
+}
+
+.courseBlock:hover { 
+    background-color: red;
 }
