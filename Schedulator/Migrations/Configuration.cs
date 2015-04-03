@@ -44,19 +44,38 @@ namespace Schedulator.Migrations
             string currentDirectoryUrl = Directory.GetCurrentDirectory();
 
             
-            foreach (ApplicationUser user in context.Users.ToList())
-            {
-                user.Program = null;
-                context.Users.AddOrUpdate(user);
-            }
-            SeedCoursesFromExcelSheet(context);
-            SeedProgramsFromExcelSheet(context);
-            AddScienceElectives(context);
-            AddGeneralElective(context);
-            AddTechnicalElectives(context);
-            Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
+            //foreach (ApplicationUser user in context.Users.ToList())
+            //{
+            //    user.Program = null;
+            //    context.Users.AddOrUpdate(user);
+            //}
+            SeedSemester(context);
+         //   SeedCoursesFromExcelSheet(context);
+        //    SeedProgramsFromExcelSheet(context);
+          //  AddScienceElectives(context);
+        //    AddGeneralElective(context);
+        //    AddTechnicalElectives(context);
+            //Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
-            List<Enrollment> enrollments = new List<Enrollment>();
+            //List<Enrollment> enrollments = new List<Enrollment>();
+
+            ////enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
+            ////enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            ////enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
+            ////enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            ////enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
+            ////enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            ////enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
+            ////enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
+            ////context.Schedule.AddOrUpdate(schedule);
+            
+            ////enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
+
+            ////context.SaveChanges();
+
+            //schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harrison").FirstOrDefault(), Semester = context.Semesters.Where(p => p.Season == Season.Fall).First(), IsRegisteredSchedule = true };
+
+            //enrollments = new List<Enrollment>();
 
             //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
             //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
@@ -67,28 +86,10 @@ namespace Schedulator.Migrations
             //enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
             //enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
             //context.Schedule.AddOrUpdate(schedule);
-            
+
             //enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
-
-            //context.SaveChanges();
-
-            schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.FirstName == "Harrison").FirstOrDefault(), Semester = context.Semesters.Where(p => p.Season == Season.Fall).First(), IsRegisteredSchedule = true };
-
-            enrollments = new List<Enrollment>();
-
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "AE" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 248).FirstOrDefault(), Grade = "A" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 201 && t.Tutorial.TutorialLetter == "GA").FirstOrDefault(), Grade = "B+" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Lecture.Course.CourseLetters == "ENGR" && t.Lecture.Course.CourseNumber == 213 && t.Tutorial.TutorialLetter == "PA").FirstOrDefault(), Grade = "B+" });
-            enrollments.LastOrDefault().Course = enrollments.LastOrDefault().Section.Lecture.Course;
-            context.Schedule.AddOrUpdate(schedule);
-
-            enrollments.ForEach(p => context.Enrollment.AddOrUpdate(p));
             
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         private void AddTechnicalElectives(ApplicationDbContext context)
@@ -209,6 +210,26 @@ namespace Schedulator.Migrations
             }
             context.SaveChanges();
         }
+        void SeedSemester(ApplicationDbContext context)
+        {
+
+            context.Semesters.Add(new Semester { Season = Season.Fall, SemesterStart = new DateTime(2011, 9, 1), SemesterEnd = new DateTime(2011, 12, 18) });
+            context.Semesters.Add(new Semester { Season = Season.Winter, SemesterStart = new DateTime(2012, 1, 7), SemesterEnd = new DateTime(2012, 5, 2) });
+            context.Semesters.Add(new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2012, 5, 4), SemesterEnd = new DateTime(2012, 6, 23) });
+            context.Semesters.Add(new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2012, 6, 25), SemesterEnd = new DateTime(2012, 7, 19) });
+
+            context.Semesters.Add(new Semester { Season = Season.Fall, SemesterStart = new DateTime(2012, 9, 1), SemesterEnd = new DateTime(2012, 12, 18) });
+            context.Semesters.Add(new Semester { Season = Season.Winter, SemesterStart = new DateTime(2013, 1, 7), SemesterEnd = new DateTime(2013, 5, 2) });
+            context.Semesters.Add(new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2013, 5, 4), SemesterEnd = new DateTime(2013, 6, 23) });
+            context.Semesters.Add(new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2013, 6, 25), SemesterEnd = new DateTime(2013, 7, 19) });
+
+            context.Semesters.Add(new Semester { Season = Season.Fall, SemesterStart = new DateTime(2013, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) });
+            context.Semesters.Add(new Semester { Season = Season.Winter, SemesterStart = new DateTime(2014, 1, 7), SemesterEnd = new DateTime(2014, 5, 2) });
+            context.Semesters.Add(new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2014, 5, 4), SemesterEnd = new DateTime(2014, 6, 23) });
+            context.Semesters.Add(new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2014, 6, 25), SemesterEnd = new DateTime(2014, 7, 19) });
+
+            context.SaveChanges();
+        }
         void SeedCoursesFromExcelSheet(ApplicationDbContext context)
         {
             context.CourseSequence.ToList().ForEach(s => context.CourseSequence.Remove(s));
@@ -242,6 +263,7 @@ namespace Schedulator.Migrations
                 manager.AddToRole(user.Id, "Student");
 
             }
+
 
 
             fallSemester = new Semester { Season = Season.Fall, SemesterStart = new DateTime(2014, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) };

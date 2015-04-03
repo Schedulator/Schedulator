@@ -2,16 +2,18 @@
 
     @using (Ajax.BeginForm("ManageSchedule", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "schedule", OnSuccess = "ManageScheduleSuccess(data)" }))
     {
-        <!-- Schedules results -->
-    <div id="schedule">
-        @Html.Partial("_ScheduleAndLegend", Model)
-    </div><!-- EO #result -->
+        <div id="collapse-schedule" class="panel-collapse collapse">
+            <div class="panel-body">
+                <span>Add a course: </span>@Html.TextBox("courseName", "", new { id = "suggestion", onkeyup = "showHint(this.value)" })
+                <span style="margin-left:10px;"><input type="button" id="add-course-to-list" value="Add" /></span>
+                <br />
+                <input type="button" value="Generate Schedule" class="btn btn-default" id="generate-schedule" />
+                <div class="selected-courses">
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
         
-         
-        
-    <div class="collapse in">
-        
-    </div>
     <div>
         <div>
             <input id="manage-schedule-button" data-toggle="collapse" data-parent="#accordion" href="#collapse" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
@@ -19,18 +21,25 @@
         <div id="collapse" class="panel-collapse collapse">
             <div class="panel-body">
                 <input id="add-courses-button" type="button" name="addCourse" class="btn btn-primary" value="Add Courses">
-                <input  type="hidden" name="submitType"  value="remove">
-                <input id="remove-button" type="button" class="btn btn-primary" value="Remove Course">
+                <input id="submitType" type="hidden" name="submitType" value="test">
+                <input id="remove-button" type="button" class="btn btn-primary" value="Remove Selected">
                 <input type="submit" name="register" class="btn btn-primary" value="Switch Sections">
-                <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
-                <input type="hidden" name="scheduleIds" value="@Model.FirstOrDefault().ScheduleId" >
-                @if(Model.Count() > 1)
-                { 
+                <input type="hidden" name="scheduleIds" value="@Model.FirstOrDefault().ScheduleId">
+                @if (Model.Count() > 1)
+                {
                     <input type="hidden" name="scheduleIds" value="@Model.LastOrDefault().ScheduleId">
                 }
             </div>
         </div>
     </div>
+    <div id="schedule">
+        @Html.Partial("_ScheduleAndLegend", Model)
+    </div><!-- EO #result -->
+
+    <div class="collapse in">
+        
+    </div>
+
     }
         <hr />
 
@@ -41,15 +50,30 @@
                 $('#schedule').html(data);
             }
             $(document).ready(function () {
-
-
                 var counter = 0;
-                $('add-courses-button').on('click', function () {
+                var count = 0;
 
+                $("#generate-schedule").on("click", function (e) {
+                    e.preventDefault();
+                    debugger;
+                    $('#contactsForm').attr('action', "/test1").submit();
+                });
+
+                $("#add-course-to-list").click(function () {
+                    debugger;
+                    var name = $("input[name='courseName']").val();
+                    $("input[name='courseName']").val("");
+                    $(".selected-courses").children().append("<li>" + name + "<input name='courseCode[" + count + "]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
+                    count++;
+                });
+
+                $('#add-courses-button').on('click', function () {
+                    $('#collapse-schedule').collapse();
                 });
 
                 $('#remove-button').on('click', function () {
                     if ($('input[type=checkbox]:checked').length) {
+                        $('#submitType').val('remove');
                         $('#form0').submit();
                     }
                     else

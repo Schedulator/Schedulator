@@ -52,8 +52,9 @@ namespace Schedulator.Models
                     {
                         foreach ( Course scienceCourse in basicScienceCourses)
                         {
-                            if (scienceCourse == enrollment.Course)
+                            if (scienceCourse.CourseID == enrollment.Course.CourseID)
                             {
+                                courseSequence.Course = scienceCourse;
                                 if (enrollment.Grade != null)
                                     ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
                                 else
@@ -61,27 +62,32 @@ namespace Schedulator.Models
                                 courseSequencesRemoved.Remove(courseSequence);
                             }
                         }
+                        break;
                     }
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
                     {
                         foreach (Course generalCourse in generalCourses)
                         {
-                            if (generalCourse == enrollment.Course)
+                            if (generalCourse.CourseID == enrollment.Course.CourseID)
                             {
+                                courseSequence.Course = generalCourse;
                                 if (enrollment.Grade != null)
                                     ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
                                 else
                                     ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.InProgressCourse });
                                 courseSequencesRemoved.Remove(courseSequence);
+                                break;
                             }
                         }
+                        break;
                     }
                     else if (courseSequence.ElectiveType == ElectiveType.TechnicalElective)
                     {
                         foreach(Course technicalCourse in courseSequence.Program.TechnicalElectiveCourses)
                         {
-                            if (technicalCourse == enrollment.Course)
+                            if (technicalCourse.CourseID == enrollment.Course.CourseID)
                             {
+                                courseSequence.Course = technicalCourse;
                                 if (enrollment.Grade != null)
                                     ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });
                                 else
@@ -89,6 +95,7 @@ namespace Schedulator.Models
                                 courseSequencesRemoved.Remove(courseSequence);
                             }
                         }
+                        break;
                     }
                 }
                 courseSequences = courseSequencesRemoved;
