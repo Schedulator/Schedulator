@@ -8,11 +8,19 @@ using Microsoft.AspNet.Identity;
 
 namespace Schedulator.Controllers
 {
-
     public class TestController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
         // GET: Test
+        public void DropAllSchedules()
+        {
+            List<Schedule> schedules = new List<Schedule>();
+            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            schedules = db.Schedule.Where(t => t.ApplicationUser.Email == user).ToList();
+            schedules.ForEach(n => db.Enrollment.RemoveRange(n.Enrollments));
+            db.Schedule.RemoveRange(schedules);
+            db.SaveChanges();
+        }
         public void FirstYearStudent()
         {
             DoABunchOfShit(User.Identity.GetUserId(), 1, 2013);

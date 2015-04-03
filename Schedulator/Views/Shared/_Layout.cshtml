@@ -46,7 +46,14 @@
                             <ul class="nav navbar-nav navbar-left">
                                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
                                 <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
-                                <li>@Html.ActionLink("Schedule", "Index", "StudentSchedule")</li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Schedules<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Fall", "Index", "StudentSchedule", new { semester = "Fall"}, null)</li>
+                                        <li>@Html.ActionLink("Winter", "Index", "StudentSchedule", new { semester = "Winter" }, null)</li>
+                                        <li>@Html.ActionLink("Summer", "Index", "StudentSchedule", new { semester = "Summer" }, null)</li>
+                                    </ul>
+                                </li>
                                 <li>@Html.ActionLink("Schedule Maker", "Index", "ScheduleGenerator")</li>
                             </ul>
                         } else if (User.IsInRole("Program Director")) {
