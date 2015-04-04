@@ -38,7 +38,7 @@ $(function () {
     $(".removeClass").click(function () {
         //this.addClass("clicked");
         this.parent().hide();
-=======
+
 $(document).ready(function () {
     $("#courseSequenceRecommend").load('/ScheduleGenerator/StudentsCourseSequence');
 
@@ -55,7 +55,7 @@ $(document).ready(function () {
     $('#generateSch').click(function () {
         $('#result').html('');
         $("#divProcessing").show();
->>>>>>> 95b599510b92d715a28754ff7c4d97988d7e816b
+
     });
 
     $('#result').bind("DOMSubtreeModified", function () {
