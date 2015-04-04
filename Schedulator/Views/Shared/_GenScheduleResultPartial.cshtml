@@ -23,7 +23,7 @@
         </div>
     }
 }
-@if (Model.Schedules == null && Model.PrequisitesStudentNeedsForCourses.Count() == 0)
+@if (Model.Schedules == null || Model.Schedules.Count() == 0)
 {
     <div class="alert alert-danger">
         Unfortunately no Schedules were possible with the selected courses and options. Some Courses might not be available during the selected semester or during the specified time. 
@@ -33,12 +33,12 @@
 else if (Model.Schedules != null)
 {
     <div class="alert alert-success">  @Model.Schedules.Count() schedules were successfully generated.</div>
-    if (@Model.Schedules.Count() > 20)
+    if (@Model.NumberOfSchedules > 40)
     {
         <ul class="pagination">
-            @for(int i = 0; i <= Model.Schedules.Count(); i += 20)
+            @for (int i = 0; i <= Model.NumberOfSchedules; i += 40)
             { 
-            <li><a>@i - @(i+20)</a></li>
+            <li><a class="pagingSchedules" style="cursor:pointer">@i - @(i+40)</a></li>
             }
         </ul>
     }
@@ -47,7 +47,7 @@ else if (Model.Schedules != null)
     {
         <div id="schedCount">#@count</div>
         count++;
-        using (Ajax.BeginForm("RegisterSchedule","ScheduleGenerator", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString() }))
+        using (Ajax.BeginForm("RegisterSchedule","ScheduleGenerator", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess ="function() { $('#courseSequenceRecommend').load('/ScheduleGenerator/StudentsCourseSequence');" }))
         {
         <!-- Schedules results -->
             <div id="@count.ToString()"></div><!-- EO #result -->
@@ -59,4 +59,14 @@ else if (Model.Schedules != null)
     }
 }
 
+<script>
 
+    $(document).ready(function()
+    {
+        $(".pagingSchedules").click(function () {
+            alert('ere');
+        });
+    })
+
+
+</script>
