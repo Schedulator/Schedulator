@@ -1,4 +1,4 @@
-﻿@model Schedulator.Models.Progression
+﻿@model Schedulator.Models.Transcript
 
 @{
     ViewBag.Title = "View Transcript";
@@ -7,13 +7,37 @@
 <h1>Student Transcript</h1>
 
 @{
-    var courseSequence = Model.ProgessionUnitList;
+    <ul>
+        @{
+            foreach (var year in Model.TranscriptYears)
+            {
+                <li>
+                    Year of @Html.DisplayFor(model => year.Year)
+                    <ul>
+                        @{
+                            foreach (var semester in year.TranscriptSemesters)
+                            {
+                                <li>
+                                    Semester: @Html.DisplayFor(model => semester.Season)
+                                    <ul>
+                                        @{
+                                            foreach (var enrollment in semester.Enrollments)
+                                            {
+                                                <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber) &nbsp;&nbsp;&nbsp; @Html.DisplayFor(modelItem => enrollment.getGPA())</li>
+                                            }
 
-    while (courseSequence.Count() > 0)
-    {
-        for (var i = 5; i > 0; i--)
-        {
-            courseSequence[i] = null;
+                                        }
+                                    </ul>
+                                </li>
+                                <li style="list-style-type: none"></li>      
+                                <li style="list-style-type: none">Total Semester GPA: @Html.DisplayFor(modelItem => semester.GetSemesterGPA())</li>
+                            }
+                        }
+                    </ul>
+                </li>
+                <li style="list-style-type: none"></li>
+                <li style="list-style-type: none">Total Year GPA: @Html.DisplayFor(modelItem => year.GetYearGPA())</li>
+            }
         }
-    }
+    </ul>
 }
