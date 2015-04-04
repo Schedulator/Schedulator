@@ -17,10 +17,13 @@ namespace Schedulator.Controllers
         // GET: Courses
         public ActionResult Index()
         {
-            ViewData["Courses"] = db.Courses.ToList();
+            db.Configuration.LazyLoadingEnabled = false;
             return View(db.Courses.ToList());
         }
-
+        public ActionResult Course(int courseId)
+        {
+            return PartialView("_CouresLectureAndTutorialPartial", db.Courses.Where(n=> n.CourseID == courseId).FirstOrDefault());
+        }
         // GET: Courses/Details/5
         public ActionResult Details(int? id)
         {

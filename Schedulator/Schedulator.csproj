@@ -320,6 +320,7 @@
     <Content Include="Views\StudentSchedule\StudentScheduleNoResultPartial.cshtml" />
     <Content Include="Views\Shared\_AddCourseAutoCompletePartial.cshtml" />
     <Content Include="Views\Test\ProgramList.cshtml" />
+    <Content Include="Views\Shared\_CouresLectureAndTutorialPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
