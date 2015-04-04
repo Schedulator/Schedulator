@@ -10,11 +10,11 @@ namespace Schedulator.Models
     public class Transcript
     {
 
-        public List<TranscriptYear> TranscriptYear { get; set; }
+        public List<TranscriptYear> StudentTranscriptYear { get; set; }
 
         public class TranscriptYear
         {
-            public int year { get; set; }
+            public int Year { get; set; }
             public List<TranscriptSemester> StudentYearEnrollments { get; set; }
 
             public class TranscriptSemester
@@ -32,15 +32,46 @@ namespace Schedulator.Models
             {
                 int studentStartYear = studentEnrollments.FirstOrDefault().Schedule.Semester.SemesterStart.Year;
                 Season startSeason = studentEnrollments.FirstOrDefault().Schedule.Semester.Season;
+                
 
                 HashSet<int> studentEnrollmentYearSpan = new HashSet<int>();
                 foreach (Enrollment enrollment in studentEnrollments)
                 {
                     studentEnrollmentYearSpan.Add(enrollment.Schedule.Semester.SemesterStart.Year);
                 }
-               
+                foreach (int year in studentEnrollmentYearSpan)
+                {
+                    StudentTranscriptYear.Add(new TranscriptYear { Year = year });
 
+
+                    //switch (startSeason)
+                    //{
+                    //    case Season.Fall:
+                    //        {
+                    //            createTranscript(startSeason, studentStartYear);
+                    //        }
+                    //        break;
+                    //    case Season.Winter:
+                    //        {
+
+                    //        }
+                    //        break;
+                    //    case Season.Summer1:
+                    //        {
+                    //            throw new NullReferenceException("Trying to start from a summer semester");
+                    //        }
+                    //    case Season.Summer2:
+                    //        {
+                    //            throw new NullReferenceException("Trying to start from a summer semester");
+                    //        }
+                    //}
+                }
             }
+        }
+
+        private void createTranscript(Season startSeason, int studentStartYear)
+        {
+            
         }
 
         public double GetSemesterGPA()
