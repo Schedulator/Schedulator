@@ -52,8 +52,7 @@ namespace Schedulator.Controllers
 
         [HttpPost]
         public ActionResult AddGradeToEnrollment(Enrollment enrollment)
-        {
-            //var user = db.Enrollment.Find(enrollment.EnrollmentID).Schedule.ApplicationUser.Id;
+        {            
             var user = db.Enrollment.AsNoTracking().First(u => u.EnrollmentID == enrollment.EnrollmentID).Schedule.ApplicationUser.Id;
 
             if (ModelState.IsValid)

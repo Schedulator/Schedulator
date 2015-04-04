@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Schedulator.Models
 {
-    public class Enrollment
+    public class Enrollment : IValidatableObject
     {
         public int EnrollmentID { get; set; }
         public string Grade { get; set; }
@@ -32,6 +32,15 @@ namespace Schedulator.Models
                 case "D"  : return 1.0;
                 case "D-" : return 0.7;
                 default   : return 0.0;
+            }
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (!(new string[] {"A+","A","A-","B+","B","B-","C+","C","C-","D+","D","D-"}.Contains(Grade)))
+                
+            {
+                yield return new ValidationResult("Grade is invalid");
             }
         }
     }
