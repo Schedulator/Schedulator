@@ -18,9 +18,12 @@ namespace Schedulator.Models
         public void StudentsProgression(List<Enrollment> studentsEnrollment, List<CourseSequence> courseSequences)
         {
             ApplicationDbContext db = new ApplicationDbContext();
-            List<Course> basicScienceCourses = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).ToList();
-            List<Course> generalCourses = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).ToList();
+            
+            List<Course> basicScienceCourses = db.Courses.AsNoTracking().Where(n => n.ElectiveType == ElectiveType.BasicScience).ToList();
+            List<Course> generalCourses = db.Courses.AsNoTracking().Where(n => n.ElectiveType == ElectiveType.GeneralElective).ToList();
             List<CourseSequence> courseSequencesRemoved = courseSequences.ToList();
+
+            
             foreach (Enrollment enrollment in studentsEnrollment)
             {
                 foreach(CourseSequence courseSequence in courseSequences)
@@ -29,7 +32,7 @@ namespace Schedulator.Models
                     {
                         foreach (CourseSequence courseSequenceOtherOptions in courseSequence.OtherOptions)
                         {
-                            if (courseSequenceOtherOptions.Course != null &&  enrollment.Course == courseSequenceOtherOptions.Course)
+                            if (courseSequenceOtherOptions.Course != null &&  enrollment.Course.CourseID == courseSequenceOtherOptions.Course.CourseID)
                             {
                                 if (enrollment.Grade != null)
                                     ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequenceOtherOptions, ProgressType = ProgressType.CompletedCourse });
@@ -39,7 +42,7 @@ namespace Schedulator.Models
                             }
                         }
                     } 
-                    else if (courseSequence.Course != null && enrollment.Course == courseSequence.Course)
+                    else if (courseSequence.Course != null && enrollment.Course.CourseID == courseSequence.Course.CourseID)
                     {
                         if (enrollment.Grade != null)
                             ProgessionUnitList.Add(new ProgressionUnit { CourseSequence = courseSequence, ProgressType = ProgressType.CompletedCourse });

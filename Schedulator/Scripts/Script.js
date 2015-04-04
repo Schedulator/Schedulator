@@ -19,6 +19,7 @@ function courseAltColor(courseCode) {
 
 }
 
+<<<<<<< HEAD
 var count = 0;
 var courseList;
 var url = '/ScheduleGenerator/CoursesViewJson';
@@ -37,28 +38,30 @@ $(function () {
     $(".removeClass").click(function () {
         //this.addClass("clicked");
         this.parent().hide();
+=======
+$(document).ready(function () {
+    $("#courseSequenceRecommend").load('/ScheduleGenerator/StudentsCourseSequence');
+
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
     });
 
-    $.getJSON(url, function (data) {
-        courseList = data;   
+    $('#showCourseSequence').click(function () {
+        $('#courseSequenceRecommend').show("slow");
+    });
+    $('#generateSch').click(function () {
+        $('#result').html('');
+        $("#divProcessing").show();
+>>>>>>> 95b599510b92d715a28754ff7c4d97988d7e816b
+    });
+
+    $('#result').bind("DOMSubtreeModified", function () {
+        $("#divProcessing").hide();
     });
 
 });
 
 
-function showHint(str) {
-      
-
-    $("#suggestion").autocomplete({
-        source: courseList,
-        messages: {
-            noResults: "",
-            results: "",
-            focus: function (event, ui) {
-                $(".ui-helper-hidden-accessible").hide();
-                event.preventDefault();
-            }
-        }
-    });
-  
-}

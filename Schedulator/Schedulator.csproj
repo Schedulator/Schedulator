@@ -235,6 +235,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
+    <Content Include="Scripts\course.autocomplete.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -316,6 +317,9 @@
     <Content Include="Views\StudentManagement\findStudent.cshtml" />
     <Content Include="Views\Progression\Index.cshtml" />
     <Content Include="Views\Transcript\Index.cshtml" />
+    <Content Include="Views\StudentSchedule\StudentScheduleNoResultPartial.cshtml" />
+    <Content Include="Views\Shared\_AddCourseAutoCompletePartial.cshtml" />
+    <Content Include="Views\Test\ProgramList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -328,7 +332,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\App_LocalResources\" />
     <Folder Include="Views\Seed\" />
-    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

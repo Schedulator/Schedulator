@@ -3,6 +3,7 @@
 @Html.AntiForgeryToken()
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+
 <!-- Title -->
 <h2 id="pageTitle">@ViewBag.Title</h2>
 
@@ -28,42 +29,26 @@
                 <!-- Courses -->
                 <div class="prefs">
                     <p>Step 2: Select your courses</p>
-                    <ul class="ui-widget">
-                        <li><span>Add a course: </span>@Html.TextBox("courseName", "", new { id= "suggestion", onkeyup = "showHint(this.value)" })
-                            <span style="margin-left:10px;"><input type="button" id="addcourse" value="Add" /></span>
-                        </li>
-                       
-                        <li>
-                            <div class="selected-courses">
-                                <ul>
-                                    <!--input type="text" name="cLetter[0]" value="COMP" />
-                                    <input type="text" name="cLetter[1]" value="COMP" />
-                                    <input type="text" name="cNumber[0]" value="232" />
-                                    <input type="text" name="cNumber[1]" value="352" /-->
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
+                    @Html.Partial("_AddCourseAutoCompletePartial")
                 </div>
+                    <!-- Preferences -->
+                    <div class="prefs">
+                        <p>Step 3: Select your preferences</p>
+                        <ul id="schedPref">
+                            <li><input type="checkbox" name="timeOption" value="Morning" /> Morning class</li>
+                            <li><input type="checkbox" name="timeOption" value="Day" /> Mid-day class</li>
+                            <li><input type="checkbox" name="timeOption" value="Night" /> Night class</li>
+                        </ul>
+                    </div>
 
-                <!-- Preferences -->
-                <div class="prefs">
-                    <p>Step 3: Select your preferences</p>
-                    <ul id="schedPref">
-                        <li><input type="checkbox" name="timeOption" value="Morning"/> Morning class</li>
-                        <li><input type="checkbox" name="timeOption" value="Day" /> Mid-day class</li>
-                        <li><input type="checkbox" name="timeOption" value="Night" /> Night class</li>
-                    </ul>
-                </div>
-            
-                <div id="generatePref">
-                    <input type="submit" value="Generate Schedule" class="btn btn-default" id="generateSch"/>
-                </div>
-                <input type="button" value="Recommend Me Courses" class="btn btn-default" id="showCourseSequence" />
-                <div id="courseSequenceRecommend" hidden>
-              
-                </div>
-            </div><!--EO #prefOptions-->
+                    <div id="generatePref">
+                        <input type="submit" value="Generate Schedule" class="btn btn-default" id="generateSch" />
+                    </div>
+                    <input type="button" value="Recommend Me Courses" class="btn btn-default" id="showCourseSequence" />
+                    <div id="courseSequenceRecommend" hidden>
+
+                    </div>
+                </div><!--EO #prefOptions-->
         }
     </div><!-- EO #schedGenPref-->
 
@@ -80,26 +65,7 @@
 @section Scripts {
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            var url = '/ScheduleGenerator/StudentsCourseSequence';
-            
-            $("#courseSequenceRecommend").load(url);
-            
 
-            $('#showCourseSequence').click(function () {
-                $('#courseSequenceRecommend').show("slow");
-            });
-            $('#generateSch').click(function () {
-                $('#result').html('');
-                $("#divProcessing").show();
-            });
-
-            $('#result').bind("DOMSubtreeModified", function () {
-                $("#divProcessing").hide();
-            });
-        });
-
-       
 
     </script>
 }

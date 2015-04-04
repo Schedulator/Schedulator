@@ -15,10 +15,9 @@ namespace Schedulator.Controllers
         public ActionResult Index()
         {
             string userId = User.Identity.GetUserId();
-
             List<Enrollment> studentEnrollments = db.Enrollment.Where(n => n.Schedule.ApplicationUser.Id == userId).ToList();
             Program program = db.Users.Find(User.Identity.GetUserId()).Program;
-            List<CourseSequence> courseSequences = db.CourseSequence.Where(n => n.Program.ProgramId == program.ProgramId && n.ContainerSequence == null).ToList();
+            List<CourseSequence> courseSequences = db.CourseSequence.AsNoTracking().Where(n => n.Program.ProgramId == program.ProgramId && n.ContainerSequence == null).ToList();
             Progression studentsProgression = new Progression() { ProgessionUnitList = new List<Progression.ProgressionUnit>() };
             studentsProgression.StudentsProgression(studentEnrollments, courseSequences);
 

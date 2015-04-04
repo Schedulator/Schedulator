@@ -46,7 +46,25 @@
                             <ul class="nav navbar-nav navbar-left">
                                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
                                 <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
-                                <li>@Html.ActionLink("Schedule", "Index", "StudentSchedule")</li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Schedules<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Fall", "Index", "StudentSchedule", new { semester = "Fall"}, null)</li>
+                                        <li>@Html.ActionLink("Winter", "Index", "StudentSchedule", new { semester = "Winter" }, null)</li>
+                                        <li>@Html.ActionLink("Summer", "Index", "StudentSchedule", new { semester = "Summer" }, null)</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">SEED DATA<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("MAKE ME FIRST YEAR STUDENT", "FirstYearStudent", "Test")</li>
+                                        <li>@Html.ActionLink("MAKE ME SECOND YEAR STUDENT", "SecondYearStudent", "Test")</li>
+                                        <li>@Html.ActionLink("MAKE ME THIRD YEAR STUDENT", "ThirdYearStudent", "Test")</li>
+                                        <li>@Html.ActionLink("MAKE ME FOURTH YEAR STUDENT", "FourthYearStudent", "Test")</li>
+                                        <li>@Html.ActionLink("DROP ALL MY SCHEDULES AND ENROLLMENTS", "DropAllSchedules", "Test")</li>
+                                        <li>@Html.ActionLink("CHANGE PROGRAM", "ProgramList", "Test")</li>
+                                    </ul>
+                                </li>
                                 <li>@Html.ActionLink("Schedule Maker", "Index", "ScheduleGenerator")</li>
                             </ul>
                         } else if (User.IsInRole("Program Director")) {

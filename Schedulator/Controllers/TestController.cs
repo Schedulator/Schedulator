@@ -8,11 +8,19 @@ using Microsoft.AspNet.Identity;
 
 namespace Schedulator.Controllers
 {
-
     public class TestController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
         // GET: Test
+        public void DropAllSchedules()
+        {
+            List<Schedule> schedules = new List<Schedule>();
+            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            schedules = db.Schedule.Where(t => t.ApplicationUser.Email == user).ToList();
+            schedules.ForEach(n => db.Enrollment.RemoveRange(n.Enrollments));
+            db.Schedule.RemoveRange(schedules);
+            db.SaveChanges();
+        }
         public void FirstYearStudent()
         {
             DoABunchOfShit(User.Identity.GetUserId(), 1, 2013);
@@ -31,12 +39,24 @@ namespace Schedulator.Controllers
             DoABunchOfShit(User.Identity.GetUserId(), 3, 2013);
         }
 
-        public void ForthYearStudent()
+        public void FourthYearStudent()
         {
             DoABunchOfShit(User.Identity.GetUserId(), 1, 2010);
             DoABunchOfShit(User.Identity.GetUserId(), 1, 2011);
             DoABunchOfShit(User.Identity.GetUserId(), 2, 2012);
             DoABunchOfShit(User.Identity.GetUserId(), 3, 2013);
+        }
+        public ActionResult ProgramList()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            return View(db.Program.ToList());
+        }
+        public void ChangeProgram (int id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            user.Program = db.Program.Where(n => n.ProgramId == id).FirstOrDefault();
+            db.SaveChanges();
         }
 
         public void DoABunchOfShit(string userId, int progressYear, int year)

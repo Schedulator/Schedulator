@@ -1,22 +1,28 @@
-﻿@model List<Schedulator.Models.Schedule>
+﻿@model string
 
-@{
-    ViewBag.Title = "Schedule Generator";
-}
-<script src="@Url.Content("~/Scripts/student.schedule.js")" type="text/javascript"></script>
-
+<script src="@Url.Content("~/Scripts/student.schedule.js")" type="text/javascript">
+    
+</script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var url = '/StudentSchedule/GetSchedule?semester=@Model';
+        $("#schedule-div").load(url);
+    });
+    </script>
 <div class="jumbotron">
-   
-    <div class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">View Registered Schedules</a>
+    <div class="dropdown pull-right">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">View Schedules</a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
             <li class="schedule-semester" semester="RegisteredFall2014"><a tabindex="-1" href="#">Fall 2014</a></li>
             <li class="schedule-semester" semester="RegisteredWinter2015"><a tabindex="-1" href="#">Winter 2015</a></li>
             <li class="schedule-semester" semester="RegisteredSummer2015"><a tabindex="-1" href="#">Summer 2015</a></li>
         </ul>
     </div>
+
+    <div id="schedule-div">
+
+    </div>
 </div>
-<div id="schedule-div">
-    
-</div>
+
 
