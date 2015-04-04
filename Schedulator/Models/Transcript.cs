@@ -16,11 +16,41 @@ namespace Schedulator.Models
         {
             public int Year { get; set; }
             public List<TranscriptSemester> TranscriptSemesters { get; set; }
+            public double totalYearCredits { get; set; }
+            public double numeratorYearTotal { get; set; }
+
+            public double GetYearGPA()
+            {
+                calculateNumeratorYearTotal();
+                calculateTotalYearCredits();
+
+                return numeratorYearTotal / totalYearCredits;
+            }
+
+            public void calculateTotalYearCredits()
+            {
+                foreach (TranscriptSemester semester in TranscriptSemesters.Where(semester => semester != null))
+                {
+                    semester.GetSemesterGPA();
+                    totalYearCredits += semester.totalSemesterCredits;
+                }
+            }
+
+            public void calculateNumeratorYearTotal()
+            {
+                foreach (TranscriptSemester semester in TranscriptSemesters.Where(semester => semester != null))
+                {
+                    semester.GetSemesterGPA();
+                    numeratorYearTotal += semester.numeratorSemesterTotal;
+                }
+            }
 
             public class TranscriptSemester
             {
                 public Season Season { get; set; }
                 public List<Enrollment> Enrollments { get; set; }
+                public double totalSemesterCredits { get; set; }
+                public double numeratorSemesterTotal { get; set; }
 
                 public double GetSemesterGPA()
                 {
@@ -28,19 +58,39 @@ namespace Schedulator.Models
                         return -1;
                     else
                     {
-                        double totalSemesterCredits = 0.0;
-                        double numeratorTotal = 0.0;
+                        calculateTotalSemesterCredits();
+                        calculateNumeratorSemesterTotal();
 
-                        foreach (Enrollment enrollment in Enrollments)
-                        {
-                            if (enrollment.Grade != null)
-                            {
-                                totalSemesterCredits += enrollment.Course.Credit;
-                                numeratorTotal += enrollment.getGPA() * enrollment.Course.Credit;
-                            }
-                        }
-                        return numeratorTotal / totalSemesterCredits;
+                        return numeratorSemesterTotal / totalSemesterCredits;
                     }
+                }
+
+                public void calculateTotalSemesterCredits()
+                {
+                    totalSemesterCredits = 0.0;
+                    foreach (Enrollment enrollment in Enrollments)
+                    {
+                        if (enrollment.Grade != null)
+                        {
+                            totalSemesterCredits += enrollment.Course.Credit;
+                            
+                        }
+                    }
+                   
+                }
+
+                public void calculateNumeratorSemesterTotal()
+                {
+                    numeratorSemesterTotal = 0.0;
+                    foreach (Enrollment enrollment in Enrollments)
+                    {
+                        if (enrollment.Grade != null)
+                        {
+                            numeratorSemesterTotal += enrollment.getGPA() * enrollment.Course.Credit;
+                            
+                        }
+                    }
+                    
                 }
             }
         }
