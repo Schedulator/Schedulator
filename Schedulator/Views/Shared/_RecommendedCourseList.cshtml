@@ -1,34 +1,27 @@
 ﻿@model Schedulator.Models.Program.RecommendCourseView
 @using EnumExtension
-<p>Recommended Courses For Program @Model.Program.ProgramName @Model.Program.ProgramSemester and @Model.Program.ProgramOption option:</p>
+
 
 <div class="container">
+    <p>Recommended Courses For Program @Model.Program.ProgramName @Model.Program.ProgramSemester and @Model.Program.ProgramOption option:</p>
     <div class="row">
         <div class="col-sm-4">
             <h4>Fall</h4>
-            @if(Model.FallSchedule != null)
-            {
+            @if (Model.FallSchedule != null) {
                 <p>Currently registered schedule courses</p>
-                <ul class="course-list-recommend" >
-                    @foreach (Schedulator.Models.Enrollment enrollment in Model.FallSchedule.Enrollments)
-                    {
+                <ul class="course-list-recommend">
+                    @foreach (Schedulator.Models.Enrollment enrollment in Model.FallSchedule.Enrollments) {
                         <li><span class="label label-default">@enrollment.Course.CourseLetters @enrollment.Course.CourseNumber</span></li>
                     }
                 </ul>
-                
+
             }
-            @if (Model.RecommendFallCourseSequence.Count() > 0)
-            {
-                <p>Recommended Courses to add</p>
+            @if (Model.RecommendFallCourseSequence.Count() > 0) {
                 <ul class="course-list-recommend">
-                    @foreach (Schedulator.Models.CourseSequence courseSequence in Model.RecommendFallCourseSequence)
-                    {
-                        if (courseSequence.Course != null)
-                        {
+                    @foreach (Schedulator.Models.CourseSequence courseSequence in Model.RecommendFallCourseSequence) {
+                        if (courseSequence.Course != null) {
                             <li><span class="label label-default">@courseSequence.Course.CourseLetters @courseSequence.Course.CourseNumber</span></li>
-                        }
-                        else
-                        {
+                        } else {
                             <li><span class="label label-default">@courseSequence.ElectiveType.DisplayName()</span></li>
                         }
                     }
@@ -40,64 +33,45 @@
 
         <div class="col-sm-4">
             <h4>Winter</h4>
-            @if (Model.WinterSchedule != null)
-            {
-                <p>Currently registered schedule courses</p>
+            @if (Model.WinterSchedule != null) {
                 <ul class="course-list-recommend">
-                    @foreach (Schedulator.Models.Enrollment enrollment in Model.WinterSchedule.Enrollments)
-                    {
+                    @foreach (Schedulator.Models.Enrollment enrollment in Model.WinterSchedule.Enrollments) {
                         <li><span class="label label-default">@enrollment.Course.CourseLetters @enrollment.Course.CourseNumber</span></li>
                     }
                 </ul>
-                
+
             }
-            @if (Model.RecommendWinterCourseSequence.Count() > 0)
-            {
-                <p>Recommended Courses to add</p>
+            @if (Model.RecommendWinterCourseSequence.Count() > 0) {
                 <ul class="course-list-recommend">
-                    @foreach (Schedulator.Models.CourseSequence courseSequence in Model.RecommendWinterCourseSequence)
-                    {
-                        if (courseSequence.Course != null)
-                        {
+                    @foreach (Schedulator.Models.CourseSequence courseSequence in Model.RecommendWinterCourseSequence) {
+                        if (courseSequence.Course != null) {
                             <li><span class="label label-default">@courseSequence.Course.CourseLetters @courseSequence.Course.CourseNumber</span></li>
-                        }
-                        else
-                        {
+                        } else {
                             <li><span class="label label-default">@courseSequence.ElectiveType.DisplayName()</span></li>
                         }
                     }
-
                 </ul>
-
             }
         </div>
+
         <div class="col-sm-4">
             <h4>Summer</h4>
-            @if (Model.SummerSchedules != null && Model.SummerSchedules.Count() > 0)
-            {
+            @if (Model.SummerSchedules != null && Model.SummerSchedules.Count() > 0) {
                 <p>Currently registered schedule courses</p>
                 <ul class="course-list-recommend">
-                    @foreach (Schedulator.Models.Schedule schedule in Model.SummerSchedules)
-                    { 
-                        foreach (Schedulator.Models.Enrollment enrollment in schedule.Enrollments)
-                        {
+                    @foreach (Schedulator.Models.Schedule schedule in Model.SummerSchedules) {
+                        foreach (Schedulator.Models.Enrollment enrollment in schedule.Enrollments) {
                             <li><span class="label label-default">@enrollment.Course.CourseLetters @enrollment.Course.CourseNumber</span></li>
                         }
                     }
                 </ul>
             }
-            @if (Model.RecommendSummerCourseSequence.Count() > 0)
-            {
-                <p>Recommended Courses to add</p>
+            @if (Model.RecommendSummerCourseSequence.Count() > 0) {
                 <ul class="course-list-recommend">
-                    @foreach (Schedulator.Models.CourseSequence courseSequence in Model.RecommendSummerCourseSequence)
-                    {
-                        if (courseSequence.Course != null)
-                        {
+                    @foreach (Schedulator.Models.CourseSequence courseSequence in Model.RecommendSummerCourseSequence) {
+                        if (courseSequence.Course != null) {
                             <li><span class="label label-default">@courseSequence.Course.CourseLetters @courseSequence.Course.CourseNumber</span></li>
-                        }
-                        else
-                        {
+                        } else {
                             <li><span class="label label-default">@courseSequence.ElectiveType.DisplayName()</span></li>
                         }
                     }
@@ -107,5 +81,6 @@
             }
         </div>
     </div>
-    <p>Please Note: The recommended Courses above are dynamically picked based on your current Course progression.</p>
+    <p><i>Please Note: The recommended Courses above are dynamically picked based on your current Course progression.</i></p>
 </div>
+

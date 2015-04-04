@@ -50,11 +50,11 @@ namespace Schedulator.Migrations
                 context.Users.AddOrUpdate(user);
             }
             SeedSemester(context);
-            //SeedCoursesFromExcelSheet(context);
-            //SeedProgramsFromExcelSheet(context);
-            //AddScienceElectives(context);
-            //AddGeneralElective(context);
-            //AddTechnicalElectives(context);
+            SeedCoursesFromExcelSheet(context);
+            SeedProgramsFromExcelSheet(context);
+            AddScienceElectives(context);
+            AddGeneralElective(context);
+            AddTechnicalElectives(context);
             //Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
             //List<Enrollment> enrollments = new List<Enrollment>();
@@ -223,7 +223,7 @@ namespace Schedulator.Migrations
             context.Semesters.Add(new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2013, 5, 4), SemesterEnd = new DateTime(2013, 6, 23) });
             context.Semesters.Add(new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2013, 6, 25), SemesterEnd = new DateTime(2013, 7, 19) });
 
-            context.Semesters.Add(new Semester { Season = Season.Fall, SemesterStart = new DateTime(2013, 9, 1), SemesterEnd = new DateTime(2014, 12, 18) });
+            context.Semesters.Add(new Semester { Season = Season.Fall, SemesterStart = new DateTime(2013, 9, 1), SemesterEnd = new DateTime(2013, 12, 18) });
             context.Semesters.Add(new Semester { Season = Season.Winter, SemesterStart = new DateTime(2014, 1, 7), SemesterEnd = new DateTime(2014, 5, 2) });
             context.Semesters.Add(new Semester { Season = Season.Summer1, SemesterStart = new DateTime(2014, 5, 4), SemesterEnd = new DateTime(2014, 6, 23) });
             context.Semesters.Add(new Semester { Season = Season.Summer2, SemesterStart = new DateTime(2014, 6, 25), SemesterEnd = new DateTime(2014, 7, 19) });
@@ -453,18 +453,26 @@ namespace Schedulator.Migrations
                 int count = 1;
                 var rows = worksheet.Rows;
                 programs.Add(new Program { ProgramName = rows[0].Cells[0].Text, ProgramOption = rows[0].Cells[1].Text, ProgramSemester = rows[0].Cells[2].Text, CreditsRequirement = Convert.ToInt32(rows[0].Cells[3].Text) });
-                Console.WriteLine(rows[0].Cells[0].Text + " " + rows[0].Cells[1].Text + " " + rows[0].Cells[2].Text);
+                System.Diagnostics.Debug.WriteLine(rows[0].Cells[0].Text + " " + rows[0].Cells[1].Text + " " + rows[0].Cells[2].Text);
+                if (rows[0].Cells[1].Text == "Software System")
+                    Console.WriteLine("h");
                 Season season = 0;
                 int year = 0;
                 while (count < rows.Count())
                 {
                     string currentCellText = rows[count].Cells[0].Text;
-
+                    if (count == 39)
+                    {
+                        Console.WriteLine("h");
+                    }
                     if (Regex.IsMatch(currentCellText, @"Year\s\d{1}\s(Winter|Fall|Summer)"))
                     {
                         year = Convert.ToInt32(Regex.Match(currentCellText, @"\d{1}").ToString());
                         string temp = Regex.Match(currentCellText, @"(Fall|Winter|Summer)").ToString();
-                        season = (Season)Enum.Parse(typeof(Season), Regex.Match(currentCellText, @"(Fall|Winter|Summer)").ToString());
+                        if (Regex.IsMatch(currentCellText, @"Year\s\d{1}\s(Summer)"))
+                            season = Season.Summer1;
+                        else
+                            season = (Season)Enum.Parse(typeof(Season), Regex.Match(currentCellText, @"(Fall|Winter)").ToString());
                     }
                     else if ( Regex.IsMatch(currentCellText, @"[A-Z]{4}\s\d{3} or"))
                     {
@@ -512,8 +520,13 @@ namespace Schedulator.Migrations
                     else if (currentCellText.Contains("Basic Science"))
                         courseSequences.Add(new CourseSequence { Program = programs.LastOrDefault(), ElectiveType = Models.ElectiveType.BasicScience, Year = year, Season = season });
                     else if (currentCellText.Contains("Elective") || currentCellText.Contains("Technical Elective"))
-                        courseSequences.Add(new CourseSequence { Program = programs.LastOrDefault(), ElectiveType = Models.ElectiveType.TechnicalElective, Year = year, Season = season });
-                    count++;
+                    {
+                        if (programs.LastOrDefault().ProgramName != "Computer Science")
+                            courseSequences.Add(new CourseSequence { Program = programs.LastOrDefault(), ElectiveType = Models.ElectiveType.TechnicalElective, Year = year, Season = season });
+                        else
+                            courseSequences.Add(new CourseSequence { Program = programs.LastOrDefault(), ElectiveType = Models.ElectiveType.GeneralElective, Year = year, Season = season });
+                    }
+                count++;
 
                 }
                 programs.LastOrDefault().CourseSequences = courseSequences;

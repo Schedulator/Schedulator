@@ -31,14 +31,18 @@ namespace Schedulator.Controllers
         public ActionResult StudentsCourseSequence()
         {
             ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-
-            List<Enrollment> studentEnrollments = new List<Enrollment>();
-            foreach (Schedule schedule in user.Schedules)
-                studentEnrollments.AddRange(schedule.Enrollments);
-            return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments,
-                                                         user.Schedules.Where(n =>n.Semester.Season == Season.Fall && n.Semester.SemesterStart.Year == 2014).FirstOrDefault(),
-                                                         user.Schedules.Where(n => n.Semester.Season == Season.Winter && n.Semester.SemesterStart.Year == 2015).FirstOrDefault(), 
-                                                         user.Schedules.Where(n =>(n.Semester.Season == Season.Summer1 || n.Semester.Season == Season.Summer2) && n.Semester.SemesterStart.Year == 2015).ToList()));
+            
+            if(user.Program == null){
+                throw new System.ArgumentNullException("User missing program.");
+            }else{
+                List<Enrollment> studentEnrollments = new List<Enrollment>();
+                foreach (Schedule schedule in user.Schedules)
+                    studentEnrollments.AddRange(schedule.Enrollments);
+                return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments,
+                                                             user.Schedules.Where(n =>n.Semester.Season == Season.Fall && n.Semester.SemesterStart.Year == 2014).FirstOrDefault(),
+                                                             user.Schedules.Where(n => n.Semester.Season == Season.Winter && n.Semester.SemesterStart.Year == 2015).FirstOrDefault(), 
+                                                             user.Schedules.Where(n =>(n.Semester.Season == Season.Summer1 || n.Semester.Season == Season.Summer2) && n.Semester.SemesterStart.Year == 2015).ToList()));
+            }
         }
         [HttpPost]
         public ActionResult RegisterSchedule()
@@ -87,6 +91,7 @@ namespace Schedulator.Controllers
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
+            
             Season season;
             switch (semester)
             {
