@@ -319,6 +319,12 @@
     <Content Include="Views\Transcript\Index.cshtml" />
     <Content Include="Views\StudentSchedule\StudentScheduleNoResultPartial.cshtml" />
     <Content Include="Views\Shared\_AddCourseAutoCompletePartial.cshtml" />
+    <Content Include="Views\StudentManagement\Details.cshtml" />
+    <Content Include="Views\Shared\View1.cshtml" />
+    <Content Include="Views\StudentManagement\ManageSchedule.cshtml" />
+    <Content Include="Views\StudentManagement\ModifySchedule.cshtml" />
+    <Content Include="Views\StudentManagement\SeeGradeToEnrollment.cshtml" />
+    <Content Include="Views\StudentManagement\AddGradeToEnrollment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

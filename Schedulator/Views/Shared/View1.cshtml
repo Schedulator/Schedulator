@@ -1,0 +1,92 @@
+﻿@model List<Schedulator.Models.Schedule>
+
+    @using (Ajax.BeginForm("ManageSchedule", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "schedule", OnSuccess = "ManageScheduleSuccess(data)" }))
+    {
+        <div>
+            <div>
+                <input id="manageScheduleButton" data-toggle="collapse" data-parent="#accordion" href="#collapse" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
+            </div>
+            <div id="collapse" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <input id="addCoursesButton" type="button" name="addCourse" class="btn btn-primary" value="Add Courses">
+                    <input type="hidden" name="semester" value="@Model.FirstOrDefault().Semester.Season">
+                    <input id="submitType" type="hidden" name="submitType" value="">
+                    <input id="removeButton" type="button" class="btn btn-primary" value="Remove Selected">
+                    <input type="submit" name="register" class="btn btn-primary" value="Switch Sections">
+                    <input type="hidden" name="scheduleIds" value="@Model.FirstOrDefault().ScheduleId">
+                    @if (Model.Count() > 1)
+                    {
+                        <input type="hidden" name="scheduleIds" value="@Model.LastOrDefault().ScheduleId">
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div id="collapse-schedule" class="panel-collapse collapse">
+            <div class="panel-body">
+                @Html.Partial("_AddCourseAutoCompletePartial")
+                <br />
+                <input type="submit" value="Generate Schedule" class="btn btn-default pull-right" id="generateSchedule" />
+            </div>
+        </div>
+        <div id="schedule">
+            @Html.Partial("_ScheduleAndLegend", Model)
+        </div><!-- EO #result -->
+
+        <div class="collapse in">
+
+        </div>
+
+    }
+    <hr />
+
+    <script>
+        function ShowSchedules() {
+            debugger;
+            alert("here");
+        }
+        function ManageScheduleSuccess(data) {
+            debugger;
+            $('#schedule').empty();
+            $('#schedule').html(data);
+        }
+        $(document).ready(function () {
+            var counter = 0;
+            var count = 0;
+            $('#addCoursesButton').on('click', function () {
+                $('#collapse-schedule').collapse('toggle');
+            });
+
+            $("#generateSchedule").on("click", function (e) {
+                e.preventDefault();
+                $('#form0').attr('data-ajax-success', 'ShowSchedules()');
+                $('#form0').attr('action', "/StudentSchedule/GenerateSchedules").submit();
+            });
+
+            $('#removeButton').on('click', function () {
+                if ($('input[type=checkbox]:checked').length) {
+                    $('#submitType').val('remove');
+                    $('#form0').submit();
+                }
+                else
+                    alert("You must select courses to remove!");
+            });
+            $('#manageScheduleButton').on('click', function () {
+                if (counter == 0) {
+                    var sectionCounter = 0;
+                    counter = 1;
+                    $('[id^=radioButtonSectionGroup]').each(function () {
+                        $(this).after('<input type="checkbox" class="section-checkbox" name="sectionIds" value="' + $(this).val() + '" >');
+                    });
+                }
+                else {
+                    counter = 0;
+                    $(".section-checkbox").hide();
+                    $('#collapse-schedule').collapse('hide');
+                }
+            });
+
+        });
+
+    </script>
