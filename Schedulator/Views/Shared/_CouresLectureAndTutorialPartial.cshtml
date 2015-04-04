@@ -1,0 +1,65 @@
+﻿@model Schedulator.Models.Course
+
+@foreach (var lecture in Model.Lectures.OrderBy(c => c.Semester.SemesterStart))
+    {
+    <div class="container">
+        @if (lecture.LectureLetter != null && lecture.LectureLetter != "UgradNSched IE")
+        {
+
+            <div class="row">
+                <div class="col-md-3"> @Html.DisplayFor(modelItem => lecture.Semester.Season) Lect @Html.DisplayFor(modelItem => lecture.LectureLetter)</div>
+                <div class="col-md-3"> @TimeSpan.FromMinutes(lecture.StartTime).ToString(@"hh\:mm") - @TimeSpan.FromMinutes(lecture.EndTime).ToString(@"hh\:mm")</div>
+                <div class="col-md-3"> @Html.DisplayFor(modelItem => lecture.FirstDay) @if (lecture.SecondDay != Schedulator.Models.TimeBlock.day.NONE){ @Html.DisplayFor(modelItem => lecture.SecondDay)}</div>
+                <div class="col-md-3"> @Html.DisplayFor(modelItem => lecture.Teacher)</div>
+            </div>
+
+    <div class="container">
+        @foreach (var tutorial in lecture.Tutorials)
+        {
+            if (tutorial.TutorialLetter != null)
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        Tut @Html.DisplayFor(modelItem => tutorial.TutorialLetter)
+                    </div>
+                    <div class="col-md-3">
+                        @TimeSpan.FromMinutes(tutorial.StartTime).ToString(@"hh\:mm") - @TimeSpan.FromMinutes(tutorial.EndTime).ToString(@"hh\:mm")
+                    </div>
+                    <div class="col-md-3">
+                        @Html.DisplayFor(modelItem => tutorial.FirstDay) @if (tutorial.SecondDay != Schedulator.Models.TimeBlock.day.NONE) {@Html.DisplayFor(modelItem => tutorial.SecondDay)}
+                    </div>
+                    <div class="col-md-3">
+                        @Html.DisplayFor(modelItem => tutorial.ClassRoomNumber)
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var labs in tutorial.Labs)
+                    {
+                        if (labs.LabLetter != null)
+                        {
+                            <div class="row">
+                                <div class="col-md-3">
+                                    Lab @Html.DisplayFor(modelItem => labs.LabLetter)
+                                </div>
+                                <div class="col-md-3">
+                                    @TimeSpan.FromMinutes(labs.StartTime).ToString(@"hh\:mm")) - @TimeSpan.FromMinutes(labs.StartTime).ToString(@"hh\:mm"))
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(modelItem => labs.FirstDay) @if ( labs.SecondDay != Schedulator.Models.TimeBlock.day.NONE) { @Html.DisplayFor(modelItem => labs.SecondDay)}
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(modelItem => labs.ClassRoomNumber)
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            }
+
+        }
+    </div>
+        }
+            </div>
+    }
+

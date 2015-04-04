@@ -9,7 +9,7 @@ namespace Schedulator.Models
     {
         public Preference Preference { get; set; }
         public List<List<Schedule>> Schedules { get; set; }
-
+        public int NumberOfSchedules { get; set; }
         public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
         private List<Course> CoursesStudentCanTake = new List<Course>();
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -40,6 +40,7 @@ namespace Schedulator.Models
             {
                 GenerateAllSchedulesUsingUserPreferenceCourses(AllPossibleSections());
             }
+            NumberOfSchedules = Schedules.Count();
         }
         public void GenerateSchedulesUsingSectionsAndCourse(List<Course> courses, List<List<Section>> sectionsListMaster, List<Enrollment> enrollments)
         {
@@ -50,6 +51,7 @@ namespace Schedulator.Models
                 sectionsListMaster.AddRange(AllPossibleSections());
                 GenerateAllSchedulesUsingUserPreferenceCourses(sectionsListMaster);
             }
+            NumberOfSchedules = Schedules.Count();
         }
         private List<List<Section>> AllPossibleSections()
         {

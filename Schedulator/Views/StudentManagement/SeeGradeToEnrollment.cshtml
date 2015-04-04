@@ -1,0 +1,42 @@
+﻿@model List<Schedulator.Models.Enrollment>
+
+    @{
+        ViewBag.Title = "SeeGradeToEnrollment";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h2>Add Grade</h2>
+
+    <table>
+        <tr>
+            <th><b>Fall</b></th>
+        </tr>
+        @{
+            var season = Schedulator.Models.Season.Fall;
+        }
+
+        @foreach (var item in Model)
+        {
+            if (item.Schedule.Semester.Season == season)
+            {
+                <tr>
+                    <th>@item.Course.Title : @item.Grade @Html.ActionLink("Edit Grade", "AddGradeToEnrollment", new { id = item.EnrollmentID })</th>
+                </tr>
+            }
+            else
+            {
+                season = item.Schedule.Semester.Season;
+                <tr>
+                    <th> <b>@season</b></th>
+                </tr>
+                <tr>
+                    <th>@item.Course.Title : @item.Grade </th>
+                </tr>
+            }
+        }
+
+    </table>
+
+               <div>
+                   @Html.ActionLink("Back to List", "Index")
+               </div>

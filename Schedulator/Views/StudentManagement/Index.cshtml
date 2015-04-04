@@ -7,6 +7,11 @@
 
 <h2>Index</h2>
 
+    <form method="get">
+        <input type="search" name="searchTerm" />
+        <input type="submit" value="Search By Name" />
+    </form>
+
 <table>
     <tr>
         <th>
@@ -23,10 +28,8 @@
         <tr>
             <td>@item.FirstName @item.LastName</td>    
             <td>@item.Program.ProgramName - @item.Program.ProgramOption</td> 
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Find Student", "findStudent")
+            <td>                
+                @Html.ActionLink("Student Details", "Details", new { id = item.Id })
             </td>       
         </tr>
         

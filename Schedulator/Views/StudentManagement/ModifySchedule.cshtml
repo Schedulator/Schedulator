@@ -1,0 +1,10 @@
+﻿@model List<Schedulator.Models.Schedule>
+
+    @{
+        ViewBag.Title = "ModifySchedule";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h2>ModifySchedule</h2>
+
+    @Html.Partial("ManageSchedule", Model)

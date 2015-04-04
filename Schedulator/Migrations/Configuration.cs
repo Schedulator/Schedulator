@@ -50,11 +50,11 @@ namespace Schedulator.Migrations
                 context.Users.AddOrUpdate(user);
             }
             SeedSemester(context);
-            SeedCoursesFromExcelSheet(context);
-            SeedProgramsFromExcelSheet(context);
-            AddScienceElectives(context);
-            AddGeneralElective(context);
-            AddTechnicalElectives(context);
+            //SeedCoursesFromExcelSheet(context);
+            //SeedProgramsFromExcelSheet(context);
+            //AddScienceElectives(context);
+            //AddGeneralElective(context);
+            //AddTechnicalElectives(context);
             //Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
             //List<Enrollment> enrollments = new List<Enrollment>();
