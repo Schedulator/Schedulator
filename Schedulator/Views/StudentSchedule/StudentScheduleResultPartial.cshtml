@@ -1,6 +1,6 @@
 ﻿@model List<Schedulator.Models.Schedule>
 
-@using (Ajax.BeginForm("ManageSchedule", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "schedule", OnSuccess = "ManageScheduleSuccess(data)" }))
+@using (Ajax.BeginForm("ManageSchedule", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "ManageScheduleSuccess(data)" }, new { id = "manageScheduleForm" }))
 {
     <div>
         <div>
@@ -27,7 +27,7 @@
             <div class="panel-body">
                 @Html.Partial("_AddCourseAutoCompletePartial")
                 <br />
-                <input type="submit" value="Generate Schedule" class="btn btn-default pull-right" id="generateSchedule" />
+                <input type="submit" value="Generate Schedule"  class="btn btn-default pull-right" id="generateSchedule" />
             </div>
     </div>
     <div id="schedule">
@@ -40,14 +40,21 @@
 
 }
 <hr />
-
+<div id="generatedSchedules" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div id ="generatedSchedulesContent" class="modal-content">
+        </div>
+    </div>
+</div>
 <script>
-    function ShowSchedules() {
+    function ShowSchedules(data) {
         debugger;
         alert("here");
+        $('#generatedSchedulesContent').empty();
+        $('#generatedSchedulesContent').html(data);
+        $('#generatedSchedules').modal('show');
     }
     function ManageScheduleSuccess(data) {
-        debugger;
         $('#schedule').empty();
         $('#schedule').html(data);
     }
@@ -60,14 +67,14 @@
 
         $("#generateSchedule").on("click", function (e) {
             e.preventDefault();
-            $('#form0').attr('data-ajax-success', 'ShowSchedules()');
-            $('#form0').attr('action', "/StudentSchedule/GenerateSchedules").submit();
+            $('#manageScheduleForm').attr('data-ajax-success', 'ShowSchedules(data)');
+            $('#manageScheduleForm').attr('action', "/StudentSchedule/GenerateSchedules").submit();
         });
 
         $('#removeButton').on('click', function () {
             if ($('input[type=checkbox]:checked').length) {
                 $('#submitType').val('remove');
-                $('#form0').submit();
+                $('#manageScheduleForm').submit();
             }
             else
                 alert("You must select courses to remove!");
