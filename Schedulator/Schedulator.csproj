@@ -319,6 +319,8 @@
     <Content Include="Views\Transcript\Index.cshtml" />
     <Content Include="Views\StudentSchedule\StudentScheduleNoResultPartial.cshtml" />
     <Content Include="Views\Shared\_AddCourseAutoCompletePartial.cshtml" />
+    <Content Include="Views\Test\ProgramList.cshtml" />
+    <Content Include="Views\Shared\_CouresLectureAndTutorialPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -331,7 +333,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\App_LocalResources\" />
     <Folder Include="Views\Seed\" />
-    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

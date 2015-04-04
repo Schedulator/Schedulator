@@ -20,12 +20,10 @@ namespace Schedulator.Controllers
             List<Enrollment> studentEnrollments = db.Enrollment.Where(n => n.Schedule.ApplicationUser.Id == userId).ToList();
             Program program = db.Users.Find(User.Identity.GetUserId()).Program;
             List<CourseSequence> courseSequences = db.CourseSequence.Where(n => n.Program.ProgramId == program.ProgramId && n.ContainerSequence == null).ToList();
+            Transcript studentTranscript = new Transcript { TranscriptYears = new List<Transcript.TranscriptYear>() };
+            studentTranscript.StudentTranscript(studentEnrollments);
 
-            List<CourseSequence> courseSequences2 = db.CourseSequence.Where(n => n.Program.ProgramId == program.ProgramId).ToList();
-            Progression studentsProgression = new Progression() { ProgessionUnitList = new List<Progression.ProgressionUnit>() };
-            studentsProgression.StudentsProgression(studentEnrollments, courseSequences);
-
-            return View(studentsProgression);
+            return View(studentTranscript);
         }
     }
 }

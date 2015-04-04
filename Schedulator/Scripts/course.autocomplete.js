@@ -49,7 +49,6 @@ $(document).ready(function () {
 
 	$(document).on("click", ".courseBlock", function () {
 		addedCourseList.splice($.inArray($(this).text(), addedCourseList), 1);
-		alert(addedCourseList);
 		$(this).closest("div").remove();
 	});
 });

@@ -91,6 +91,7 @@ namespace Schedulator.Controllers
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
+            
             Season season;
             switch (semester)
             {
