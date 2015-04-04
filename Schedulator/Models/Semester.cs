@@ -7,7 +7,7 @@ namespace Schedulator.Models
 {
     public enum Season 
     {
-        Fall, Winter, Summer1,Summer2
+        Winter, Summer1,Summer2, Fall
     }
     public class Semester
     {

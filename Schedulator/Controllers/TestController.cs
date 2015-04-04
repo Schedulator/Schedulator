@@ -46,6 +46,18 @@ namespace Schedulator.Controllers
             DoABunchOfShit(User.Identity.GetUserId(), 2, 2012);
             DoABunchOfShit(User.Identity.GetUserId(), 3, 2013);
         }
+        public ActionResult ProgramList()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            return View(db.Program.ToList());
+        }
+        public void ChangeProgram (int id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            user.Program = db.Program.Where(n => n.ProgramId == id).FirstOrDefault();
+            db.SaveChanges();
+        }
 
         public void DoABunchOfShit(string userId, int progressYear, int year)
         {

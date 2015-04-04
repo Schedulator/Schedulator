@@ -1,0 +1,17 @@
+﻿@model List<Schedulator.Models.Program>
+@{
+    ViewBag.Title = "ChangeProgram";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ChangeProgram</h2>
+
+<div class="list-group">
+    @foreach (Schedulator.Models.Program program in Model)
+    { 
+        @Html.ActionLink("Change program to " + program.ProgramName + " " + program.ProgramOption + " " + program.ProgramSemester, "ChangeProgram", "Test", new { id = program.ProgramId },
+           new Dictionary<string, object> { { "class", "list-group-item" } });
+        <br/>
+    }
+
+</div>
