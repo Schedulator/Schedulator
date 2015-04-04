@@ -25,14 +25,17 @@ var url = '/ScheduleGenerator/CoursesViewJson';
 
 $(function () {
     $("#addcourse").click(function () {
-        debugger;
+   //     debugger;
         var name = $("input[name='courseName']").val();
+        if (name.length > 0) {
+            $(".selected-courses").children().append("<li>" + name + "<input name='courseCode[" + count + "]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass li"+count+"'/></li>");
+        }
         $("input[name='courseName']").val("");
-        $(".selected-courses").children().append("<li>"+name+"<input name='courseCode["+count+"]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass'/></li>");
         count++;
     });
 
     $(".removeClass").click(function () {
+        //this.addClass("clicked");
         this.parent().hide();
     });
 
