@@ -1,4 +1,4 @@
-﻿@model Schedulator.Models.Progression
+﻿@model Schedulator.Models.Transcript
 
 @{
     ViewBag.Title = "View Transcript";
@@ -7,13 +7,28 @@
 <h1>Student Transcript</h1>
 
 @{
-    var courseSequence = Model.ProgessionUnitList;
-
-    while (courseSequence.Count() > 0)
-    {
-        for (var i = 5; i > 0; i--)
-        {
-            courseSequence[i] = null;
+    <ul>
+        @{
+            foreach (var yearInfo in Model.TranscriptYears)
+            {
+                <li>Year of @Html.DisplayFor(model => yearInfo.Year)</li>
+                <ul>
+                    @{
+                        foreach (var semester in yearInfo.TranscriptSemesters)
+                        {
+                            <li>Semester: @Html.DisplayFor(model => semester.Season)</li>
+                            <ul>
+                                @{
+                                    foreach (var enrollment in semester.Enrollments)
+                                    {
+                                        <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber)</li>        
+                                    }
+                                }
+                            </ul>
+                        }
+                    }
+                </ul>
+            }
         }
-    }
+    </ul>
 }
