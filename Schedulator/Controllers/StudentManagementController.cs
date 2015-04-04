@@ -18,17 +18,51 @@ namespace Schedulator.Controllers
 
         //
         // GET: /StudentManagement/
-        public ActionResult Index()
+        public ActionResult Index(string searchTerm = null)
         {
-            List<ApplicationUser> applicationUser = db.Users.ToList();
-            return View(db.Users.ToList().Where(user => user.Roles.First().RoleId == userRole));
+            List<ApplicationUser> applicationUser = db.Users.Where( u => searchTerm == null || searchTerm.Contains(u.FirstName) || searchTerm.Contains(u.LastName)).ToList();
+            return View(applicationUser.Where(user => user.Roles.First().RoleId == userRole));
         }
 
-        public ActionResult findStudent(string Name)
+        public ActionResult Details(string id)
         {
-            ApplicationUser user = db.Users.First(u => (u.FirstName + " " + u.LastName) == Name);
-            return View(user);
+            ApplicationUser user = db.Users.First(u => u.Id == id );            
+            return View(user);           
         }
 
+        public ActionResult ModifySchedule(string id)
+        {
+            ApplicationUser user = db.Users.First(u => u.Id == id);  
+            return View(user.Schedules.ToList());
+        }
+
+        [HttpGet]
+        public ActionResult SeeGradeToEnrollment(string id)
+        {
+            ApplicationUser user = db.Users.First(u => u.Id == id);
+            return View(user.Schedules.SelectMany(u => u.Enrollments).ToList());
+        }
+
+        [HttpGet]
+        public ActionResult AddGradeToEnrollment(int id)
+        {
+            Enrollment enrollment = db.Enrollment.Find(id);
+            return View(enrollment);
+        }
+
+        [HttpPost]
+        public ActionResult AddGradeToEnrollment(Enrollment enrollment)
+        {
+            //var user = db.Enrollment.Find(enrollment.EnrollmentID).Schedule.ApplicationUser.Id;
+            var user = db.Enrollment.AsNoTracking().First(u => u.EnrollmentID == enrollment.EnrollmentID).Schedule.ApplicationUser.Id;
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(enrollment).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("SeeGradeToEnrollment", new { id = user });
+            }
+            return View(enrollment);
+        } 
 	}
 }

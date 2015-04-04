@@ -1,0 +1,49 @@
+﻿@model Schedulator.Models.ApplicationUser
+
+    @{
+        ViewBag.Title = "Details";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+
+    <h2>Details</h2>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Student Name:
+        </dt>
+
+        <dd>
+            @Model.FirstName @Model.LastName
+        </dd>
+
+        <dt>
+            Program:
+        </dt>
+
+        <dd>
+            @Model.Program.ProgramName - @Model.Program.ProgramOption
+        </dd>    
+        
+        <dt>
+            Schedules: 
+        </dt>
+        
+        <dd>
+           @Html.ActionLink("Modify Schedules", "ModifySchedule", new { id = Model.Id})
+        </dd>   
+
+        <dt>
+            Grades: 
+        </dt>
+
+        <dd>            
+            @Html.ActionLink("Edit Grades", "SeeGradeToEnrollment", new { id = Model.Id })
+        </dd>
+
+    </dl>
+</div>
+
