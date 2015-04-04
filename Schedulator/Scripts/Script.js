@@ -59,6 +59,10 @@ $(function () {
     $('#showCourseSequence').click(function () {
         $('#courseSequenceRecommend').show("slow");
     });
+
+    $('#generateSch').click(function () {
+        colorCount = 0;
+    });
     $('#generateSch, #showCourseSequence').click(function () {
         $('#result').html('');
         $("#divProcessing").show();
