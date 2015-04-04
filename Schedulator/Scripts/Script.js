@@ -1,9 +1,10 @@
 ﻿var colorCount = 0;
-
 /* Alternating color for each course in schedule
  * @param courseCode class for each diff block
  */
+
 function courseAltColor(courseCode) {
+
     var colors = ["#f57722", "#d3d3d3", "#67aded","#f7fe2e", "#d3ffce", "#daa520", "#66cdaa","#cbbeb5"];
     //var randomColor = '#' + (0x1000000 + (Math.random()) * 0xf57722).toString(16).substr(1, 6);
     
@@ -22,11 +23,9 @@ function courseAltColor(courseCode) {
         backgroundColor: shade
     });
 
-
-
 }
 
-<<<<<<< HEAD
+
 var count = 0;
 var courseList;
 var url = '/ScheduleGenerator/CoursesViewJson';
@@ -45,8 +44,9 @@ $(function () {
     $(".removeClass").click(function () {
         //this.addClass("clicked");
         this.parent().hide();
+    });
 
-$(document).ready(function () {
+//$(document).ready(function () {
     $("#courseSequenceRecommend").load('/ScheduleGenerator/StudentsCourseSequence');
 
     $(window).keydown(function (event) {
