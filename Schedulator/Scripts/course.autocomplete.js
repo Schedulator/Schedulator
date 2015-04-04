@@ -3,6 +3,7 @@
 		source: courseList,
 		autoFocus: true,
 		select: function (event, ui) {
+			$("input[name='courseName']").val(ui.item.label);
 			$('#addCourse').click();
 			this.value = "";
 			return false;
@@ -15,7 +16,7 @@
 }
 function checkIfCourseExist(courseName)
 {
-	var courseExist = $.grep(courseList, function (e) { return e.label == courseName; }).length == 1;
+	var courseExist = $.grep(courseList, function (e) { return e.label == courseName.toUpperCase(); }).length == 1;
 	var courseAlreadyAdded = $.inArray(courseName, addedCourseList) == -1
 	if (courseExist && courseAlreadyAdded)
 		return true;
@@ -26,7 +27,6 @@ function checkIfCourseExist(courseName)
 	return false;
 
 }
-var count = 0;
 var courseList;
 var addedCourseList = [];
 $(document).ready(function () {
@@ -34,8 +34,7 @@ $(document).ready(function () {
 		var name = $("input[name='courseName']").val();
 		$("input[name='courseName']").val("");
 		if (checkIfCourseExist(name)) {
-			$("#selectedCourses").append("<div class='col-sm-1 courseBlock'>" + name + "<input name='courseCode[" + count + "]' value='" + name + "' hidden></div>");
-			count++;
+			$("#selectedCourses").append("<div class='col-sm-1 courseBlock'>" + name.toUpperCase() + "<input name='courseCode' value='" + name + "' hidden></div>");
 			addedCourseList.push(name);
 		}		
 	});
@@ -49,6 +48,8 @@ $(document).ready(function () {
 	});
 
 	$(document).on("click", ".courseBlock", function () {
+		addedCourseList.splice($.inArray($(this).text(), addedCourseList), 1);
+		alert(addedCourseList);
 		$(this).closest("div").remove();
 	});
 });
