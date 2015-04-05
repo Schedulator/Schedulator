@@ -5,11 +5,11 @@
             <label for="course">Add Course</label>
             <input type="text" class="form-control" name="courseName" id="suggestion" onkeyup="showHint(this.value)" placeholder="Enter Course">
             <input type="button" id="addCourse" class="btn btn-default" value="Add" />
+            <span style="color:red;" id="addCourseErr" hidden>Please add one or more course.</span>
         </div>
         
     </div>
     <br />
-    <div class="row" id="selectedCourses">
-    </div>
+    <div class="row" id="selectedCourses"></div>
 </div>
 
