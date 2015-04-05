@@ -217,6 +217,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\calendar.png" />
+    <Content Include="Content\img\delete.ico.png" />
     <Content Include="Content\img\progress.png" />
     <Content Include="Content\img\sequence.png" />
     <Content Include="Content\img\transcript.png" />
