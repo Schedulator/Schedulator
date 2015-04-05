@@ -53,7 +53,7 @@ namespace Schedulator.Controllers
             Season season;
             switch (semester)
             {
-                case "Summer": season = Season.Summer1;
+                case "Summer1": season = Season.Summer1;
                     break;
                 case "Fall": season = Season.Fall;
                     break;

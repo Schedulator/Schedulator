@@ -30,7 +30,7 @@
     foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules) {
         <div id="schedCount">#@count</div>
         count++;
-        using (Ajax.BeginForm("RegisterSchedule", "ScheduleGenerator", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess = "reloadCourseSequence" }))
+        using (Ajax.BeginForm("RegisterSchedule", "ScheduleGenerator", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess = "reloadCourseSequence" }, new { @class = "registerScheduleForm" }))
         {
         <!-- Schedules results -->
             <div id="@count.ToString()"></div><!-- EO #result -->

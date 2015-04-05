@@ -48,11 +48,14 @@
 </div>
 <script>
     function ShowSchedules(data) {
-        debugger;
-        alert("here");
         $('#generatedSchedulesContent').empty();
         $('#generatedSchedulesContent').html(data);
+        $('.registerScheduleForm').attr('data-ajax-success', 'ReloadSchedule');
         $('#generatedSchedules').modal('show');
+    }
+    function ReloadSchedule()
+    {
+        alert("here");
     }
     function ManageScheduleSuccess(data) {
         $('#schedule').empty();
