@@ -21,38 +21,6 @@ function courseAltColor(courseCode) {
 
 }
 
-$(document).ready(function () {
-    $("#courseSequenceRecommend").load('/ScheduleGenerator/StudentsCourseSequence');
 
-    $(window).keydown(function (event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-        }
-    });
-
-    $('#showCourseSequence').click(function () {
-        $('#courseSequenceRecommend').show("slow");
-    });
-
-    $('#generateSch').click(function (e) {
-        colorCount = 0;
-
-        if ($('#selectedCourses').is(':empty')) {
-            e.preventDefault();
-            $('#addCourseErr').delay(50).fadeOut().fadeIn('fast');
-            return false;
-        } else {
-            $('#addCourseErr').hide();
-            $('#result').html('');
-            $("#divProcessing").show();
-        }
-    });
-
-    $('#result, #courseSequenceRecommend').bind("DOMSubtreeModified", function () {
-        $("#divProcessing").hide();
-    });
-
-});
 
 

@@ -31,11 +31,11 @@
     {
         <div id="schedCount">#@count</div>
         count++;
-        using (Ajax.BeginForm("RegisterSchedule","ScheduleGenerator", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess ="function() { $('#courseSequenceRecommend').load('/ScheduleGenerator/StudentsCourseSequence');" }))
+        using (Ajax.BeginForm("RegisterSchedule", "ScheduleGenerator", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess = "reloadCourseSequence" }))
         {
         <!-- Schedules results -->
             <div id="@count.ToString()"></div><!-- EO #result -->
-            <input type="submit" name="register" class="btn btn-primary" value="Register">
+            <input type="submit"  name="register" class="btn btn-primary" value="Register">
 
             @Html.Partial("_ScheduleAndLegend", schedule)
         }

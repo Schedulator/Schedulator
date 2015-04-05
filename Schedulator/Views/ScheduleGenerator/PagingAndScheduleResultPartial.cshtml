@@ -28,12 +28,12 @@
             $(document).ready(function () {
                 $(".pagingSchedules").click(function () {
 
-                    $('#form0').attr('data-ajax-update', '#scheduleResult');
-                    $('#form0').attr('data-ajax-success', 'pagingSuccess()');
+                    $('#preferenceScheduleForm').attr('data-ajax-update', '#scheduleResult');
+                    $('#preferenceScheduleForm').attr('data-ajax-success', 'pagingSuccess()');
                     number = $(this).attr('value');
                     $('#pageNumber').val(number);
-                    $('#form0').attr('action', '/ScheduleGenerator/GenerateSchedulesPaging').submit();
-                    $('#form0').attr('action', '/ScheduleGenerator/GenerateSchedules');
+                    $('#preferenceScheduleForm').attr('action', '/ScheduleGenerator/GenerateSchedulesPaging').submit();
+                    $('#preferenceScheduleForm').attr('action', '/ScheduleGenerator/GenerateSchedules');
                    
                 });
             })
