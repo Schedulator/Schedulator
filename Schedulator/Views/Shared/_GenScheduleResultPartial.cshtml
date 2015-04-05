@@ -23,9 +23,9 @@
         </div>
     }
 }
-@if (Model.Schedules != null && Model.NumberOfSchedules != 0) {
-    
-    <div class="alert alert-success flash">  @Model.NumberOfSchedules schedules were successfully generated.</div>
+@if (Model.Schedules != null && Model.Schedules.Count() > 0)
+{
+    <div class="alert alert-success">  @Model.NumberOfSchedules schedules were successfully generated.</div>
 
     foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules) {
         <div id="schedCount">#@count</div>

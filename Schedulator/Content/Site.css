@@ -200,7 +200,15 @@ footer {
     padding:3px 0px 3px 3px;
 }
 
+
+.courseBlock:hover { 
+    background-color: red;
+}
+.pagingSchedules {
+    cursor: pointer;
+}
 .courseBlock #delCourse {
     padding:0;
     margin-left: 4px;
+
 }
