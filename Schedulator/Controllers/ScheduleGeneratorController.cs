@@ -13,7 +13,15 @@ namespace Schedulator.Controllers
     [Authorize]
     public class ScheduleGeneratorController : Controller
     {
-        ApplicationDbContext db = new ApplicationDbContext();
+        public Func<string> GetUserId; //For testing
+        public Func<string, bool> IsInRole; //For testing
+
+        private ApplicationDbContext db = new ApplicationDbContext();
+        public ScheduleGeneratorController()
+        {
+            GetUserId = () => User.Identity.GetUserId();
+            IsInRole = (string role) => User.IsInRole(role);
+        }
         public ActionResult Index()
         {
             return View();
@@ -32,7 +40,7 @@ namespace Schedulator.Controllers
 
         public ActionResult StudentsCourseSequence()
         {
-            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            ApplicationUser user = db.Users.Find(GetUserId());
             
             if(user.Program == null){
                 throw new System.ArgumentNullException("User missing program.");
@@ -74,7 +82,7 @@ namespace Schedulator.Controllers
                         }        
                     }
                     if (noScheduleForSemester)
-                        schedules.Add(new Schedule { ApplicationUser = db.Users.Find(User.Identity.GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = isRegisteredSchedule, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
+                        schedules.Add(new Schedule { ApplicationUser = db.Users.Find(GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = isRegisteredSchedule, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
 
                 }
             }
@@ -152,7 +160,7 @@ namespace Schedulator.Controllers
                 preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             }            
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
-            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            string user = db.Users.Find(GetUserId()).Email;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
@@ -216,7 +224,7 @@ namespace Schedulator.Controllers
                 preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             }
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
-            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            string user = db.Users.Find(GetUserId()).Email;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
