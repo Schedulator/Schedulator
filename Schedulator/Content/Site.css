@@ -202,8 +202,8 @@ footer {
 
 
 .courseBlock:hover { 
-    background-color: #d9534f;
-    border-color: #d43f3a;
+    background-color: #EEB1AF;
+    border-color: #E7928F;
 }
 .pagingSchedules {
     cursor: pointer;
@@ -212,4 +212,22 @@ footer {
     padding:0;
     margin-left: 4px;
 
+}
+
+#mySchedSelect {
+    padding:0;
+    margin:0;
+}
+
+#mySchedSelect li {
+    display:inline-block;
+    margin-right: 30px;
+    padding:0;
+    padding-bottom: 10px;
+    border-right:1px solid #DDD;
+
+}
+
+#mySchedSelect li:last-child {
+    border-right:0;
 }

@@ -1,27 +1,45 @@
 ﻿@model string
+@{ViewBag.Title = "My Schedules";}
+@Html.AntiForgeryToken()
 
-<script src="@Url.Content("~/Scripts/student.schedule.js")" type="text/javascript">
-    
-</script>
+
+<!-- Title -->
+<h2 id="pageTitle">@ViewBag.Title</h2>
+
+
+<div style="clear:both;margin-bottom:20px;margin-top:40px;">
+    <ul id="mySchedSelect">
+        <li>
+            <h3>Fall</h3>
+            <ul>
+                <li class="schedule-semester" semester="RegisteredFall2014"><a tabindex="-1" href="#">2014</a></li>
+            </ul>
+        </li>
+        <li>
+            <h3>Winter</h3>
+            <ul>
+                <li class="schedule-semester" semester="RegisteredWinter2015"><a tabindex="-1" href="#">2015</a></li>
+            </ul>
+        </li>
+        <li>
+            <h3>Summer</h3>
+            <ul>
+                <li class="schedule-semester" semester="RegisteredSummer2015"><a tabindex="-1" href="#">2015</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div id="schedule-div" style="clear:both"></div>
+
+
+
+
+<!-- Script -->
+<script src="@Url.Content("~/Scripts/student.schedule.js")" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         var url = '/StudentSchedule/GetSchedule?semester=@Model';
         $("#schedule-div").load(url);
     });
-    </script>
-<div class="jumbotron">
-    <div class="dropdown pull-right">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">View Schedules</a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li class="schedule-semester" semester="RegisteredFall2014"><a tabindex="-1" href="#">Fall 2014</a></li>
-            <li class="schedule-semester" semester="RegisteredWinter2015"><a tabindex="-1" href="#">Winter 2015</a></li>
-            <li class="schedule-semester" semester="RegisteredSummer2015"><a tabindex="-1" href="#">Summer 2015</a></li>
-        </ul>
-    </div>
-
-    <div id="schedule-div">
-
-    </div>
-</div>
-
-
+</script>
