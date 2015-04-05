@@ -11,7 +11,8 @@ namespace Schedulator.Models
     {
 
         public List<TranscriptYear> TranscriptYears { get; set; }
-        public List<double> 
+        public List<double> yearGPAs { get; set; }
+        public List<double> semesterGPAs { get; set; }
 
         public class TranscriptYear
         {
@@ -19,6 +20,7 @@ namespace Schedulator.Models
             public List<TranscriptSemester> TranscriptSemesters { get; set; }
             public double totalYearCredits { get; set; }
             public double numeratorYearTotal { get; set; }
+            public double YearGPA { get; set; }
 
 
             public double GetYearGPA()
@@ -53,6 +55,7 @@ namespace Schedulator.Models
                 public List<Enrollment> Enrollments { get; set; }
                 public double totalSemesterCredits { get; set; }
                 public double numeratorSemesterTotal { get; set; }
+                public double SemesterGPA { get; set; }
 
                 public double GetSemesterGPA()
                 {
@@ -136,6 +139,7 @@ namespace Schedulator.Models
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
                                             studentEnrollmentsRemove.RemoveAt(0);
                                         }
+                                        newSemester.SemesterGPA = newSemester.GetSemesterGPA(); // Calculate the semester's GPA
                                         newTranscriptYear.TranscriptSemesters.Add(newSemester); // Add the transcript semester to the transcript year
                                     }
                                     break;
@@ -150,6 +154,7 @@ namespace Schedulator.Models
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
                                             studentEnrollmentsRemove.RemoveAt(0);
                                         }
+                                        newSemester.SemesterGPA = newSemester.GetSemesterGPA(); // Calculate the semester's GPA
                                         newTranscriptYear.TranscriptSemesters.Add(newSemester); // Add the transcript semester to the transcript year
                                     }
                                     break;
@@ -164,6 +169,7 @@ namespace Schedulator.Models
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
                                             studentEnrollmentsRemove.RemoveAt(0);
                                         }
+                                        newSemester.SemesterGPA = newSemester.GetSemesterGPA(); // Calculate the semester's GPA
                                         newTranscriptYear.TranscriptSemesters.Add(newSemester); // Add the transcript semester to the transcript year
                                     }
                                     break;
@@ -178,10 +184,12 @@ namespace Schedulator.Models
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
                                             studentEnrollmentsRemove.RemoveAt(0);
                                         }
+                                        newSemester.SemesterGPA = newSemester.GetSemesterGPA(); // Calculate the semester's GPA
                                         newTranscriptYear.TranscriptSemesters.Add(newSemester); // Add the transcript semester to the transcript year
                                     }
                                     break;
                         }
+                        newTranscriptYear.YearGPA = newTranscriptYear.GetYearGPA();
                         // Add the completed year to the instance variable.
                         TranscriptYears.Add(newTranscriptYear);
                     }
