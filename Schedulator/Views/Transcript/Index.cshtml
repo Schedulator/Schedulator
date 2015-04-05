@@ -23,20 +23,20 @@
                                         @{
                                             foreach (var enrollment in semester.Enrollments)
                                             {
-                                                <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber) @Html.DisplayFor(modelItem => enrollment.getGPA())</li>
+                                                <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber) @Html.DisplayFor(modelItem => enrollment.Grade)</li>
                                             }
 
                                         }
                                     </ul>
                                 </li>
                                 <li style="list-style-type: none"></li>      
-                                <li style="list-style-type: none">Total Semester GPA: @Html.DisplayFor(modelItem => semester.GetSemesterGPA())</li>
+                                <li style="list-style-type: none">Total Semester GPA: @Html.DisplayFor(modelItem => semester.SemesterGPA)</li>
                             }
                         }
                     </ul>
                 </li>
                 <li style="list-style-type: none"></li>
-                <li style="list-style-type: none">Total Year GPA: @Html.DisplayFor(modelItem => year.GetYearGPA())</li>
+                <li style="list-style-type: none">Total Year GPA: @Html.DisplayFor(modelItem => year.YearGPA)</li>
             }
         }
     </ul>
