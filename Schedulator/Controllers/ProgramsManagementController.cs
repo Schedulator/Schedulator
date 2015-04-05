@@ -67,11 +67,6 @@ namespace Schedulator.Controllers
         // GET: ProgramsManagement/Edit/5
         public ActionResult Edit(int? id)
         {
-            //Program management details view model instance
-            ProgramManagementViewModel edit = new ProgramManagementViewModel();
-
-            //Program director instance
-            ProgramDirector progD = new ProgramDirector();
 
             if (id == null)
             {
@@ -80,21 +75,11 @@ namespace Schedulator.Controllers
             //Get the program Id
             Program program = db.Program.Find(id);
 
-            //Get the program Course IDs from the specified program Id
-            var detailedCourseList = progD.getProgramCourseIDs(program.ProgramId);
-
-
-            //Copy elements from list to details  list
-            edit.Courses = detailedCourseList.ToList();
-
-            //Copy program details into details program instance
-            edit.Program = program;
-
             if (program == null)
             {
                 return HttpNotFound();
             }
-            return View(edit);
+            return View(program);
         }
 
         // POST: ProgramsManagement/Edit/5
@@ -102,7 +87,7 @@ namespace Schedulator.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProgramId,ProgramName,ProgramOption,CreditsRequirement,Courses,Credit,Lectures,Prerequisites")] ProgramManagementViewModel program)
+        public ActionResult Edit([Bind(Include = "ProgramId,ProgramName,ProgramOption,CreditsRequirement")] Program program)
         {
             if (ModelState.IsValid)
             {

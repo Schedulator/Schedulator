@@ -189,14 +189,49 @@ footer {
 }
 .courseBlock
 {
-    border-radius: 10px;
+    border-radius: 5px;
+    border: 1px solid #B3E39C;
     color: #3c763d;
     background-color: #dff0d8;
     margin-right: 5px;
     text-align: center;
     cursor: pointer;
+    width:12%;
+    padding:3px 0px 3px 3px;
 }
 
+
 .courseBlock:hover { 
-    background-color: #F0D8DD;
+
+/*    background-color: #F0D8DD;*/
+
+    background-color: #EEB1AF;
+    border-color: #E7928F;
+}
+.pagingSchedules {
+    cursor: pointer;
+}
+.courseBlock #delCourse {
+    padding:0;
+    margin-left: 4px;
+
+}
+
+#mySchedSelect {
+    padding:0;
+    margin:0;
+}
+
+#mySchedSelect li {
+    display:inline-block;
+    margin-right: 30px;
+    padding:0;
+    padding-bottom: 10px;
+    border-right:1px solid #DDD;
+
+}
+
+#mySchedSelect li:last-child {
+    border-right:0;
+
 }

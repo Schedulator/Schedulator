@@ -21,12 +21,31 @@ function checkIfCourseExist(courseName)
 	if (courseExist && courseAlreadyAdded)
 		return true;
 	else if (courseExist)
-		alert("Course already added");
+	    showAddCourseMsg("Course already added");
 	else
-		alert("Course doesn't exist");
+	    showAddCourseMsg("Course doesn't exist");
 	return false;
 
 }
+
+
+/** 
+ * Add course autocomplete message 
+ * @param {String} msg Message to show
+ **/
+function showAddCourseMsg(msg) {
+    msg = "" || msg;
+    $('#addCourseErr').html(msg);
+    $('#addCourseErr').delay(50).fadeOut().fadeIn('fast');  
+}
+
+/*
+ * Hide add course autocomplete message
+ */
+function hideAddCourseMsg() {
+    $('#addCourseErr').hide();
+}
+
 var courseList;
 var addedCourseList = [];
 $(document).ready(function () {
@@ -34,8 +53,12 @@ $(document).ready(function () {
 		var name = $("input[name='courseName']").val();
 		$("input[name='courseName']").val("");
 		if (checkIfCourseExist(name)) {
-			$("#selectedCourses").append("<div class='col-sm-1 courseBlock'>" + name.toUpperCase() + "<input name='courseCode' value='" + name + "' hidden></div>");
-			addedCourseList.push(name);
+		    $("#selectedCourses").append("<div class='courseBlock col-xs-2'><span>" + name.toUpperCase()
+                                                               + "</span><input name='courseCode' value='"
+                                                               + name + "' hidden> "
+                                                               + "<span id='delCourse'> <img src='/Content/img/delete.ico.png' /><span></div>");
+		    addedCourseList.push(name);
+		    $('#addCourseErr').hide();
 		}		
 	});
 
@@ -48,6 +71,7 @@ $(document).ready(function () {
 	});
 
 	$(document).on("click", ".courseBlock", function () {
+	    hideAddCourseMsg();
 		addedCourseList.splice($.inArray($(this).text(), addedCourseList), 1);
 		$(this).closest("div").remove();
 	});

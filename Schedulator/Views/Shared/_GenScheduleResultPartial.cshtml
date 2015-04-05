@@ -1,6 +1,6 @@
 ﻿@model Schedulator.Models.ScheduleGenerator
 @{
-    var count = 1;
+    var count = Model.CurrentPageNumber + 1;
 }
 @if (Model.PrequisitesStudentNeedsForCourses.Count() > 0)
 {
@@ -23,35 +23,18 @@
         </div>
     }
 }
-@if (Model.Schedules == null || Model.Schedules.Count() == 0)
+@if (Model.Schedules != null && Model.Schedules.Count() > 0)
 {
-    <div class="alert alert-danger">
-        Unfortunately no Schedules were possible with the selected courses and options. Some Courses might not be available during the selected semester or during the specified time. 
-        It is also possible that the courses selected do not have any combinations where there isn't a time conflict.
-    </div>
-}
-else if (Model.Schedules != null)
-{
-    <div class="alert alert-success">  @Model.Schedules.Count() schedules were successfully generated.</div>
-    if (@Model.NumberOfSchedules > 40)
-    {
-        <ul class="pagination">
-            @for (int i = 0; i <= Model.NumberOfSchedules; i += 40)
-            { 
-            <li><a class="pagingSchedules" style="cursor:pointer">@i - @(i+40)</a></li>
-            }
-        </ul>
-    }
-    
-    foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules)
-    {
+    <div class="alert alert-success">  @Model.NumberOfSchedules schedules were successfully generated.</div>
+
+    foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules) {
         <div id="schedCount">#@count</div>
         count++;
-        using (Ajax.BeginForm("RegisterSchedule","ScheduleGenerator", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess ="function() { $('#courseSequenceRecommend').load('/ScheduleGenerator/StudentsCourseSequence');" }))
+        using (Ajax.BeginForm("RegisterSchedule", "ScheduleGenerator", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess = "reloadCourseSequence" }, new { @class = "registerScheduleForm" }))
         {
         <!-- Schedules results -->
             <div id="@count.ToString()"></div><!-- EO #result -->
-            <input type="submit" name="register" class="btn btn-primary" value="Register">
+            <input type="submit"  name="register" class="btn btn-primary" value="Register">
 
             @Html.Partial("_ScheduleAndLegend", schedule)
         }
@@ -59,14 +42,3 @@ else if (Model.Schedules != null)
     }
 }
 
-<script>
-
-    $(document).ready(function()
-    {
-        $(".pagingSchedules").click(function () {
-            alert('ere');
-        });
-    })
-
-
-</script>

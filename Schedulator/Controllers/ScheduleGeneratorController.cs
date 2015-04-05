@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Diagnostics;
+using System.Data.Entity.Validation;
 
 namespace Schedulator.Controllers
 {
@@ -79,20 +80,32 @@ namespace Schedulator.Controllers
             }
             foreach (Schedule schedule in schedules)
             {
-                if (isRegisteredSchedule)
-                    schedule.RegisterSchedule();
-                else
-                    schedule.SaveSchedule();
-
+                schedule.RegisterSchedule();
                 db.Schedule.Add(schedule);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException dbEx)
+                {
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            System.Console.WriteLine("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        }
+                    }
+                }
             }
 
             return PartialView("RegisterSuccessPartial");
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
-            
+            if(courseCode == null){
+                return Json(new { Success = false, Message = "Please add one or more course." });
+            }
+
             Season season;
             switch (semester)
             {
@@ -143,16 +156,14 @@ namespace Schedulator.Controllers
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            scheduleGenerator.Schedules.OrderByDescending(n => n.FirstOrDefault().Days.Count());
             stopWatch.Stop();
             long duration = stopWatch.ElapsedMilliseconds;
-            try
-            {
-                if (scheduleGenerator.Schedules.Count() > 40)
-                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(0, 40);
-            }
-            catch { }
-            
-            return PartialView("_GenScheduleResultPartial", scheduleGenerator);
+            if (scheduleGenerator.Schedules.Count() > 20)
+                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(0, 20);
+
+
+            return PartialView("PagingAndScheduleResultPartial", scheduleGenerator);
         }
         [HttpPost]
         public ActionResult GenerateSchedulesPaging(List<String> courseCode, String semester, List<String> timeOption, int pageNumber)
@@ -211,13 +222,9 @@ namespace Schedulator.Controllers
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
             stopWatch.Stop();
             long duration = stopWatch.ElapsedMilliseconds;
-            try
-            {
-                if (scheduleGenerator.Schedules.Count() > 40)
-                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, pageNumber + 40);
-            }
-            catch { }
-
+            if (scheduleGenerator.Schedules.Count() > 20)
+                scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, pageNumber + 20);
+            scheduleGenerator.CurrentPageNumber = pageNumber;
             return PartialView("_GenScheduleResultPartial", scheduleGenerator);
         }
 

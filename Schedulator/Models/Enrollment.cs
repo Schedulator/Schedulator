@@ -37,7 +37,7 @@ namespace Schedulator.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (!(new string[] {"A+","A","A-","B+","B","B-","C+","C","C-","D+","D","D-"}.Contains(Grade)))
+            if (!(new string[] {"A+","A","A-","B+","B","B-","C+","C","C-","D+","D","D-", null}.Contains(Grade)))
                 
             {
                 yield return new ValidationResult("Grade is invalid");
