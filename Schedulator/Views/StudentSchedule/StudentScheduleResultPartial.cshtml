@@ -47,6 +47,8 @@
     </div>
 </div>
 <script>
+    var counter = 0;
+    var count = 0;
     function ShowSchedules(data) {
         $('#generatedSchedulesContent').empty();
         $('#generatedSchedulesContent').html(data);
@@ -55,15 +57,17 @@
     }
     function ReloadSchedule()
     {
-        alert("here");
+        location.reload();
+        $('#generatedSchedules').modal('hide');
+        counter = 0;
+
     }
     function ManageScheduleSuccess(data) {
         $('#schedule').empty();
         $('#schedule').html(data);
     }
     $(document).ready(function () {
-        var counter = 0;
-        var count = 0;
+
         $('#addCoursesButton').on('click', function () {
             $('#collapse-schedule').collapse('toggle');
         });
