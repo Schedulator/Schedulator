@@ -200,3 +200,6 @@ footer {
 .courseBlock:hover { 
     background-color: red;
 }
+.pagingSchedules{
+    cursor: pointer;
+}
