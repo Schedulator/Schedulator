@@ -34,8 +34,12 @@ $(document).ready(function () {
 		var name = $("input[name='courseName']").val();
 		$("input[name='courseName']").val("");
 		if (checkIfCourseExist(name)) {
-			$("#selectedCourses").append("<div class='col-sm-1 courseBlock'>" + name.toUpperCase() + "<input name='courseCode' value='" + name + "' hidden></div>");
-			addedCourseList.push(name);
+		    $("#selectedCourses").append("<div class='courseBlock col-xs-2'><span>" + name.toUpperCase()
+                                                               + "</span><input name='courseCode' value='"
+                                                               + name + "' hidden> "
+                                                               + "<span id='delCourse'> <img src='/Content/img/delete.ico.png' /><span></div>");
+		    addedCourseList.push(name);
+		    $('#addCourseErr').hide();
 		}		
 	});
 

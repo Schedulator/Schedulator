@@ -102,7 +102,10 @@ namespace Schedulator.Controllers
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
-            
+            if(courseCode == null){
+                return Json(new { Success = false, Message = "Please add one or more course." });
+            }
+
             Season season;
             switch (semester)
             {
