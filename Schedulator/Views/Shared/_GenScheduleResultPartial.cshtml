@@ -23,12 +23,11 @@
         </div>
     }
 }
-@if (Model.Schedules != null)
-{
-    <div class="alert alert-success">  @Model.NumberOfSchedules schedules were successfully generated.</div>
+@if (Model.Schedules != null && Model.NumberOfSchedules != 0) {
+    
+    <div class="alert alert-success flash">  @Model.NumberOfSchedules schedules were successfully generated.</div>
 
-    foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules)
-    {
+    foreach (List<Schedulator.Models.Schedule> schedule in Model.Schedules) {
         <div id="schedCount">#@count</div>
         count++;
         using (Ajax.BeginForm("RegisterSchedule","ScheduleGenerator", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = count.ToString(), OnSuccess ="function() { $('#courseSequenceRecommend').load('/ScheduleGenerator/StudentsCourseSequence');" }))

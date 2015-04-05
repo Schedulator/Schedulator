@@ -39,11 +39,11 @@ $(document).ready(function () {
         colorCount = 0;
 
         if ($('#selectedCourses').is(':empty')) {
+            showAddCourseMsg('Please add one or more course.');
             e.preventDefault();
-            $('#addCourseErr').delay(50).fadeOut().fadeIn('fast');
             return false;
         } else {
-            $('#addCourseErr').hide();
+            hideAddCourseMsg();
             $('#result').html('');
             $("#divProcessing").show();
         }
@@ -53,6 +53,17 @@ $(document).ready(function () {
         $("#divProcessing").hide();
     });
 
+
+    /** Flashing **/
+    window.setTimeout(function () {
+        $(".flash").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 5000);
+
 });
+
+
+
 
 
