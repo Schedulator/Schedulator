@@ -23,7 +23,7 @@
                                         @{
                                             foreach (var enrollment in semester.Enrollments)
                                             {
-                                                <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber) &nbsp;&nbsp;&nbsp; @Html.DisplayFor(modelItem => enrollment.getGPA())</li>
+                                                <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber) @Html.DisplayFor(modelItem => enrollment.getGPA())</li>
                                             }
 
                                         }
