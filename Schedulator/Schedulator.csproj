@@ -327,6 +327,8 @@
     <Content Include="Views\StudentManagement\AddGradeToEnrollment.cshtml" />
     <Content Include="Views\Test\ProgramList.cshtml" />
     <Content Include="Views\Shared\_CouresLectureAndTutorialPartial.cshtml" />
+    <Content Include="Views\Shared\_PagingAndScheduleResultPartial.cshtml" />
+    <Content Include="Views\ScheduleGenerator\PagingAndScheduleResultPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

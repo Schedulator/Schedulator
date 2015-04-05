@@ -43,7 +43,7 @@ $(document).ready(function () {
     $('#generateSch').click(function () {
         colorCount = 0;
     });
-    $('#generateSch, #showCourseSequence').click(function () {
+    $('#generateSch').click(function () {
         $('#result').html('');
         $("#divProcessing").show();
     });

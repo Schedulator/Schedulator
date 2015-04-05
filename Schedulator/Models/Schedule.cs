@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -14,11 +15,34 @@ namespace Schedulator.Models
         public virtual ApplicationUser ApplicationUser {get; set;}
         public virtual ICollection<Enrollment> Enrollments { get; set; }
 
-
-        public bool SaveSchedule()
+        [NotMapped]
+        public List<TimeBlock.day> Days = new List<TimeBlock.day>();
+        
+        public void FillDayList()
         {
-            ApplicationDbContext db = new ApplicationDbContext();
-            return true;
+            foreach (Enrollment enrollment in Enrollments)
+            {
+                if (Days.Contains(enrollment.Section.Lecture.FirstDay))
+                    Days.Add(enrollment.Section.Lecture.FirstDay);
+                if (Days.Contains(enrollment.Section.Lecture.SecondDay))
+                    Days.Add(enrollment.Section.Lecture.SecondDay);
+                if (enrollment.Section.Tutorial != null)
+                {
+                    if (Days.Contains(enrollment.Section.Tutorial.FirstDay))
+                        Days.Add(enrollment.Section.Tutorial.FirstDay);
+                    if (Days.Contains(enrollment.Section.Tutorial.FirstDay))
+                        Days.Add(enrollment.Section.Tutorial.FirstDay);
+                }
+                if (enrollment.Section.Lab != null)
+                {
+                    if (Days.Contains(enrollment.Section.Lab.FirstDay))
+                        Days.Add(enrollment.Section.Lab.FirstDay);
+                    if (Days.Contains(enrollment.Section.Lab.FirstDay))
+                        Days.Add(enrollment.Section.Lab.FirstDay);
+                }
+                if (Days.Count() == 5)
+                    return;
+            }
         }
         public void RemoveCourseFromSchedule(List<int> sectionIds, ApplicationDbContext db)
         {

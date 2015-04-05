@@ -1,0 +1,45 @@
+﻿@model Schedulator.Models.ScheduleGenerator
+@if (Model.Schedules == null || Model.Schedules.Count() == 0)
+{
+    <div class="alert alert-danger">
+        Unfortunately no Schedules were possible with the selected courses and options. Some Courses might not be available during the selected semester or during the specified time.
+        It is also possible that the courses selected do not have any combinations where there isn't a time conflict.
+    </div>
+}
+@if (@Model.NumberOfSchedules > 20)
+{
+    <div>
+        <ul class="pagination">
+            @for (int i = 0; i <= Model.NumberOfSchedules; i += 20)
+            {
+                <li><a class="pagingSchedules" value="@i" style="cursor:pointer">@(i + 1) - @(i + 20)</a></li>
+            }
+        </ul>
+    </div>
+}
+        
+        <div id="scheduleResult">
+            @Html.Partial("_GenScheduleResultPartial", Model)
+
+        </div>
+
+        <script>
+
+            $(document).ready(function () {
+                $(".pagingSchedules").click(function () {
+
+                    $('#form0').attr('data-ajax-update', '#scheduleResult');
+                    $('#form0').attr('data-ajax-success', 'pagingSuccess()');
+                    number = $(this).attr('value');
+                    $('#pageNumber').val(number);
+                    $('#form0').attr('action', '/ScheduleGenerator/GenerateSchedulesPaging').submit();
+                    $('#form0').attr('action', '/ScheduleGenerator/GenerateSchedules');
+                   
+                });
+            })
+            function pagingSuccess()
+            {
+
+            }
+
+        </script>

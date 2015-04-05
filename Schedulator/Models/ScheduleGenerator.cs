@@ -10,6 +10,7 @@ namespace Schedulator.Models
         public Preference Preference { get; set; }
         public List<List<Schedule>> Schedules { get; set; }
         public int NumberOfSchedules { get; set; }
+        public int CurrentPageNumber { get; set; }
         public List<PrequisitesStudentNeedsForCourse> PrequisitesStudentNeedsForCourses { get; set; }
         private List<Course> CoursesStudentCanTake = new List<Course>();
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -103,6 +104,8 @@ namespace Schedulator.Models
                 {
                     if (schedule.Enrollments.Count() == 0)
                         Schedules.LastOrDefault().Remove(schedule);
+                    else
+                        schedule.FillDayList();
                 }
             }
 

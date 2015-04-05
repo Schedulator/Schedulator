@@ -15,6 +15,7 @@
 
         @using (Ajax.BeginForm("GenerateSchedules",new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "result" })){
             <!-- Options -->
+        <input id="pageNumber" type="hidden" value="0" name="pageNumber" />
             <div id="prefOptions">
                 <!-- Semesters -->
                 <div class="prefs">
@@ -54,8 +55,8 @@
     <div id="divProcessing" style="display:none;">
         Processing . . . <img src="~/Content/img/ajax-loader.gif" />
     </div>
-
     <!-- Schedules results -->
+    <div id="paging"></div>
     <div id="result"></div><!-- EO #result -->
 
 
