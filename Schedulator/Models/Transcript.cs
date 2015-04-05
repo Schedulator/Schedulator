@@ -11,6 +11,7 @@ namespace Schedulator.Models
     {
 
         public List<TranscriptYear> TranscriptYears { get; set; }
+        public List<double> 
 
         public class TranscriptYear
         {
@@ -18,6 +19,7 @@ namespace Schedulator.Models
             public List<TranscriptSemester> TranscriptSemesters { get; set; }
             public double totalYearCredits { get; set; }
             public double numeratorYearTotal { get; set; }
+
 
             public double GetYearGPA()
             {
@@ -113,7 +115,7 @@ namespace Schedulator.Models
                 // For every year in which the student has been enrolled
                 foreach (int year in studentEnrollmentYearSpan)
                 {
-                    TranscriptYear newTranscriptYear = new TranscriptYear();
+                    TranscriptYear newTranscriptYear = new TranscriptYear { TranscriptSemesters = new List<TranscriptYear.TranscriptSemester>() };
                     TranscriptYear.TranscriptSemester newSemester; // Create a dummy semester
                     newTranscriptYear.Year = year;
 
@@ -121,15 +123,14 @@ namespace Schedulator.Models
                     while (studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year) 
                     { 
                         // Check the first enrollment's season type. This means that the following couple of enrollments should also match this season type. Therefore
-                        switch (studentEnrollments.FirstOrDefault().Schedule.Semester.Season)
+                        switch (studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season)
                         {
                             case Season.Winter:
                                     {
-                                        newSemester = new TranscriptYear.TranscriptSemester(); // Instantiate the dummy semester
-                                        newSemester.Season = Season.Winter; // Add its season type
+                                        newSemester = new TranscriptYear.TranscriptSemester { Season = Season.Winter, Enrollments = new List<Enrollment>() }; // Instantiate the dummy semester, set its season and instantiate its list of enrollments
                                         
                                         // While the first enrollment's type is still of the desired type and its year is the desired year
-                                        while (studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Winter && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year && studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null/* CHECK FOR NULL*/)
+                                        while (studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null/* CHECK FOR NULL*/ && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Winter && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year)
                                         {
                                             // Add the desired enrollment in the semester and remove the enrollment from the checklist.
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
@@ -140,11 +141,10 @@ namespace Schedulator.Models
                                     break;
                             case Season.Fall:
                                     {
-                                        newSemester = new TranscriptYear.TranscriptSemester(); // Instantiate the dummy semester
-                                        newSemester.Season = Season.Fall; // Add its season type
+                                        newSemester = new TranscriptYear.TranscriptSemester { Season = Season.Fall, Enrollments = new List<Enrollment>() }; // Instantiate the dummy semester, set its season and instantiate its list of enrollments
 
                                         // While the first enrollment's type is still of the desired type and its year is the desired year
-                                        while (studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Fall && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year && studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null /* CHECK FOR NULL*/)
+                                        while (studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null/* CHECK FOR NULL*/ && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Fall && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year)
                                         {
                                             // Add the desired enrollment in the semester and remove the enrollment from the checklist.
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
@@ -155,11 +155,10 @@ namespace Schedulator.Models
                                     break;
                             case Season.Summer1:
                                     {
-                                        newSemester = new TranscriptYear.TranscriptSemester(); // Instantiate the dummy semester
-                                        newSemester.Season = Season.Summer1; // Add its season type
+                                        newSemester = new TranscriptYear.TranscriptSemester { Season = Season.Summer1, Enrollments = new List<Enrollment>() }; // Instantiate the dummy semester, set its season and instantiate its list of enrollments
 
                                         // While the first enrollment's type is still of the desired type and its year is the desired year
-                                        while (studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Summer1 && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year && studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null /* CHECK FOR NULL*/)
+                                        while (studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null/* CHECK FOR NULL*/ && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Summer1 && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year)
                                         {
                                             // Add the desired enrollment in the semester and remove the enrollment from the checklist.
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
@@ -170,11 +169,10 @@ namespace Schedulator.Models
                                     break;
                             case Season.Summer2:
                                     {
-                                        newSemester = new TranscriptYear.TranscriptSemester(); // Instantiate the dummy semester
-                                        newSemester.Season = Season.Summer2; // Add its season type
+                                        newSemester = new TranscriptYear.TranscriptSemester { Season = Season.Summer2, Enrollments = new List<Enrollment>() }; // Instantiate the dummy semester, set its season and instantiate its list of enrollments
 
                                         // While the first enrollment's type is still of the desired type and its year is the desired year
-                                        while (studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Summer2 && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year && studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null /* CHECK FOR NULL*/)
+                                        while (studentEnrollmentsRemove.Count != 0 && studentEnrollmentsRemove != null/* CHECK FOR NULL*/ && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.Season == Season.Summer2 && studentEnrollmentsRemove.FirstOrDefault().Schedule.Semester.SemesterStart.Year == year)
                                         {
                                             // Add the desired enrollment in the semester and remove the enrollment from the checklist.
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
@@ -189,6 +187,8 @@ namespace Schedulator.Models
                     }
                 }
             }
+
+
         }
 
       
