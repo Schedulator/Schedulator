@@ -7,11 +7,12 @@
 <h1>Student Transcript</h1>
 
 @{
+   
     <ul>
         @{
             foreach (var year in Model.TranscriptYears)
             {
-                <li>
+                <li style="list-style-type: none">
                     Year of @Html.DisplayFor(model => year.Year)
                     <ul>
                         @{
@@ -23,21 +24,44 @@
                                         @{
                                             foreach (var enrollment in semester.Enrollments)
                                             {
-                                                <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber) @Html.DisplayFor(modelItem => enrollment.Grade)</li>
+                                                if (enrollment.Grade != null)
+                                                {
+                                                    <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber) @Html.DisplayFor(modelItem => enrollment.Grade)</li>
+                                                }
+                                                else
+                                                {
+                                                    <li>@Html.DisplayFor(modelItem => enrollment.Course.CourseLetters) @Html.DisplayFor(modelItem => enrollment.Course.CourseNumber)</li>
+                                                }
                                             }
-
                                         }
                                     </ul>
                                 </li>
-                                <li style="list-style-type: none"></li>      
-                                <li style="list-style-type: none">Total Semester GPA: @Html.DisplayFor(modelItem => semester.SemesterGPA)</li>
+                               
+                                    if (semester.SemesterGPA > -1)
+                                    {
+                                        <li style="list-style-type: none">Total Semester GPA: @Html.DisplayFor(modelItem => semester.SemesterGPA)</li>
+                                    }
+                                    else
+                                    {
+                                        <li style="list-style-type: none"><br /></li>
+                                    }
+                                
+                                <li style="list-style-type: none"><br /></li>
                             }
                         }
                     </ul>
                 </li>
-                <li style="list-style-type: none"></li>
-                <li style="list-style-type: none">Total Year GPA: @Html.DisplayFor(modelItem => year.YearGPA)</li>
+               
+                    if (year.YearGPA > -1)
+                    {
+                        <li style="list-style-type: none">Total Year GPA: @Html.DisplayFor(modelItem => year.YearGPA)</li>
+                    }
+                    else
+                    {
+                        <li style="list-style-type: none"><br /></li>
+                    }
+                    <li style="list-style-type: none"><br /></li>
+                }
             }
-        }
     </ul>
 }
