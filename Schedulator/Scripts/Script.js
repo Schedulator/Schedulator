@@ -4,8 +4,7 @@
  * @param courseCode class for each diff block
  */
 function courseAltColor(courseCode) {
-    var colors = ["#FAB586", "#d3d3d3", "#67aded", "#f7fe2e", "#d3ffce", "#daa520", "#66cdaa", "#cbbeb5"];
-    //var randomColor = '#' + (0x1000000 + (Math.random()) * 0xf57722).toString(16).substr(1, 6);
+    var colors = ["#FAB586", "#DFDFDF", "#90C3F2", "#F9FE67", "#DFFFDB", "#E4BE5D", "#90DBC1", "#D9D0C9"];
     
     if (colors[colorCount] == undefined || typeof colors[colorCount] == "undefined") {
         colorCount = 0;
