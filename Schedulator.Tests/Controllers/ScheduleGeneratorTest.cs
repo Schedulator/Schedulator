@@ -288,6 +288,161 @@ namespace Schedulator.Tests.Controllers
 
         }
 
+        /*------------"GenerateScheduleModelWithCourses()" method testing------------------*/
+        [TestMethod]
+        public void VerifyGenerateScheduleModelWithVariousCourses()
+        {
+
+            List<Course> course = new List<Course>();
+
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault(), EndTime = 1440 };
+            List<Course> courses = db.Courses.ToList();
+            preference.Courses = new List<Course>();
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 232 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 248 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 201 && n.CourseLetters == "ENGR").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 213 && n.CourseLetters == "ENGR").FirstOrDefault());
+            ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
+
+            Program program = db.Program.FirstOrDefault();
+
+            scheduleGenerator.GenerateSchedules(db.Enrollment.ToList());
+
+            // We should expect more than one schedule
+            Assert.IsTrue(scheduleGenerator.Schedules.Count() >= 1);
+
+            // Test some other courses with another season
+            preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Winter).FirstOrDefault(), EndTime = 1440 };
+            preference.Courses = new List<Course>();
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 249 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 233 && n.CourseLetters == "ENGR").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 228 && n.CourseLetters == "SOEN").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 287 && n.CourseLetters == "SOEN").FirstOrDefault());
+            scheduleGenerator = new ScheduleGenerator { Preference = preference };
+
+            program = db.Program.FirstOrDefault();
+
+            scheduleGenerator.GenerateSchedules(db.Enrollment.ToList());
+
+            // We should expect more than one schedule
+            Assert.IsTrue(scheduleGenerator.Schedules.Count() >= 1);
+
+        }
+        /*------------"GenerateScheduleHaveNoTimeConflict()" method testing------------------*/
+        [TestMethod]
+        public void VerifyGenerateScheduleHaveNoTimeConflict()
+        {
+            // Generate a bunch of schedules and verify that none of them have a time conflict
+            List<Course> course = new List<Course>();
+
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault(), EndTime = 1440 };
+            List<Course> courses = db.Courses.ToList();
+            preference.Courses = new List<Course>();
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 232 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 248 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 201 && n.CourseLetters == "ENGR").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 213 && n.CourseLetters == "ENGR").FirstOrDefault());
+            ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
+
+            Program program = db.Program.FirstOrDefault();
+
+            scheduleGenerator.GenerateSchedules(db.Enrollment.ToList());
+
+            // We should expect more than one schedule
+            foreach (Schedule schedule in scheduleGenerator.Schedules.FirstOrDefault())
+            {
+                List<Section> sectionsInSchedule = new List<Section>();
+                foreach (Enrollment enrollment in schedule.Enrollments)
+                {
+                    Assert.IsTrue(scheduleGenerator.CheckIfTimeConflict(sectionsInSchedule, enrollment.Section));
+                    sectionsInSchedule.Add(enrollment.Section);
+                }
+            }
+        }
+        /*------------"GenerateNoScheduleModelBecauseTimeConflict()" method testing------------------*/
+        [TestMethod]
+        public void VerifyGenerateNoPossibleSchedulesModel()
+        {
+            // We set the end time to 720 minutes, from functional testing and looking at the data we expect there to be no possible schedules with these constraints
+            List<Course> course = new List<Course>();
+
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault(), EndTime = 720 };
+            List<Course> courses = db.Courses.ToList();
+            preference.Courses = new List<Course>();
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 232 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 248 && n.CourseLetters == "COMP").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 201 && n.CourseLetters == "ENGR").FirstOrDefault());
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 213 && n.CourseLetters == "ENGR").FirstOrDefault());
+            ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
+
+            Program program = db.Program.FirstOrDefault();
+
+            scheduleGenerator.GenerateSchedules(db.Enrollment.ToList());
+
+            // We should expect more than one schedule
+            Assert.IsTrue(scheduleGenerator.Schedules.Count() == 0);
+
+        }
+
+        /*------------"GenerateNoScheduleModelBecauseNoCourseNotOfferedInSelectedSemester()" method testing------------------*/
+        [TestMethod]
+        public void VerifyGenerateNoPossibleSchedulesBecauseNoCourseOfferedModel()
+        {
+            // We try to generate a schedule with a course that isn't offered in the selected semester
+            List<Course> course = new List<Course>();
+
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault(), EndTime = 720 };
+            List<Course> courses = db.Courses.ToList();
+            preference.Courses = new List<Course>();
+            preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == 228 && n.CourseLetters == "COMP").FirstOrDefault());
+            ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
+
+            Program program = db.Program.FirstOrDefault();
+
+            scheduleGenerator.GenerateSchedules(db.Enrollment.ToList());
+
+            // We should expect more than one schedule
+            Assert.IsTrue(scheduleGenerator.Schedules.Count() == 0);
+
+        }
+
+        /*------------"GenerateScheduleAndRegisterSchedule()" method testing------------------*/
+        [TestMethod]
+        public void verifyGenerateAndRegisterScheduleWithController()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            string userId = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault().Id;
+            ScheduleGeneratorController testScheGenCon = new ScheduleGeneratorController()
+            {
+                GetUserId = () => userId,
+                IsInRole = (role) => true
+            };
+            List<string> courseCodes = new List<string> { "COMP 232", "COMP 248", "ENGR 201", "ENGR 213" };
+            ViewResult view = testScheGenCon.GenerateSchedules(courseCodes, "Fall", null) as ViewResult;
+            ScheduleGenerator schedGenerator = testScheGenCon.scheduleGenerator;
+
+            testScheGenCon.sectionIds = new List<int>();
+
+            Schedule scheduleToRegister = schedGenerator.Schedules.FirstOrDefault().FirstOrDefault();
+            foreach (Enrollment enrollmentsInSchedule in scheduleToRegister.Enrollments)
+                testScheGenCon.sectionIds.Add(enrollmentsInSchedule.Section.SectionId);
+
+            testScheGenCon.RegisterSchedule();
+            ApplicationUser user = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault();
+            Schedule registeredSchedule = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault().Schedules.Where(n => n.Semester.SemesterID == scheduleToRegister.Semester.SemesterID).FirstOrDefault();
+
+            // Check if the schedule from the db is the same that was generated and saved
+            for (int i = 0; i < registeredSchedule.Enrollments.Count(); i++)
+                Assert.IsTrue(registeredSchedule.Enrollments.ToList()[i].Section.SectionId == scheduleToRegister.Enrollments.ToList()[i].Section.SectionId);
+        }
 
 
 
