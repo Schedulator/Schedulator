@@ -35,10 +35,7 @@ namespace Schedulator.Tests.Controllers
                 courseViews.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, label = course.CourseLetters + " " + course.CourseNumber });
             }
 
-
             string studentExpected = new JavaScriptSerializer().Serialize(courseViews);
-
-
 
             //Create new controller object, call "CoursesViewJson()" method
             ScheduleGeneratorController testSchedGenCon = new ScheduleGeneratorController();
@@ -223,8 +220,7 @@ namespace Schedulator.Tests.Controllers
             ActionResult studentResult = testSchedGenCon1.GenerateSchedules(null, "Fall", null);
 
             //Create JSON object of alert message
-            //ActionResult studentExpected = Json(new { Success = false, Message = "Please add one or more courses." });
-            JsonResult studentExpected = null;
+            string studentExpected = new JavaScriptSerializer().Serialize(new { Success = false, Message = "Please add one or more courses." });
             //Check if method generates appropriate alert message
             Assert.AreEqual(studentResult, studentExpected);
         }
@@ -281,7 +277,9 @@ namespace Schedulator.Tests.Controllers
 
             //Call "GenerateSchedules()" method specifying "Fall" as the semester
             //ActionResult studentExpected = Json(new { Success = false, Message = "Please add a time option." });
-            JsonResult studentExpected = null;
+
+
+            string studentExpected = new JavaScriptSerializer().Serialize(new { Success = false, Message = "Please add a time option." });
 
             //Check if method generates appropriate schedule
             Assert.AreEqual(studentResult, studentExpected);
