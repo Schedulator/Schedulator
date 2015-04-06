@@ -16,7 +16,11 @@ namespace Schedulator.Controllers
             return View("Index",null,semester);
         }
         public ActionResult GetSchedule(string semester)
-        {   
+        {
+            if (semester == null)
+            {
+                throw new System.ArgumentNullException("Please enter a semester.");
+            }
             List<Schedule> schedules = new List<Schedule>();
             string user = db.Users.Find(User.Identity.GetUserId()).Email;
             User.Identity.GetUserId();
@@ -50,6 +54,16 @@ namespace Schedulator.Controllers
         }
         public ActionResult GenerateSchedules(List<int> scheduleIds, List<string> courseCode, string semester)
         {
+            if (scheduleIds == null)
+            {
+                throw new ArgumentNullException("Please enter valid schedule ID(s).");
+            }
+
+            if (courseCode == null)
+            {
+                throw new ArgumentNullException("Please enter valid course code(s).");
+            }
+            
             Season season;
             switch (semester)
             {

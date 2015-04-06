@@ -141,6 +141,7 @@ namespace Schedulator.Tests.Controllers
             ScheduleGeneratorController testSchedGenCon1 = new ScheduleGeneratorController();
             ActionResult studentResult = testSchedGenCon1.StudentsCourseSequence();
 
+            Assert.Equals(1, 1);
         }
 
 
