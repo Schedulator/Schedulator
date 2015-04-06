@@ -27,6 +27,22 @@
                         {
                             <li><span class="label label-default">@courseSequence.Course.CourseLetters @courseSequence.Course.CourseNumber</span></li>
                         }
+                        else if (courseSequence.OtherOptions.Count() > 0)
+                        {
+                            <li>
+                                @foreach (Schedulator.Models.CourseSequence courseSequenceOtherOption in courseSequence.OtherOptions)
+                                {
+                                    if (courseSequenceOtherOption.Course == null)
+                                    {
+                                        <span class="label label-default">@courseSequenceOtherOption.ElectiveType.DisplayName()</span>
+                                    }
+                                    else
+                                    { 
+                                    <span class="label label-default">@courseSequenceOtherOption.Course.CourseLetters @courseSequenceOtherOption.Course.CourseNumber</span>
+                                    }
+                                }
+                            </li>
+                        }
                         else
                         {
                             <li><span class="label label-default">@courseSequence.ElectiveType.DisplayName()</span></li>
@@ -60,6 +76,22 @@
                         if (courseSequence.Course != null)
                         {
                             <li><span class="label label-default">@courseSequence.Course.CourseLetters @courseSequence.Course.CourseNumber</span></li>
+                        }
+                        else if (courseSequence.OtherOptions.Count() > 0)
+                        {
+                            <li>
+                                @foreach (Schedulator.Models.CourseSequence courseSequenceOtherOption in courseSequence.OtherOptions)
+                                {
+                                    if (courseSequenceOtherOption.Course == null)
+                                    {
+                                        <span class="label label-default">@courseSequenceOtherOption.ElectiveType.DisplayName()</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-default">@courseSequenceOtherOption.Course.CourseLetters @courseSequenceOtherOption.Course.CourseNumber</span>
+                                    }
+                                }
+                            </li>
                         }
                         else
                         {
@@ -95,6 +127,22 @@
                         if (courseSequence.Course != null)
                         {
                             <li><span class="label label-default">@courseSequence.Course.CourseLetters @courseSequence.Course.CourseNumber</span></li>
+                        }
+                        else if (courseSequence.OtherOptions.Count() > 0 )
+                        {
+                            <li>
+                                @foreach (Schedulator.Models.CourseSequence courseSequenceOtherOption in courseSequence.OtherOptions)
+                                {
+                                    if (courseSequenceOtherOption.Course == null)
+                                    {
+                                        <span class="label label-default">@courseSequenceOtherOption.ElectiveType.DisplayName()</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-default">@courseSequenceOtherOption.Course.CourseLetters @courseSequenceOtherOption.Course.CourseNumber</span>
+                                    }
+                                }
+                            </li>
                         }
                         else
                         {
