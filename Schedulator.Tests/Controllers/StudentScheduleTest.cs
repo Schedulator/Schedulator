@@ -16,7 +16,7 @@ namespace Schedulator.Tests.Controllers
         //-----------------------------------"GetSchedule()" method testing----------------------------------------
 
         [TestMethod]
-        public void studentNullSemesterVerifyGetSchedule()
+        public void StudentNullSemesterVerifyGetSchedule()
         {
             //Create new database instance
             ApplicationDbContext db = new ApplicationDbContext();
@@ -40,9 +40,10 @@ namespace Schedulator.Tests.Controllers
             Assert.AreEqual(studentActual, studentExpected);
         }
 
+
          //------------------------------------"ManageSchedule()" method testing---------------------------------------
         [TestMethod]
-        public void nullSectionIdsNullScheduleIdsVerifyManageSchedule()
+        public void NullSectionIdsNullScheduleIdsVerifyManageSchedule()
         {
             //Create new database instance
             ApplicationDbContext db = new ApplicationDbContext();
@@ -71,9 +72,10 @@ namespace Schedulator.Tests.Controllers
             Assert.Equals(nullSectionIdsNullScheduleIdsResult, nullSectionIdsResult);
         }
 
+
         //Test null schedule IDs that the database is unchanged
         [TestMethod]
-        public void unchangedDatabaseVerifyManageSchedule()
+        public void UnchangedDatabaseVerifyManageSchedule()
         {
             //Create new database instance
             ApplicationDbContext db = new ApplicationDbContext();
@@ -109,7 +111,7 @@ namespace Schedulator.Tests.Controllers
 
 
         [TestMethod]
-        public void studentNullSemesterVerifyGenerateSchedule()
+        public void StudentNullSemesterVerifyGenerateSchedule()
         {
             //Create new database instance
             ApplicationDbContext db = new ApplicationDbContext();
@@ -139,9 +141,6 @@ namespace Schedulator.Tests.Controllers
             //Check to make sure function threw appropriate error
             Assert.AreEqual(studentActual, studentExpected);
         }
-
-
-        
 
     }
 }
