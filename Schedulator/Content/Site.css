@@ -224,3 +224,9 @@ footer {
     border-right:0;
 
 }
+
+td.instructorName {
+    text-transform: capitalize;
+    width: 140px;
+
+}

@@ -94,7 +94,7 @@
 
 @helper RenderSections(Schedulator.Models.Section sectionToShow, string radioButtonGroup, bool hideRadioButton)
 {
-    <table sectionid="@sectionToShow.SectionId" style="width:325px;">
+    <table sectionid="@sectionToShow.SectionId" style="width:325px;font-weight:600;">
         <tr>
             @if (!hideRadioButton)
             {
@@ -109,7 +109,7 @@
                 </td>
             }
             <td width="60">Lec @sectionToShow.Lecture.LectureLetter </td>
-            <td style="text-transform:capitalize">@sectionToShow.Lecture.Teacher.ToString().ToLower()</td>
+            <td class="instructorName">@sectionToShow.Lecture.Teacher.ToString().ToLower()</td>
             <td>@sectionToShow.Lecture.ClassRoomNumber</td>
         </tr>
         @if (sectionToShow.Tutorial != null)
