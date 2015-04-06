@@ -187,7 +187,7 @@ namespace Schedulator.Controllers
             string user = db.Users.Find(GetUserId()).Email;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            scheduleGenerator.GenerateSchedules( db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
             scheduleGenerator.Schedules.OrderByDescending(n => n.FirstOrDefault().Days.Count());
             stopWatch.Stop();
             long duration = stopWatch.ElapsedMilliseconds;
@@ -251,7 +251,7 @@ namespace Schedulator.Controllers
             string user = db.Users.Find(GetUserId()).Email;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            scheduleGenerator.GenerateSchedules(db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
             stopWatch.Stop();
             long duration = stopWatch.ElapsedMilliseconds;
             try

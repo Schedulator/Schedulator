@@ -94,8 +94,13 @@ namespace Schedulator.Tests.Controllers
             for (int i = 0; i < registeredSchedule.Enrollments.Count(); i++ )
                 Assert.IsTrue(registeredSchedule.Enrollments.ToList()[i].Section.SectionId == scheduleToRegister.Enrollments.ToList()[i].Section.SectionId);
         }
-        /*-------------
-
+        /*------------"GenerateScheduleModel()" method testing------------------*/
+        [TestMethod]
+        public void verifyGenerateScheduleModel()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ScheduleGenerator scheduleGenerator = new ScheduleGenerator();
+        }
 
 
 

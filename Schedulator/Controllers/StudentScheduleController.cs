@@ -78,7 +78,7 @@ namespace Schedulator.Controllers
             List<List<Section>> sections = new List<List<Section>>();
             foreach( int scheduleId in scheduleIds)
                 db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault().Enrollments.ToList().ForEach(n => sections.Add(new List<Section>(){ n.Section}));
-            scheduleGenerator.GenerateSchedulesUsingSectionsAndCourse(db.Courses.ToList(), sections, db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            scheduleGenerator.GenerateSchedulesUsingSectionsAndCourse(sections, db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
 
             return PartialView("_GenScheduleResultPartial", scheduleGenerator);
         }
