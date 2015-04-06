@@ -1,18 +1,23 @@
 ﻿function showHint(str) {
-	$("#suggestion").autocomplete({
-		source: courseList,
-		autoFocus: true,
-		select: function (event, ui) {
-			$("input[name='courseName']").val(ui.item.label);
-			$('#addCourse').click();
-			this.value = "";
-			return false;
-		},
-		messages: {
-			noResults: '',
-			results: function () { }
-		}
-	});
+    $("#suggestion").autocomplete({
+        source: courseList,
+        autoFocus: true,
+        select: function (event, ui) {
+            $("input[name='courseName']").val(ui.item.label);
+            $('#addCourse').click();
+            this.value = "";
+            return false;
+        },
+        messages: {
+            noResults: '',
+            results: function () { }
+        }
+    })
+    .autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+            .append("<span style='font-weight:bold'>"+item.label + "</span><br><span style='text-transform:capitalize;font-size:10px'>" + item.desc + "</span>")
+            .appendTo(ul);
+    };
 }
 function checkIfCourseExist(courseName)
 {

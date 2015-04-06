@@ -34,7 +34,7 @@ namespace Schedulator.Controllers
             List<Schedulator.Models.ScheduleGenerator.CourseView> coursesView = new List<Schedulator.Models.ScheduleGenerator.CourseView>();
             foreach (Course course in courses)
             {
-                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, label = course.CourseLetters + " " + course.CourseNumber });
+                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, label = course.CourseLetters + " " + course.CourseNumber, desc = course.Title.ToLower() });
                 
             }
             return Json(coursesView, JsonRequestBehavior.AllowGet);
