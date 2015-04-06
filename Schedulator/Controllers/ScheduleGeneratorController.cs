@@ -58,12 +58,7 @@ namespace Schedulator.Controllers
         public ActionResult RegisterSchedule()
         {
             List<string> keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
-
             List<Schedule> schedules = new List<Schedule>();
-            bool isRegisteredSchedule = false;
-            if (Request.Form["register"] != null )
-                isRegisteredSchedule = true;
-
 
             foreach( string key in keys)
             {
@@ -230,8 +225,15 @@ namespace Schedulator.Controllers
             scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
             stopWatch.Stop();
             long duration = stopWatch.ElapsedMilliseconds;
-            if (scheduleGenerator.Schedules.Count() > 20)
-                scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, pageNumber + 20);
+            try
+            {
+                if (scheduleGenerator.Schedules.Count() > 20)
+                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, 20);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             scheduleGenerator.CurrentPageNumber = pageNumber;
             return PartialView("_GenScheduleResultPartial", scheduleGenerator);
         }

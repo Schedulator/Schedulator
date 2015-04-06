@@ -22,6 +22,7 @@ namespace Schedulator.Controllers
         }
         public ActionResult Index()
         {
+            string temp = GetUserId();
             if (IsInRole("Student"))
                 return View(db.Users.Find(GetUserId()));
             else

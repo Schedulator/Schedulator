@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Schedulator.Controllers;
-
+using System.Web.Script.Serialization;
 namespace Schedulator.Tests.Controllers
 {
     [TestClass]
@@ -46,14 +46,15 @@ namespace Schedulator.Tests.Controllers
                 courseViews.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, label = course.CourseLetters + " " + course.CourseNumber });
             }
 
-          //  JsonResult expected = Json(courseViews, JsonRequestBehavior.AllowGet);
+            string expected = new JavaScriptSerializer().Serialize(courseViews);
 
             ScheduleGeneratorController testSchedGenCon = new ScheduleGeneratorController();
 
             JsonResult actual = testSchedGenCon.CoursesViewJson();
+            string actualJson = new JavaScriptSerializer().Serialize(actual.Data);
+            Assert.AreEqual(actualJson, expected);
 
-         //   Assert.AreEqual(actual, expected);
-
+            
 
         }
 
