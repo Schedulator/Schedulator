@@ -24,7 +24,7 @@ $(document).ready(function () {
     });
 
     $('#addCoursesButton').on('click', function () {
-        $('#collapse-schedule').collapse('toggle');
+        $('#collapseSchedule').collapse('toggle');
     });
 
     $("#generateSchedule").on("click", function (e) {
@@ -52,7 +52,6 @@ $(document).ready(function () {
         else {
             counter = 0;
             $(".section-checkbox").hide();
-            $('#collapseSchedule').collapse('hide');
         }
     });
 });

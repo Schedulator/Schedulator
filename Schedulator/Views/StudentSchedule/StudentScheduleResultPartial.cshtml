@@ -4,15 +4,14 @@
 {
     <div>
         <div>
-            <input id="manageScheduleButton" data-toggle="#collapseButtons"  type="button" name="register" class="btn btn-primary" value="Manage Schedule">
+            <input id="manageScheduleButton" data-toggle="collapse" data-target="#collapseButton" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
         </div>
-        <div id="collapseButtons" class="panel-collapse in">
+        <div id="collapseButton" class="collapse">
             <div class="panel-body">
                 <input id="addCoursesButton" type="button" name="addCourse" class="btn btn-primary" value="Add Courses">
                 <input type="hidden" name="semester" value="@Model.FirstOrDefault().Semester.Season">
                 <input id="submitType" type="hidden" name="submitType" value="">
                 <input id="removeButton" type="button" class="btn btn-primary" value="Remove Selected">
-                <input type="submit" name="register" class="btn btn-primary" value="Switch Sections">
                 <input type="hidden" name="scheduleIds" value="@Model.FirstOrDefault().ScheduleId">
                 @if (Model.Count() > 1)
                 {
@@ -23,12 +22,12 @@
     </div>
     <br />
     <br />
-    <div id="collapseSchedule" class="panel-collapse in">
-            <div class="panel-body">
-                @Html.Partial("_AddCourseAutoCompletePartial")
-                <br />
-                <input type="submit" value="Generate Schedule"  class="btn btn-default pull-right" id="generateSchedule" />
-            </div>
+    <div id="collapseSchedule" class="panel-collapse collapse">
+        <div class="panel-body">
+            @Html.Partial("_AddCourseAutoCompletePartial")
+            <br />
+            <input type="submit" value="Generate Schedule" class="btn btn-default pull-right" id="generateSchedule" />
+        </div>
     </div>
     <div id="schedule">
         @Html.Partial("_ScheduleAndLegend", Model)
