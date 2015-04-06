@@ -33,7 +33,7 @@ namespace Schedulator.Models
             public TimeBlock.day FirstDay;
             public TimeBlock.day SecondDay;
         }
-        public void GenerateSchedules(List<Course> courses, List<Enrollment> enrollments)
+        public void GenerateSchedules( List<Enrollment> enrollments)
         {
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
             AddUserPreferenceCourses(enrollments);
@@ -43,7 +43,7 @@ namespace Schedulator.Models
             }
             NumberOfSchedules = Schedules.Count();
         }
-        public void GenerateSchedulesUsingSectionsAndCourse(List<Course> courses, List<List<Section>> sectionsListMaster, List<Enrollment> enrollments)
+        public void GenerateSchedulesUsingSectionsAndCourse( List<List<Section>> sectionsListMaster, List<Enrollment> enrollments)
         {
             PrequisitesStudentNeedsForCourses = new List<PrequisitesStudentNeedsForCourse>();
             AddUserPreferenceCourses(enrollments);

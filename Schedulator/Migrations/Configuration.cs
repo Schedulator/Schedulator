@@ -49,9 +49,9 @@ namespace Schedulator.Migrations
                 user.Program = null;
                 context.Users.AddOrUpdate(user);
             }
-            SeedSemester(context);
+            //SeedSemester(context);
             //SeedCoursesFromExcelSheet(context);
-            //SeedProgramsFromExcelSheet(context);
+            SeedProgramsFromExcelSheet(context);
             //AddScienceElectives(context);
             //AddGeneralElective(context);
             //AddTechnicalElectives(context);

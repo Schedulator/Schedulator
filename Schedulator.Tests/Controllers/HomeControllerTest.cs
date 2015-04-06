@@ -28,7 +28,6 @@ namespace Schedulator.Tests.Controllers
                 IsInRole = (role) => true
             };
 
-
             // Act
             ViewResult result = controller.Index() as ViewResult;
 

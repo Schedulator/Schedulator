@@ -1,5 +1,3 @@
-
-
 var counter = 0;
 var count = 0;
 function ShowSchedules(data) {
@@ -19,13 +17,14 @@ function ManageScheduleSuccess(data) {
     $('#schedule').html(data);
 }
 $(document).ready(function () {
+
     $(".schedule-semester").click(function () {
         var url = '/StudentSchedule/GetSchedule?semester=' + $(this).attr('semester');
         $("#schedule-div").load(url);
     });
 
     $('#addCoursesButton').on('click', function () {
-        $('#collapse-schedule').collapse('toggle');
+        $('#collapseSchedule').collapse('toggle');
     });
 
     $("#generateSchedule").on("click", function (e) {
@@ -53,7 +52,6 @@ $(document).ready(function () {
         else {
             counter = 0;
             $(".section-checkbox").hide();
-            $('#collapse-schedule').collapse('hide');
         }
     });
 });
