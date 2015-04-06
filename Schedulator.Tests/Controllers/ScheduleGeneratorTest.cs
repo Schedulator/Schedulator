@@ -65,10 +65,34 @@ namespace Schedulator.Tests.Controllers
         }
 
 
-        /*------------"RegisterSchedule()" method testing------------------*/
+        /*------------"GenerateScheduleAndRegisterSchedule()" method testing------------------*/
         [TestMethod]
         public void test4()
         {
+            ApplicationDbContext db = new ApplicationDbContext();
+            string userId = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault().Id;
+            ScheduleGeneratorController testScheGenCon = new ScheduleGeneratorController()
+            {
+                GetUserId = () => userId,
+                IsInRole = (role) => true
+            };
+            List<string> courseCodes = new List<string> {"COMP 232", "COMP 248", "ENGR 201", "ENGR 213" };
+            ViewResult view = testScheGenCon.GenerateSchedules(courseCodes,"Fall", null) as ViewResult;
+            ScheduleGenerator schedGenerator =  testScheGenCon.scheduleGenerator;
+
+            testScheGenCon.sectionIds = new List<int>();
+
+            Schedule scheduleToRegister = schedGenerator.Schedules.FirstOrDefault().FirstOrDefault();
+            foreach (Enrollment enrollmentsInSchedule in scheduleToRegister.Enrollments)
+                testScheGenCon.sectionIds.Add(enrollmentsInSchedule.Section.SectionId);
+
+            testScheGenCon.RegisterSchedule();
+            ApplicationUser user = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault();
+            Schedule registeredSchedule = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault().Schedules.Where(n => n.Semester.SemesterID == scheduleToRegister.Semester.SemesterID).FirstOrDefault();
+
+            // Check if the schedule from the db is the same that was generated and saved
+            for (int i = 0; i < registeredSchedule.Enrollments.Count(); i++ )
+                Assert.IsTrue(registeredSchedule.Enrollments.ToList()[i].Section.SectionId == scheduleToRegister.Enrollments.ToList()[i].Section.SectionId);
         }
 
 

@@ -16,6 +16,7 @@ namespace Schedulator.Controllers
         public Func<string> GetUserId; //For testing
         public Func<string, bool> IsInRole; //For testing
         public List<int> sectionIds;
+        public ScheduleGenerator scheduleGenerator;
 
         private ApplicationDbContext db = new ApplicationDbContext();
         public ScheduleGeneratorController()
@@ -193,7 +194,7 @@ namespace Schedulator.Controllers
             if (scheduleGenerator.Schedules.Count() > 20)
                     scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(0, 20);
 
-
+            this.scheduleGenerator = scheduleGenerator;
             return PartialView("PagingAndScheduleResultPartial", scheduleGenerator);
         }
         [HttpPost]
