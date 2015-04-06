@@ -4,9 +4,9 @@
 {
     <div>
         <div>
-            <input id="manageScheduleButton" data-toggle="collapse" data-parent="#accordion" href="#collapse" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
+            <input id="manageScheduleButton" data-toggle="#collapseButtons"  type="button" name="register" class="btn btn-primary" value="Manage Schedule">
         </div>
-        <div id="collapse" class="panel-collapse collapse">
+        <div id="collapseButtons" class="panel-collapse in">
             <div class="panel-body">
                 <input id="addCoursesButton" type="button" name="addCourse" class="btn btn-primary" value="Add Courses">
                 <input type="hidden" name="semester" value="@Model.FirstOrDefault().Semester.Season">
@@ -23,7 +23,7 @@
     </div>
     <br />
     <br />
-    <div id="collapse-schedule" class="panel-collapse collapse">
+    <div id="collapseSchedule" class="panel-collapse in">
             <div class="panel-body">
                 @Html.Partial("_AddCourseAutoCompletePartial")
                 <br />
@@ -46,3 +46,4 @@
         </div>
     </div>
 </div>
+<script src="@Url.Content("/Scripts/student.schedule.js")" type="text/javascript"></script>
