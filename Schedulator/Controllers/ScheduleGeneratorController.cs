@@ -176,8 +176,6 @@ namespace Schedulator.Controllers
                         endTime = (endTime < 1440) ? 1440 : endTime;
                     }
                 }
-            }else {
-                return Json(new { Success = false, Message = "Please add a time option." });
             }
 
 

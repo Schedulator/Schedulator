@@ -37,7 +37,7 @@ $(document).ready(function () {
     });
 
     $('#showCourseSequence').click(function () {
-        $('#courseSequenceRecommend').toggle("slow");
+        $('#courseSequenceRecommend').collapse("slow");
     });
 
     $('#generateSch').click(function (e) {
