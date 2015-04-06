@@ -42,20 +42,17 @@ input[type=checkbox] {
 }
 
 .schedule {
-    font-size: 8px;
+    font-size: 20px;
+    font-family: Arial;
     color: #000066;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
     text-decoration: none;
     padding: 0px;
     text-align: center;
     vertical-align: middle;
-    border-color: #BBBBBB;
+    border-color: black;
     border-collapse: collapse;
     width: 400px;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
+
     border-spacing: 0px;
     margin-left: auto;
     margin-right: auto;
@@ -67,17 +64,6 @@ input[type=checkbox] {
     font-size: 10px;
     }
 
-#Lec {
-    background-color: #5cb85c;
-}
-
-#Tut {
-    background-color: #5bc0de;
-}
-
-#Lab {
-    background-color: #d9534f;
-}
 
 /* Home - SubMenu*/
 #subMenu {

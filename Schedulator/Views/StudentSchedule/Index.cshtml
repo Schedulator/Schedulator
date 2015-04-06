@@ -12,19 +12,19 @@
         <li>
             <h3>Fall</h3>
             <ul>
-                <li class="schedule-semester" semester="RegisteredFall2014"><a tabindex="-1" href="#">2014</a></li>
+                <li class="schedule-semester" semester="Fall"><a tabindex="-1" href="#">2014</a></li>
             </ul>
         </li>
         <li>
             <h3>Winter</h3>
             <ul>
-                <li class="schedule-semester" semester="RegisteredWinter2015"><a tabindex="-1" href="#">2015</a></li>
+                <li class="schedule-semester" semester="Winter"><a tabindex="-1" href="#">2015</a></li>
             </ul>
         </li>
         <li>
             <h3>Summer</h3>
             <ul>
-                <li class="schedule-semester" semester="RegisteredSummer2015"><a tabindex="-1" href="#">2015</a></li>
+                <li class="schedule-semester" semester="Summer"><a tabindex="-1" href="#">2015</a></li>
             </ul>
         </li>
     </ul>
@@ -39,7 +39,7 @@
 <script src="@Url.Content("~/Scripts/student.schedule.js")" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
-        var url = '~/StudentSchedule/GetSchedule?semester=@Model';
+        var url = '/StudentSchedule/GetSchedule?semester=@Model';
         $("#schedule-div").load(url);
     });
 </script>
