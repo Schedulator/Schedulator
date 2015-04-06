@@ -67,7 +67,7 @@ namespace Schedulator.Tests.Controllers
 
         /*------------"GenerateScheduleAndRegisterSchedule()" method testing------------------*/
         [TestMethod]
-        public void test4()
+        public void verifyGenerateAndRegisterScheduleWithController()
         {
             ApplicationDbContext db = new ApplicationDbContext();
             string userId = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault().Id;
@@ -94,6 +94,7 @@ namespace Schedulator.Tests.Controllers
             for (int i = 0; i < registeredSchedule.Enrollments.Count(); i++ )
                 Assert.IsTrue(registeredSchedule.Enrollments.ToList()[i].Section.SectionId == scheduleToRegister.Enrollments.ToList()[i].Section.SectionId);
         }
+        /*-------------
 
 
 
