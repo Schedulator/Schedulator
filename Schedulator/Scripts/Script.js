@@ -4,13 +4,13 @@
  */
 
 function courseAltColor(courseCode) {
-<<<<<<< HEAD
 
-    var colors = ["#f57722", "#d3d3d3", "#67aded","#f7fe2e", "#d3ffce", "#daa520", "#66cdaa","#cbbeb5"];
+
+//    var colors = ["#f57722", "#d3d3d3", "#67aded","#f7fe2e", "#d3ffce", "#daa520", "#66cdaa","#cbbeb5"];
     //var randomColor = '#' + (0x1000000 + (Math.random()) * 0xf57722).toString(16).substr(1, 6);
-=======
+
     var colors = ["#FAB586", "#DFDFDF", "#90C3F2", "#F9FE67", "#DFFFDB", "#E4BE5D", "#90DBC1", "#D9D0C9"];
->>>>>>> 081c1c4f041ccc55a71ef2d48d34a0422f0c7683
+
     
     if (colors[colorCount] == undefined || typeof colors[colorCount] == "undefined") {
         colorCount = 0;
@@ -30,10 +30,10 @@ var count = 0;
 var courseList;
 var url = '/ScheduleGenerator/CoursesViewJson';
 
-<<<<<<< HEAD
+
 $(function () {
     $("#addcourse").click(function () {
-   //     debugger;
+        //     debugger;
         var name = $("input[name='courseName']").val();
         if (name.length > 0) {
             $(".selected-courses").children().append("<li>" + name + "<input name='courseCode[" + count + "]' value='" + name + "' hidden><input type='button' value='Remove' class='removeClass li"+count+"'/></li>");
@@ -47,13 +47,11 @@ $(function () {
         this.parent().hide();
     });
 
-//$(document).ready(function () {
+    //$(document).ready(function () {
     $("#courseSequenceRecommend").load('/ScheduleGenerator/StudentsCourseSequence');
-=======
->>>>>>> 081c1c4f041ccc55a71ef2d48d34a0422f0c7683
 
 
-<<<<<<< HEAD
+
     $('#showCourseSequence').click(function () {
         $('#courseSequenceRecommend').show("slow");
     });
@@ -70,8 +68,7 @@ $(function () {
     $('#result, #courseSequenceRecommend').bind("DOMSubtreeModified", function () {
         $("#divProcessing").hide();
     });
-=======
->>>>>>> 081c1c4f041ccc55a71ef2d48d34a0422f0c7683
 
 
 
+});
