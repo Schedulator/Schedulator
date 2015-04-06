@@ -330,7 +330,7 @@ namespace Schedulator.Tests.Controllers
         }
         /*------------"GenerateScheduleHaveNoTimeConflict()" method testing------------------*/
         [TestMethod]
-        public void VerifyGenerateScheduleHaveNoTimeConflict()
+        public void VerifyGenerateScheduleHasNoTimeConflict()
         {
             // Generate a bunch of schedules and verify that none of them have a time conflict
             List<Course> course = new List<Course>();
@@ -356,7 +356,7 @@ namespace Schedulator.Tests.Controllers
                 List<Section> sectionsInSchedule = new List<Section>();
                 foreach (Enrollment enrollment in schedule.Enrollments)
                 {
-                    Assert.IsTrue(scheduleGenerator.CheckIfTimeConflict(sectionsInSchedule, enrollment.Section));
+                    Assert.IsTrue(!scheduleGenerator.CheckIfTimeConflict(sectionsInSchedule, enrollment.Section));
                     sectionsInSchedule.Add(enrollment.Section);
                 }
             }
