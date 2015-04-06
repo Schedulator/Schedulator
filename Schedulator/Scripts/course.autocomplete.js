@@ -15,7 +15,7 @@
     })
     .autocomplete("instance")._renderItem = function (ul, item) {
         return $("<li>")
-            .append("<span style='font-weight:bold'>"+item.label + "</span><br><span style='text-transform:capitalize;font-size:10px'>" + item.desc + "</span>")
+            .append("<span style='font-weight:bold'>"+item.label + "</span><br><span style='text-transform:capitalize;font-size:12px'>" + item.desc + "</span>")
             .appendTo(ul);
     };
 }
