@@ -15,6 +15,7 @@ namespace Schedulator.Controllers
     {
         public Func<string> GetUserId; //For testing
         public Func<string, bool> IsInRole; //For testing
+        public List<int> sectionIds;
 
         private ApplicationDbContext db = new ApplicationDbContext();
         public ScheduleGeneratorController()
@@ -57,28 +58,55 @@ namespace Schedulator.Controllers
         [HttpPost]
         public ActionResult RegisterSchedule()
         {
-            List<string> keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
+            List<string> keys = new List<string>();
+            if (sectionIds == null)
+                 keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
             List<Schedule> schedules = new List<Schedule>();
-
-            foreach( string key in keys)
+            if (sectionIds == null)
             {
-                int sectionId = Convert.ToInt32(Request.Form[key]);
-                Section section = db.Section.Where(n => n.SectionId == sectionId).FirstOrDefault();
-                if (section != null)
+                foreach (string key in keys)
                 {
-                    bool noScheduleForSemester = true;
-                    foreach (Schedule schedule in schedules)
+                    int sectionId = Convert.ToInt32(Request.Form[key]);
+                    Section section = db.Section.Where(n => n.SectionId == sectionId).FirstOrDefault();
+                    if (section != null)
                     {
-                        if (schedule.Semester == section.Lecture.Semester)
+                        bool noScheduleForSemester = true;
+                        foreach (Schedule schedule in schedules)
                         {
-                            schedule.Enrollments.Add(new Enrollment { Course = section.Lecture.Course, Section = section });
-                            noScheduleForSemester = false;
-                            break;
-                        }        
-                    }
-                    if (noScheduleForSemester)
-                        schedules.Add(new Schedule { ApplicationUser = db.Users.Find(GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = isRegisteredSchedule, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
+                            if (schedule.Semester == section.Lecture.Semester)
+                            {
+                                schedule.Enrollments.Add(new Enrollment { Course = section.Lecture.Course, Section = section });
+                                noScheduleForSemester = false;
+                                break;
+                            }
+                        }
+                        if (noScheduleForSemester)
+                            schedules.Add(new Schedule { ApplicationUser = db.Users.Find(GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = true, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
 
+                    }
+                }
+            }
+            else
+            {
+                foreach (int sectionId in sectionIds)
+                {
+                    Section section = db.Section.Where(n => n.SectionId == sectionId).FirstOrDefault();
+                    if (section != null)
+                    {
+                        bool noScheduleForSemester = true;
+                        foreach (Schedule schedule in schedules)
+                        {
+                            if (schedule.Semester == section.Lecture.Semester)
+                            {
+                                schedule.Enrollments.Add(new Enrollment { Course = section.Lecture.Course, Section = section });
+                                noScheduleForSemester = false;
+                                break;
+                            }
+                        }
+                        if (noScheduleForSemester)
+                            schedules.Add(new Schedule { ApplicationUser = db.Users.Find(GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = true, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
+
+                    }
                 }
             }
             foreach (Schedule schedule in schedules)
