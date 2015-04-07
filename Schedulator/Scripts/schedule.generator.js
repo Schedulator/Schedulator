@@ -4,7 +4,8 @@
  * @param courseCode class for each diff block
  */
 function courseAltColor(courseCode) {
-    var colors = ["#FAB586", "#DFDFDF", "#90C3F2", "#F9FE67", "#DFFFDB", "#E4BE5D", "#90DBC1", "#D9D0C9"];
+    // var colors = ["#FAB586", "#DFDFDF", "#90C3F2", "#F9FE67", "#DFFFDB", "#E4BE5D", "#90DBC1", "#D9D0C9"];
+    var colors = ["#f06b5d", "#f0ad4e", "#5bc0de", "#5cb85c", "#B284C5", "#f1c40f", "#1abc9c", "#7f8c8d"];
 
     if (colors[colorCount] == undefined || typeof colors[colorCount] == "undefined") {
         colorCount = 0;
@@ -14,7 +15,8 @@ function courseAltColor(courseCode) {
     colorCount += 1;
 
     $("." + courseCode).css({
-        backgroundColor: shade
+        backgroundColor: shade,
+        color: "#FFFFFF"
     });
 
 
