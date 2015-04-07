@@ -49,13 +49,16 @@ namespace Schedulator.Migrations
                 user.Program = null;
                 context.Users.AddOrUpdate(user);
             }
-            //SeedSemester(context);
-            //SeedCoursesFromExcelSheet(context);
+            SeedSemester(context);
+            SeedCoursesFromExcelSheet(context);
             SeedProgramsFromExcelSheet(context);
-            //AddScienceElectives(context);
-            //AddGeneralElective(context);
-            //AddTechnicalElectives(context);
+            AddScienceElectives(context);
+            AddGeneralElective(context);
+            AddTechnicalElectives(context);
             //Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
+            //AddPrerequisite(context);
+
+
 
             //List<Enrollment> enrollments = new List<Enrollment>();
 
@@ -755,8 +758,9 @@ namespace Schedulator.Migrations
 
             context.SaveChanges();
         }
-        List<Prerequisite> AddPrerequisite(List<Course> courses)
+        void AddPrerequisite( ApplicationDbContext context)
         {
+            List<Course> courses = context.Courses.ToList();
             List<Prerequisite> prerequisites = new List<Prerequisite>();
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 287).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault()});
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 321).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
@@ -838,9 +842,12 @@ namespace Schedulator.Migrations
                 List<Prerequisite> prerequisiteToAddToCourse = prerequisites.Where(n => n.Course == course).ToList();
                 if (prerequisiteToAddToCourse.Count() > 0)
                     course.Prerequisites = prerequisiteToAddToCourse;
-
+                context.Entry(course).State = EntityState.Modified;
             }
-            return prerequisites;
+            context.Prerequisite.AddRange(prerequisites);
+            
+            context.SaveChanges();
+
         }
         public struct time
         {
