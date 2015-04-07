@@ -44,6 +44,7 @@ $(document).ready(function () {
 
     $('#generateSch').click(function (e) {
         colorCount = 0;
+        $("#prefOptions").slideUp('slow');
 
         if ($('#selectedCourses').is(':empty')) {
             e.preventDefault();
@@ -54,6 +55,10 @@ $(document).ready(function () {
             $('#result').html('');
             $("#divProcessing").show();
         }
+    });
+
+    $("#pageTitle").click(function () {
+        $("#prefOptions").slideDown('slow');
     });
 
     $('#result, #courseSequenceRecommend').bind("DOMSubtreeModified", function () {
