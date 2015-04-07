@@ -10,14 +10,42 @@
 <!-- SubMenu -->
 <div id="subMenu">
     <ul>
-        <li>
-            <a href="">
-                <div id="btnSchedule">
-                    <img src="~/Content/img/calendar.png" />
-                    <p>View Schedule</p>
-                </div>
-            </a>
-        </li>
+        @{
+            DateTime date = new DateTime();
+            if (date.Month >= 1 && date.Month <= 4)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "winter" }, null)">
+                        <div id="btnSchedule">
+                            <img src="~/Content/img/calendar.png" />
+                            <p>View Schedule</p>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (date.Month >= 5 && date.Month <= 8)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "summer" }, null)">
+                        <div id="btnSchedule">
+                            <img src="~/Content/img/calendar.png" />
+                            <p>View Schedule</p>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (date.Month >= 9 && date.Month <= 12)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "fall" }, null)">
+                        <div id="btnSchedule">
+                            <img src="~/Content/img/calendar.png" />
+                            <p>View Schedule</p>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
         <li>
             <a href="@Url.Action("Index", "Progression")">
                 <div id="btnProgress">
