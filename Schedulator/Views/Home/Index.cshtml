@@ -15,7 +15,7 @@
             if (date.Month >= 1 && date.Month <= 4)
             {
                 <li>
-                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "winter" }, null)">
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "Winter" }, null)">
                         <div id="btnSchedule">
                             <img src="~/Content/img/calendar.png" />
                             <p>View Schedule</p>
@@ -26,7 +26,7 @@
             else if (date.Month >= 5 && date.Month <= 8)
             {
                 <li>
-                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "summer" }, null)">
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "Summer" }, null)">
                         <div id="btnSchedule">
                             <img src="~/Content/img/calendar.png" />
                             <p>View Schedule</p>
@@ -37,7 +37,7 @@
             else if (date.Month >= 9 && date.Month <= 12)
             {
                 <li>
-                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "fall" }, null)">
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "Fall" }, null)">
                         <div id="btnSchedule">
                             <img src="~/Content/img/calendar.png" />
                             <p>View Schedule</p>
