@@ -53,7 +53,7 @@ $(function () {
 
 
     $('#showCourseSequence').click(function () {
-        $('#courseSequenceRecommend').show("slow");
+        $('#courseSequenceRecommend').show('slow');
     });
 
     $('#generateSch').click(function () {
