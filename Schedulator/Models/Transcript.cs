@@ -11,9 +11,38 @@ namespace Schedulator.Models
     {
 
         public List<TranscriptYear> TranscriptYears { get; set; }
-        public List<double> yearGPAs { get; set; }
-        public List<double> semesterGPAs { get; set; }
+        public double totalCredits { get; set; }
+        public double numeratorTotal { get; set; }
+        public double CumulativeGPA{ get; set; }      
 
+        public void GetTotalGPA() 
+        {
+            calculateNumeratorTotal();
+            calculateTotalCredits();
+
+            if (totalCredits != 0.0)
+                CumulativeGPA = numeratorTotal / totalCredits;
+            else
+                CumulativeGPA = -1;
+        }
+
+        private void calculateTotalCredits()
+        {
+            totalCredits = 0.0;
+            foreach (TranscriptYear year in TranscriptYears.Where(year => year != null))
+            {
+                totalCredits += year.totalYearCredits;
+            }
+        }
+
+        private void calculateNumeratorTotal()
+        {
+            numeratorTotal = 0.0;
+            foreach (TranscriptYear year in TranscriptYears.Where(year => year != null))
+            {
+                numeratorTotal += year.numeratorYearTotal;
+            }
+        }
         public class TranscriptYear
         {
             public int Year { get; set; }
@@ -32,14 +61,12 @@ namespace Schedulator.Models
                     YearGPA = numeratorYearTotal / totalYearCredits;
                 else
                     YearGPA = -1;
-                YearGPA = numeratorYearTotal / totalYearCredits;
             }
 
             public void calculateTotalYearCredits()
             {
                 foreach (TranscriptSemester semester in TranscriptSemesters.Where(semester => semester != null))
                 {
-                    semester.GetSemesterGPA();
                     totalYearCredits += semester.totalSemesterCredits;
                 }
             }
@@ -48,7 +75,6 @@ namespace Schedulator.Models
             {
                 foreach (TranscriptSemester semester in TranscriptSemesters.Where(semester => semester != null))
                 {
-                    semester.GetSemesterGPA();
                     numeratorYearTotal += semester.numeratorSemesterTotal;
                 }
             }
@@ -170,7 +196,7 @@ namespace Schedulator.Models
                                             newSemester.Enrollments.Add(studentEnrollmentsRemove.FirstOrDefault());
                                             studentEnrollmentsRemove.RemoveAt(0);
                                         }
-                                       newSemester.GetSemesterGPA(); // Calculate the semester's GPA
+                                        newSemester.GetSemesterGPA(); // Calculate the semester's GPA
                                         newTranscriptYear.TranscriptSemesters.Add(newSemester); // Add the transcript semester to the transcript year
                                     }
                                     break;
@@ -195,6 +221,7 @@ namespace Schedulator.Models
                         TranscriptYears.Add(newTranscriptYear);
                     }
                 }
+                this.GetTotalGPA();
             }
         }
     }

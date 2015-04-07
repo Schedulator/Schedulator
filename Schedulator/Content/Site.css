@@ -43,8 +43,10 @@ input[type=checkbox] {
 
 .schedule {
     font-size: 20px;
-    font-family: Arial;
-    color: #000066;
+    font-family: 'Open Sans';
+    
+    letter-spacing: 1px;
+    color: #4E4E4E;
     text-decoration: none;
     padding: 0px;
     text-align: center;
