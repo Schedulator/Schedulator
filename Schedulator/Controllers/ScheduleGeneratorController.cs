@@ -263,7 +263,10 @@ namespace Schedulator.Controllers
             try
             {
                 if (scheduleGenerator.Schedules.Count() > 20)
-                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, 20);
+                    if ((pageNumber + 20) < scheduleGenerator.Schedules.Count())
+                        scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, 20);
+                    else
+                        scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, scheduleGenerator.Schedules.Count() - pageNumber);
             }
             catch (Exception e)
             {
