@@ -329,6 +329,9 @@
     <Content Include="Views\Shared\_CouresLectureAndTutorialPartial.cshtml" />
     <Content Include="Views\Shared\_PagingAndScheduleResultPartial.cshtml" />
     <Content Include="Views\ScheduleGenerator\PagingAndScheduleResultPartial.cshtml" />
+    <Content Include="Views\ProgramDirector\CreateLecture.cshtml" />
+    <Content Include="Views\ProgramDirector\CreateTutorial.cshtml" />
+    <Content Include="Views\ProgramDirector\CreateLab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
