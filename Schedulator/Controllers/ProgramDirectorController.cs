@@ -24,11 +24,20 @@ namespace Schedulator.Controllers
         // GET: ProgramDirector/Details/5
         public ActionResult Details(int? id)
         {
+            ICollection<Lecture> lectureList;
+            ProgramDirector pd = new ProgramDirector();
+            Course course = db.Courses.Find(id);
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            else
+            {
+                //Grab Lectures from the Course
+                //course.LoadLecturesForCourse(pd.getLecturesFromCourse(course));
+            }
+ 
             if (course == null)
             {
                 return HttpNotFound();

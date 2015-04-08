@@ -217,7 +217,6 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\calendar.png" />
-    <Content Include="Content\img\delete.ico.png" />
     <Content Include="Content\img\progress.png" />
     <Content Include="Content\img\sequence.png" />
     <Content Include="Content\img\transcript.png" />
@@ -235,7 +234,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Properties\PublishProfiles\Schedulator.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Scripts\course.autocomplete.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -252,7 +250,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\schedule.generator.js" />
     <Content Include="Scripts\student.schedule.js" />
     <Content Include="Scripts\Script.js" />
     <Content Include="Scripts\_references.js" />
