@@ -24,7 +24,6 @@ namespace Schedulator.Controllers
         // GET: ProgramDirector/Details/5
         public ActionResult Details(int? id)
         {
-            ICollection<Lecture> lectureList;
             ProgramDirector pd = new ProgramDirector();
             Course course = db.Courses.Find(id);
             
@@ -56,7 +55,7 @@ namespace Schedulator.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseID,Title,CourseLetters,CourseNumber,SpecialNote")] Course course)
+        public ActionResult Create([Bind(Include = "Title,CourseLetters,CourseNumber,SpecialNote", Exclude="CourseId")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +67,116 @@ namespace Schedulator.Controllers
             return View(course);
         }
 
+        //Create Lecture
+        public ActionResult CreateLecture()
+        {
+            return View();
+        }
+
+        // POST: ProgramDirector/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateLecture([Bind(Include = "LectureLetter,Teacher,ClassRoomNumber,StartTime,EndTime,FirstDay,SecondDay", Exclude = "LectureID")] Lecture lecture)
+        {
+      
+            
+            /*
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (id == null)
+            
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+                */
+            
+            if (ModelState.IsValid)
+            {
+                db.Lectures.Add(lecture);
+                db.SaveChanges();
+                return RedirectToAction("Create");
+            }
+            
+            return View(lecture);
+        }
+
+        //Create Tutorial
+        public ActionResult CreateTutorial()
+        {
+            return View();
+        }
+
+        // POST: ProgramDirector/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTutorial([Bind(Include = "TutorialLetter,Teacher,ClassRoomNumber,StartTime,EndTime,FirstDay,SecondDay", Exclude = "TutorialID")] Tutorial tutorial) //, int? id
+        {
+
+
+            /*
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (id == null)
+            
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+                */
+            
+            if (ModelState.IsValid)
+            {
+                db.Tutorials.Add(tutorial);
+                db.SaveChanges();
+                return RedirectToAction("Create");
+            }
+            
+            return View(tutorial);
+        }
+
+        //Create Tutorial
+        public ActionResult CreateLab()
+        {
+            return View();
+        }
+
+        // POST: ProgramDirector/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateLab([Bind(Include = "LabLetter,Teacher,ClassRoomNumber,StartTime,EndTime,FirstDay,SecondDay", Exclude = "TutorialID")] Lab lab) //int? id
+        {
+
+
+            /*
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (id == null)
+            
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+                */
+            
+            if (ModelState.IsValid)
+            {
+                db.Labs.Add(lab);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            
+            return View(lab);
+        }
         // GET: ProgramDirector/Edit/5
         public ActionResult Edit(int? id)
         {
