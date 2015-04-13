@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -35,12 +36,24 @@ namespace Schedulator.Models
         public virtual CourseSequence ContainerSequence { get; set; }
         public virtual List<CourseSequence> OtherOptions { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Course == null)
+            {
+                yield return new ValidationResult("Grade is invalid");
+            }
+        }
+
 
     }
 
 
 
 }
+
+
+
+
 namespace EnumExtension
 {
     public static class Extensions
