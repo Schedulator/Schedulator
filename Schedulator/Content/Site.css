@@ -232,3 +232,6 @@ td.instructorName {
     width: 140px;
 
 }
+#pageTitle{
+    cursor: pointer;
+}

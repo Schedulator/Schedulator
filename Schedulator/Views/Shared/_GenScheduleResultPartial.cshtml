@@ -19,12 +19,13 @@
             <ul>
                 @foreach (Schedulator.Models.Prerequisite prequisite in missingPrequisite.PrequisitesStudentNeeds)
                 {
-                    @prequisite.PrerequisiteCourse.CourseLetters 
-                    @prequisite.PrerequisiteCourse.CourseNumber
-                    if (prequisite.Concurrently)
-                    {
-                         @Html.Raw("Can take concurrently");
-                    }
+                    <li>
+                        @prequisite.PrerequisiteCourse.CourseLetters @prequisite.PrerequisiteCourse.CourseNumber
+                        @if (prequisite.Concurrently)
+                        {
+                            @Html.Raw("Can take concurrently");
+                        }
+                    </li>
                 }
             </ul>
         </div>

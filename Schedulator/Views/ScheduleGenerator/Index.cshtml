@@ -15,7 +15,7 @@
     <!-- Generator Preferences -->
     <div id="schedGenPref" class="contentBox">
 
-        @using (Ajax.BeginForm("GenerateSchedules",null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "result" }, new { id = "preferenceScheduleForm" }))
+        @using (Ajax.BeginForm("GenerateSchedules", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "result" }, new { id = "preferenceScheduleForm" }))
         {
             <!-- Options -->
         <input id="pageNumber" type="hidden" value="0" name="pageNumber" />
@@ -59,7 +59,6 @@
         Processing . . . <img src="~/Content/img/ajax-loader.gif" />
     </div>
     <!-- Schedules results -->
-    <div id="paging"></div>
     <div id="result"></div><!-- EO #result -->
 
 

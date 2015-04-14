@@ -32,7 +32,9 @@
             })
             function pagingSuccess()
             {
-
+                $('#preferenceScheduleForm').attr('data-ajax-update', '#result');
+                $('#preferenceScheduleForm').removeAttr('data-ajax-success');
+                $('#divProcessing').hide();
             }
 
         </script>
