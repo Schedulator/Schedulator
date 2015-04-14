@@ -4,7 +4,7 @@
     ViewBag.Title = "CreateLecture";
 }
 
-<h2>Create Lecture</h2>
+<h2>CreateLecture</h2>
 
 
 @using (Html.BeginForm()) 
@@ -12,6 +12,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
+        <h4>Lecture</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -81,10 +82,8 @@
 }
 
 <div>
-    @Html.ActionLink("Back to Add Class", "Create") <!--- new { id = Model.LectureID } -->
+    @Html.ActionLink("Back to List", "Index")
 </div>
-
-
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
