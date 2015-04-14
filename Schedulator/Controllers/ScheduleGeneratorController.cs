@@ -191,16 +191,14 @@ namespace Schedulator.Controllers
             }            
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
             string user = db.Users.Find(GetUserId()).Email;
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
             scheduleGenerator.GenerateSchedules( db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
-            scheduleGenerator.Schedules.OrderByDescending(n => n.FirstOrDefault().Days.Count());
-            stopWatch.Stop();
-            long duration = stopWatch.ElapsedMilliseconds;
-            if (scheduleGenerator.Schedules.Count() > 20)
+            if (scheduleGenerator.Schedules != null)
+            {
+                scheduleGenerator.Schedules.OrderByDescending(n => n.FirstOrDefault().Days.Count());
+                if (scheduleGenerator.Schedules.Count() > 20)
                     scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(0, 20);
-
-            this.scheduleGenerator = scheduleGenerator;
+                this.scheduleGenerator = scheduleGenerator;
+            }
             return PartialView("PagingAndScheduleResultPartial", scheduleGenerator);
         }
         [HttpPost]

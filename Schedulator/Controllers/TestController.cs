@@ -58,7 +58,23 @@ namespace Schedulator.Controllers
             user.Program = db.Program.Where(n => n.ProgramId == id).FirstOrDefault();
             db.SaveChanges();
         }
-
+        public string RandomGrade()
+        {
+            Random rnd = new Random();
+            int number = rnd.Next(1, 9);
+            switch (number)
+            {
+                case 1 : return "A+";
+                case 2 : return "A";
+                case 3 : return "A-";
+                case 4 : return "B+";
+                case 5 : return "B";
+                case 6 : return "B-";
+                case 7 : return "C+";
+                case 8 : return "C";
+                default : return "C-";
+            }
+        }
         public void DoABunchOfShit(string userId, int progressYear, int year)
         {
             List<Enrollment> studentEnrollments = db.Enrollment.Where(n => n.Schedule.ApplicationUser.Id == userId).ToList();
@@ -75,11 +91,11 @@ namespace Schedulator.Controllers
                 if (courseSequence.Season == Season.Fall)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
+                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
+                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
-                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = "A+" });
+                        fallSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.OtherOptions.Count() > 0)
                     {
                         foreach (CourseSequence otherOptionsCourseSequence in courseSequence.OtherOptions)
@@ -87,22 +103,22 @@ namespace Schedulator.Controllers
                             Course courses = db.Courses.Where(n => n.CourseID == otherOptionsCourseSequence.Course.CourseID).FirstOrDefault();
                             if (courses != null)
                             {
-                                fallSchedule.Enrollments.Add(new Enrollment { Course = courses, Grade = "A+" });
+                                fallSchedule.Enrollments.Add(new Enrollment { Course = courses, Grade = RandomGrade() });
                                 break;
                             }
                         }
                     }
                     else
-                        fallSchedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = "A+" });
+                        fallSchedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = RandomGrade() });
                 }
                 else if (courseSequence.Season == Season.Winter)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
+                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
+                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
-                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = "A+" });
+                        winterSchedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.OtherOptions.Count() > 0)
                     {
                         foreach (CourseSequence otherOptionsCourseSequence in courseSequence.OtherOptions)
@@ -110,22 +126,22 @@ namespace Schedulator.Controllers
                             Course courses = db.Courses.Where(n => n.CourseID == otherOptionsCourseSequence.Course.CourseID).FirstOrDefault();
                             if (courses != null)
                             {
-                                winterSchedule.Enrollments.Add(new Enrollment { Course = courses, Grade = "A+" });
+                                winterSchedule.Enrollments.Add(new Enrollment { Course = courses, Grade = RandomGrade() });
                                 break;
                             }
                         }
                     }
                     else
-                        winterSchedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = "A+" });
+                        winterSchedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = RandomGrade() });
                 }
                 else if (courseSequence.Season == Season.Summer1)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
+                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
+                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
-                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = "A+" });
+                        summer1Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.OtherOptions.Count() > 0)
                     {
                         foreach (CourseSequence otherOptionsCourseSequence in courseSequence.OtherOptions)
@@ -133,20 +149,20 @@ namespace Schedulator.Controllers
                             Course courses = db.Courses.Where(n => n.CourseID == otherOptionsCourseSequence.Course.CourseID).FirstOrDefault();
                             if (courses != null)
                             {
-                                summer1Schedule.Enrollments.Add(new Enrollment { Course = courses, Grade = "A+" });
+                                summer1Schedule.Enrollments.Add(new Enrollment { Course = courses, Grade = RandomGrade() });
                                 break;
                             }
                         }
                     }
                     else
-                        summer1Schedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = "A+" });
+                        summer1Schedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = RandomGrade() });
                 }
                 else if (courseSequence.Season == Season.Summer2)
                 {
                     if (courseSequence.ElectiveType == ElectiveType.BasicScience)
-                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = "A+" });
+                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.BasicScience).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.GeneralElective)
-                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = "A+" });
+                        summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.GeneralElective).FirstOrDefault(), Grade = RandomGrade() });
                     else if (courseSequence.ElectiveType == ElectiveType.MathElective)
                         summer2Schedule.Enrollments.Add(new Enrollment { Course = db.Courses.Where(n => n.ElectiveType == ElectiveType.MathElective).FirstOrDefault() });
                     else if (courseSequence.OtherOptions.Count() > 0)
@@ -156,13 +172,13 @@ namespace Schedulator.Controllers
                             Course courses = db.Courses.Where(n => n.CourseID == otherOptionsCourseSequence.Course.CourseID).FirstOrDefault();
                             if (courses != null)
                             {
-                                summer2Schedule.Enrollments.Add(new Enrollment { Course = courses, Grade = "A+" });
+                                summer2Schedule.Enrollments.Add(new Enrollment { Course = courses, Grade = RandomGrade() });
                                 break;
                             }
                         }
                     }
                     else
-                        summer2Schedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = "A+" });
+                        summer2Schedule.Enrollments.Add(new Enrollment { Course = courseSequence.Course, Grade = RandomGrade() });
                 }
             }
             db.Schedule.Add(fallSchedule);

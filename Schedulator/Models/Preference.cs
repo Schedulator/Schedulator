@@ -12,6 +12,6 @@ namespace Schedulator.Models
         public double EndTime { get; set; }
         public Semester Semester { get; set; }
         public ICollection<String> Days { get; set; }
-        public ICollection<Course> Courses { get; set; }
+        public List<Course> Courses { get; set; }
     }
 }
