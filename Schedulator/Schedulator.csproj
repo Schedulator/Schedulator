@@ -301,7 +301,6 @@
     <Content Include="Views\ProgramDirector\Create.cshtml" />
     <Content Include="Views\ProgramDirector\Delete.cshtml" />
     <Content Include="Views\ProgramDirector\Details.cshtml" />
-    <Content Include="Views\ProgramDirector\Edit.cshtml" />
     <Content Include="Views\ProgramDirector\Index.cshtml" />
     <Content Include="Views\ProgramsManagement\Create.cshtml" />
     <Content Include="Views\ProgramsManagement\Delete.cshtml" />
