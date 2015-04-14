@@ -253,6 +253,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\schedule.generator.js" />
     <Content Include="Scripts\student.schedule.js" />
+    <Content Include="Scripts\student.schedule.manage.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
