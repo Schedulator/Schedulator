@@ -306,7 +306,6 @@
     <Content Include="Views\ProgramsManagement\Create.cshtml" />
     <Content Include="Views\ProgramsManagement\Delete.cshtml" />
     <Content Include="Views\ProgramsManagement\Details.cshtml" />
-    <Content Include="Views\ProgramsManagement\Edit.cshtml" />
     <Content Include="Views\ProgramsManagement\Index.cshtml" />
     <Content Include="Views\Shared\_Schedules.cshtml" />
     <Content Include="Views\Shared\_GenScheduleResultPartial.cshtml" />
@@ -333,6 +332,8 @@
     <Content Include="Views\ProgramDirector\CreateLecture.cshtml" />
     <Content Include="Views\ProgramDirector\CreateTutorial.cshtml" />
     <Content Include="Views\ProgramDirector\CreateLab.cshtml" />
+    <Content Include="Views\ProgramsManagement\EditProgram.cshtml" />
+    <Content Include="Views\ProgramsManagement\DeleteCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

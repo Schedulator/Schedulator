@@ -160,6 +160,12 @@ namespace Schedulator.Models
             }
             return missingPrequisite;
         }
+
+
+        public ICollection<Lecture> LoadLecturesForCourse(ICollection<Lecture> lectures)
+        {
+            return lectures;
+        }
     }
   
 }

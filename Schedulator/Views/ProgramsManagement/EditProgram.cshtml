@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Schedulator.Models.CourseSequence>
+
+@{
+    ViewBag.Title = "AddCourse";
+}
+
+<h2>Edit Program Courses</h2>
+
+@{
+    if (ViewBag.Error != ""){
+       <h4 class="text-danger">@ViewBag.Error</h4>
+
+    }
+}
+@using (Html.BeginForm("AddCourse", "ProgramsManagement", new { courseSequenceId = Model.First().CourseSequenceId }))
+{
+    <div style="float:left; padding: 10px 0 0 100px; width:50%">
+        Search: <input type="text" name="searchTerm" style="width: 225px" />
+        <input type="submit" value="Search" />
+        
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Course Number
+        </th>
+        <th>
+            Course Name
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    if (item.Course != null) { 
+    <tr>
+        <td>
+            @item.Course.CourseLetters @item.Course.CourseNumber
+        </td>
+        <td>
+            @item.Course.Title
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "DeleteCourse", new { id=item.CourseSequenceId })
+        </td>
+    </tr>
+}
+    else
+    {
+        <tr>
+            <td>
+                @item.ElectiveType
+            </td>
+            <td>
+
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteCourse", new { id = item.CourseSequenceId })
+            </td>
+        </tr>
+    }
+}
+
+</table>

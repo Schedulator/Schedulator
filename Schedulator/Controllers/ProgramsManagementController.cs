@@ -64,6 +64,81 @@ namespace Schedulator.Controllers
             return View(program);
         }
 
+        //Add course to program
+        public ActionResult AddCourse(string searchTerm, int courseSequenceId)
+        {
+            var courseSequenceData = db.CourseSequence.Find(courseSequenceId);
+
+            var program = courseSequenceData.Program;
+
+            var course = db.Courses.FirstOrDefault(i => (i.CourseLetters + " " + i.CourseNumber) == searchTerm);
+
+            if (course == null)
+            {
+                return RedirectToAction("EditProgram", new { programId = program.ProgramId, season = courseSequenceData.Season, year = courseSequenceData.Year, error = true});
+            }
+
+            var courseToAdd = new CourseSequence
+            {
+                Season = courseSequenceData.Season,
+                Year = courseSequenceData.Year,
+                Program = courseSequenceData.Program,
+                Course = course
+            };
+
+            program.CourseSequences.Add(courseToAdd);
+      
+             if (ModelState.IsValid)
+            {
+                db.Entry(program).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("EditProgram", new { programId = program.ProgramId, season = courseSequenceData.Season, year = courseSequenceData.Year, error = false });
+            }
+            return View(program);
+        
+
+        }
+
+
+
+        // Edit Program 
+        public ActionResult EditProgram(int programId, Season season, int year, bool error = false)
+        {
+            if(error == true)
+                ViewBag.Error = "The Course is invalid.";
+
+            var courses  = db.CourseSequence.Where(i => i.Program.ProgramId == programId && i.Season == season && i.Year == year).ToList();
+            
+            return View(courses);
+        }
+
+        // Delete Course in Program
+        public ActionResult DeleteCourse(int? id)
+        {
+            var data = db.CourseSequence.AsNoTracking().First(i => i.CourseSequenceId == id);
+            var pid = data.CourseSequenceId;
+            var season = data.Season;
+            var year = data.Year;
+            CourseSequence course = db.CourseSequence.Find(id);
+            db.CourseSequence.Remove(course);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+            
+        }
+
+        // POST: ProgramsManagement/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteCourseConfirmed(int id)
+        {
+            CourseSequence course = db.CourseSequence.Find(id);
+            db.CourseSequence.Remove(course);
+            db.SaveChanges();
+            return RedirectToAction("EditProgram", new { programId = course.Program.ProgramId, season = course.Season, year = course.Year, error = false });
+        }
+       
+  
+
         // GET: ProgramsManagement/Edit/5
         public ActionResult Edit(int? id)
         {

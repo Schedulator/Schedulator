@@ -1,11 +1,4 @@
 ﻿@model Schedulator.Models.ScheduleGenerator
-@if (Model.Schedules == null || Model.Schedules.Count() == 0)
-{
-    <div class="alert alert-danger">
-        Unfortunately no Schedules were possible with the selected courses and options. Some Courses might not be available during the selected semester or during the specified time.
-        It is also possible that the courses selected do not have any combinations where there isn't a time conflict.
-    </div>
-}
 @if (Model.NumberOfSchedules > 20 )
 {
     <div>
