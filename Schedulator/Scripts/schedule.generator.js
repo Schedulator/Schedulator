@@ -39,12 +39,12 @@ $(document).ready(function () {
     });
 
     $('#showCourseSequence').click(function () {
-        $('#courseSequenceRecommend').collapse("slow");
+        $('#courseSequenceRecommend').slideToggle('slow');
     });
 
     $('#generateSch').click(function (e) {
         colorCount = 0;
-        $("#prefOptions").slideUp('slow');
+        //$("#prefOptions").slideUp('slow');
 
         if ($('#selectedCourses').is(':empty')) {
             e.preventDefault();

@@ -42,7 +42,8 @@ namespace Schedulator.Models
             {
                 GenerateAllSchedulesUsingUserPreferenceCourses(AllPossibleSections());
             }
-            NumberOfSchedules = Schedules.Count();
+            if (Schedules != null)
+                NumberOfSchedules = Schedules.Count();
         }
         public void GenerateSchedulesUsingSectionsAndCourse( List<List<Section>> sectionsListMaster, List<Enrollment> enrollments)
         {
@@ -53,7 +54,8 @@ namespace Schedulator.Models
                 sectionsListMaster.AddRange(AllPossibleSections());
                 GenerateAllSchedulesUsingUserPreferenceCourses(sectionsListMaster);
             }
-            NumberOfSchedules = Schedules.Count();
+            if (Schedules != null)
+                NumberOfSchedules = Schedules.Count();
         }
         private List<List<Section>> AllPossibleSections()
         {
@@ -174,7 +176,7 @@ namespace Schedulator.Models
             {
                 if (course != null)
                 {
-                    List<Prerequisite> prerequisitesStudentNeeds = course.MissingPrequisite(enrollments, Preference.Semester);
+                    List<Prerequisite> prerequisitesStudentNeeds = course.MissingPrequisite(enrollments, Preference.Semester, Preference.Courses );
                     if (prerequisitesStudentNeeds.Count == 0) // Check if student has all prerquisite for the course they want to add
                         CoursesStudentCanTake.Add(course);
                     else // If they don't then add it to class so we can tell the user what course they can't take and what prerequisites they need
