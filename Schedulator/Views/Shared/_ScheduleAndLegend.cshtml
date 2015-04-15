@@ -32,7 +32,6 @@
         </tr>
     </tbody>
 </table>
-
 @helper GenScheduleLegend(List<Schedulator.Models.Schedule> schedule)
 {
     <div class="schedLegend">
@@ -94,7 +93,7 @@
 
 @helper RenderSections(Schedulator.Models.Section sectionToShow, string radioButtonGroup, bool hideRadioButton)
 {
-    <table sectionid="@sectionToShow.SectionId">
+    <table sectionid="@sectionToShow.SectionId" style="width:325px;font-weight:600;">
         <tr>
             @if (!hideRadioButton)
             {
@@ -108,21 +107,22 @@
                     <input style="display:none" checked="checked" id="radioButtonSectionGroup2" name="@radioButtonGroup" type="radio" value="@sectionToShow.SectionId">
                 </td>
             }
-            <td width="30%">Lec @sectionToShow.Lecture.LectureLetter </td>
-            <td>@sectionToShow.Lecture.Teacher</td>
+            <td width="60" style="padding-left:3px;">Lec @sectionToShow.Lecture.LectureLetter </td>
+            <td class="instructorName">@sectionToShow.Lecture.Teacher.ToString().ToLower()</td>
             <td>@sectionToShow.Lecture.ClassRoomNumber</td>
         </tr>
         @if (sectionToShow.Tutorial != null)
         {
             <tr>
-                <td>Tut @sectionToShow.Tutorial.TutorialLetter </td>
+                <td style="padding-left:3px;">Tut @sectionToShow.Tutorial.TutorialLetter </td>
+                <td></td>
                 <td>@sectionToShow.Tutorial.ClassRoomNumber</td>
             </tr>
         }
         @if (sectionToShow.Lab != null)
         {
             <tr>
-                <td>Lab @sectionToShow.Lab.LabLetter </td>
+                <td style="padding-left:3px;">Lab @sectionToShow.Lab.LabLetter </td><td></td>
                 <td>@sectionToShow.Lab.ClassRoomNumber</td>
             </tr>
         }

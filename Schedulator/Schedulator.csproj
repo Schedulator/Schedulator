@@ -235,6 +235,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
+    <Content Include="Scripts\common.js" />
     <Content Include="Scripts\course.autocomplete.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -250,8 +251,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\schedule.generator.js" />
     <Content Include="Scripts\student.schedule.js" />
-    <Content Include="Scripts\Script.js" />
+    <Content Include="Scripts\student.schedule.manage.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -300,12 +302,10 @@
     <Content Include="Views\ProgramDirector\Create.cshtml" />
     <Content Include="Views\ProgramDirector\Delete.cshtml" />
     <Content Include="Views\ProgramDirector\Details.cshtml" />
-    <Content Include="Views\ProgramDirector\Edit.cshtml" />
     <Content Include="Views\ProgramDirector\Index.cshtml" />
     <Content Include="Views\ProgramsManagement\Create.cshtml" />
     <Content Include="Views\ProgramsManagement\Delete.cshtml" />
     <Content Include="Views\ProgramsManagement\Details.cshtml" />
-    <Content Include="Views\ProgramsManagement\Edit.cshtml" />
     <Content Include="Views\ProgramsManagement\Index.cshtml" />
     <Content Include="Views\Shared\_Schedules.cshtml" />
     <Content Include="Views\Shared\_GenScheduleResultPartial.cshtml" />
@@ -327,6 +327,13 @@
     <Content Include="Views\StudentManagement\AddGradeToEnrollment.cshtml" />
     <Content Include="Views\Test\ProgramList.cshtml" />
     <Content Include="Views\Shared\_CouresLectureAndTutorialPartial.cshtml" />
+    <Content Include="Views\Shared\_PagingAndScheduleResultPartial.cshtml" />
+    <Content Include="Views\ScheduleGenerator\PagingAndScheduleResultPartial.cshtml" />
+    <Content Include="Views\ProgramDirector\CreateLecture.cshtml" />
+    <Content Include="Views\ProgramDirector\CreateTutorial.cshtml" />
+    <Content Include="Views\ProgramDirector\CreateLab.cshtml" />
+    <Content Include="Views\ProgramsManagement\EditProgram.cshtml" />
+    <Content Include="Views\ProgramsManagement\DeleteCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -42,20 +42,19 @@ input[type=checkbox] {
 }
 
 .schedule {
-    font-size: 8px;
-    color: #000066;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-family: 'Open Sans';
+    
+    letter-spacing: 1px;
+    color: #4E4E4E;
     text-decoration: none;
     padding: 0px;
     text-align: center;
     vertical-align: middle;
-    border-color: #BBBBBB;
+    border-color: black;
     border-collapse: collapse;
     width: 400px;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
+
     border-spacing: 0px;
     margin-left: auto;
     margin-right: auto;
@@ -67,17 +66,6 @@ input[type=checkbox] {
     font-size: 10px;
     }
 
-#Lec {
-    background-color: #5cb85c;
-}
-
-#Tut {
-    background-color: #5bc0de;
-}
-
-#Lab {
-    background-color: #d9534f;
-}
 
 /* Home - SubMenu*/
 #subMenu {
@@ -189,14 +177,61 @@ footer {
 }
 .courseBlock
 {
-    border-radius: 10px;
+    border-radius: 5px;
+    border: 1px solid #B3E39C;
     color: #3c763d;
     background-color: #dff0d8;
     margin-right: 5px;
     text-align: center;
     cursor: pointer;
+    width:12%;
+    padding:3px 0px 3px 3px;
+}
+
+.courseHeader {
+    font-weight: bold;
 }
 
 .courseBlock:hover { 
-    background-color: red;
+
+/*    background-color: #F0D8DD;*/
+
+    background-color: #EEB1AF;
+    border-color: #E7928F;
+}
+.pagingSchedules {
+    cursor: pointer;
+}
+.courseBlock #delCourse {
+    padding:0;
+    margin-left: 4px;
+
+}
+
+#mySchedSelect {
+    padding:0;
+    margin:0;
+}
+
+#mySchedSelect li {
+    display:inline-block;
+    margin-right: 30px;
+    padding:0;
+    padding-bottom: 10px;
+    border-right:1px solid #DDD;
+
+}
+
+#mySchedSelect li:last-child {
+    border-right:0;
+
+}
+
+td.instructorName {
+    text-transform: capitalize;
+    width: 140px;
+
+}
+#pageTitle{
+    cursor: pointer;
 }

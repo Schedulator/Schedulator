@@ -3,49 +3,135 @@
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+   
 }
 
 <h2>Details</h2>
 
+        <h4>@Model.CourseLetters @Model.CourseNumber</h4>
+        <hr />
+
+    <table>
+        <thead>
+            <tr>
+        <th>Lecture Section</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>First Day Of Week</th>
+        <th>Second Day Of Week</th>
+        <th>Semester Start Period</th>
+        <th>Semester End Period</th>
+        <th>Teacher</th>
+        <th>Class Room</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.Lectures)
+            {
+                <tr>
+                    <td>
+                        @item.LectureLetter
+                    </td>
+                    <td>
+                        @TimeSpan.FromMinutes(item.StartTime).ToString(@"hh\:mm")
+                    </td>
+                    <td>
+                        @TimeSpan.FromMinutes(item.EndTime).ToString(@"hh\:mm")
+                    </td>
+                    <td>
+                        @item.FirstDay
+                    </td>
+                    <td>
+                        @item.SecondDay
+                    </td>
+                    <td>
+                        @item.Semester.SemesterStart.ToShortDateString()
+                    </td>
+                    <td>
+                        @item.Semester.SemesterEnd.ToShortDateString()
+                    </td>
+                    <td>
+                        @item.Teacher
+                    </td>
+                    <td>
+                        @item.ClassRoomNumber
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+
+    <table>
+    <thead>
+        <tr>
+            <th>Tutorial Section</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>First Day Of Week</th>
+            <th>Second Day Of Week</th>
+            <th>Class Room</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.Lectures)
+        {
+
+            <tr>
+                <td>
+                    @foreach (var tut in item.Tutorials)
+                    {
+                        @tut.TutorialLetter
+                        <br />
+                    }
+                </td>
+                <td>
+                    @foreach (var tut in item.Tutorials)
+                    {
+                        @TimeSpan.FromMinutes(tut.StartTime).ToString(@"hh\:mm")
+                        <br />
+                    }
+                </td>
+                <td>
+                    @foreach (var tut in item.Tutorials)
+                    {
+                        @TimeSpan.FromMinutes(tut.EndTime).ToString(@"hh\:mm")
+                        <br />
+                    }
+                </td>
+                <td>
+                    @foreach (var tut in item.Tutorials)
+                    {
+                        @tut.FirstDay
+                        <br />
+                    }
+                </td>
+                <td>
+                    @foreach (var tut in item.Tutorials)
+                    {
+                        @tut.SecondDay
+                        <br />
+                    }
+                </td>
+                <td>
+                    @foreach (var tut in item.Tutorials)
+                    {
+                        @tut.ClassRoomNumber
+                        <br />
+                    }
+                </td>
+
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
+
 <div>
-    <h4>Course</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseLetters)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseLetters)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SpecialNote)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SpecialNote)
-        </dd>
-
-    </dl>
+    @Html.ActionLink("Back to All Courses", "Index")
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CourseID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

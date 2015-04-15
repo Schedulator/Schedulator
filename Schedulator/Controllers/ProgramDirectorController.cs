@@ -24,11 +24,19 @@ namespace Schedulator.Controllers
         // GET: ProgramDirector/Details/5
         public ActionResult Details(int? id)
         {
+            ProgramDirector pd = new ProgramDirector();
+            Course course = db.Courses.Find(id);
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            else
+            {
+                //Grab Lectures from the Course
+                //course.LoadLecturesForCourse(pd.getLecturesFromCourse(course));
+            }
+ 
             if (course == null)
             {
                 return HttpNotFound();
@@ -47,47 +55,133 @@ namespace Schedulator.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseID,Title,CourseLetters,CourseNumber,SpecialNote")] Course course)
+        public ActionResult Create([Bind(Include = "Title,CourseLetters,CourseNumber,Credit,Prerequisites,SpecialNote,CourseId")] Course course)
         {
             if (ModelState.IsValid)
             {
                 db.Courses.Add(course);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("CreateLecture", new { courseid = course.CourseID });
             }
+            return RedirectToAction("CreateLecture", new { courseid = course.CourseID });
 
-            return View(course);
         }
+        
 
-        // GET: ProgramDirector/Edit/5
-        public ActionResult Edit(int? id)
+        //Create Lecture
+        public ActionResult CreateLecture(int? courseid)
+        
         {
-            if (id == null)
+            if (courseid != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["courseId"] = courseid;
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            else
             {
                 return HttpNotFound();
             }
-            return View(course);
+           return View();
         }
 
-        // POST: ProgramDirector/Edit/5
+        // POST: ProgramDirector/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CourseID,Title,CourseLetters,CourseNumber,SpecialNote")] Course course)
+        public ActionResult CreateLecture([Bind(Include = "LectureLetter,Teacher,ClassRoomNumber,StartTime,EndTime,FirstDay,SecondDay,Semester,LectureID")] Lecture lecture)
         {
+            Course course = db.Courses.Find(TempData["courseId"]);
+            
+            //Add Lecture for the course
+            course.Lectures.Add(lecture);
+
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
+                db.Lectures.Add(lecture);
+                db.SaveChanges();
+                return RedirectToAction("CreateTutorial", new { lectureid = lecture.LectureID });
+            }
+            return RedirectToAction("CreateTutorial", new { lectureid = lecture.LectureID });
+        }
+
+        //Create Tutorial
+        public ActionResult CreateTutorial(int? lectureId)
+        {
+            if (lectureId != null)
+            {
+                TempData["lectureId"] = lectureId;
+            }
+            else
+            {
+                HttpNotFound();
+            }
+            return View();
+        }
+
+        // POST: ProgramDirector/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTutorial([Bind(Include = "TutorialLetter,Teacher,ClassRoomNumber,StartTime,EndTime,FirstDay,SecondDay,TutorialID")] Tutorial tutorial)
+        {
+
+            Course course = db.Courses.Find(TempData["courseId"]);
+
+            var lectures = course.Lectures.Where(n => n.LectureID == (int)TempData["lectureId"]);
+
+            if (lectures != null)
+            {
+                foreach (var lec in lectures)
+                {
+                    lec.Tutorials.Add(tutorial);
+                }
+            }
+           
+          
+            
+            if (ModelState.IsValid)
+            {
+                db.Tutorials.Add(tutorial);
+                db.SaveChanges();
+                return RedirectToAction("CreateLab");
+            }
+            return RedirectToAction("CreateLab");
+        }
+
+        //Create Tutorial
+        public ActionResult CreateLab()
+        {
+            return View();
+        }
+
+        // POST: ProgramDirector/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateLab([Bind(Include = "LabLetter,Teacher,ClassRoomNumber,StartTime,EndTime,FirstDay,SecondDay", Exclude = "TutorialID")] Lab lab) //int? id
+        {
+            Course course = db.Courses.Find(TempData["courseId"]);
+
+            var lectures = course.Lectures.Where(n => n.LectureID == (int)TempData["lectureId"]);
+
+            if (lectures != null)
+            {
+                foreach (var lec in lectures)
+                {
+                    lec.Labs.Add(lab);
+                }
+            }
+            
+            if (ModelState.IsValid)
+            {
+                db.Labs.Add(lab);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(course);
+            return RedirectToAction("Index");
+
         }
 
         // GET: ProgramDirector/Delete/5

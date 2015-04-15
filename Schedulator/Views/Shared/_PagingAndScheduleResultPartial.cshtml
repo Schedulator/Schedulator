@@ -1,0 +1,12 @@
+﻿@model Schedulator.Models.ScheduleGenerator
+
+   @if (@Model.NumberOfSchedules > 40)
+    {
+    <ul class="pagination">
+        @for (int i = 0; i <= Model.NumberOfSchedules; i += 40)
+        {
+            <li><a class="pagingSchedules" value="@i" style="cursor:pointer">@(i + 1) - @(i + 40)</a></li>
+        }
+    </ul>
+    }
+    @Html.Partial("_GenScheduleResultPartial", null, Model, null, null,null)

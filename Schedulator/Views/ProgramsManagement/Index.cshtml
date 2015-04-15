@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Program Management</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -36,7 +36,6 @@
             @Html.DisplayFor(modelItem => item.CreditsRequirement)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProgramId }) |
             @Html.ActionLink("Details", "Details", new { id=item.ProgramId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.ProgramId })
         </td>

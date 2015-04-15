@@ -6,6 +6,10 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schedulator;
 using Schedulator.Controllers;
+using Microsoft.AspNet.Identity;
+using Schedulator.Models;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace Schedulator.Tests.Controllers
 {
@@ -16,13 +20,20 @@ namespace Schedulator.Tests.Controllers
         public void Index()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            ApplicationDbContext db = new ApplicationDbContext();
+            string userId = db.Users.Where(n => n.Email == "harleymc@gmail.com").FirstOrDefault().Id;
+            HomeController controller = new HomeController()
+            {
+                GetUserId = () => userId,
+                IsInRole = (role) => true
+            };
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
+
         }
     }
 }

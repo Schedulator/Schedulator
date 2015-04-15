@@ -10,14 +10,42 @@
 <!-- SubMenu -->
 <div id="subMenu">
     <ul>
-        <li>
-            <a href="">
-                <div id="btnSchedule">
-                    <img src="~/Content/img/calendar.png" />
-                    <p>View Schedule</p>
-                </div>
-            </a>
-        </li>
+        @{
+            DateTime date = new DateTime();
+            if (date.Month >= 1 && date.Month <= 4)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "Winter" }, null)">
+                        <div id="btnSchedule">
+                            <img src="~/Content/img/calendar.png" />
+                            <p>View Schedule</p>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (date.Month >= 5 && date.Month <= 8)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "Summer" }, null)">
+                        <div id="btnSchedule">
+                            <img src="~/Content/img/calendar.png" />
+                            <p>View Schedule</p>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (date.Month >= 9 && date.Month <= 12)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "StudentSchedule", new { semester = "Fall" }, null)">
+                        <div id="btnSchedule">
+                            <img src="~/Content/img/calendar.png" />
+                            <p>View Schedule</p>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
         <li>
             <a href="@Url.Action("Index", "Progression")">
                 <div id="btnProgress">
@@ -27,18 +55,11 @@
             </a>
         </li>
         <li>
-            <a href="">     @*@Url.Action("Index", "Transcript")*@
+            <a href="@Url.Action("Index", "Transcript")">
+                @*@Url.Action("Index", "Transcript")*@
                 <div id="btnTranscript">
                     <img src="~/Content/img/transcript.png" />
                     <p>View Transcript</p>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="">
-                <div id="btnSequence">
-                    <img src="~/Content/img/sequence.png" />
-                    <p>View Course Sequence</p>
                 </div>
             </a>
         </li>

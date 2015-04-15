@@ -4,15 +4,14 @@
 {
     <div>
         <div>
-            <input id="manageScheduleButton" data-toggle="collapse" data-parent="#accordion" href="#collapse" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
+            <input id="manageScheduleButton" data-toggle="collapse" data-target="#collapseButton" type="button" name="register" class="btn btn-primary" value="Manage Schedule">
         </div>
-        <div id="collapse" class="panel-collapse collapse">
+        <div id="collapseButton" class="collapse">
             <div class="panel-body">
                 <input id="addCoursesButton" type="button" name="addCourse" class="btn btn-primary" value="Add Courses">
                 <input type="hidden" name="semester" value="@Model.FirstOrDefault().Semester.Season">
                 <input id="submitType" type="hidden" name="submitType" value="">
                 <input id="removeButton" type="button" class="btn btn-primary" value="Remove Selected">
-                <input type="submit" name="register" class="btn btn-primary" value="Switch Sections">
                 <input type="hidden" name="scheduleIds" value="@Model.FirstOrDefault().ScheduleId">
                 @if (Model.Count() > 1)
                 {
@@ -23,12 +22,12 @@
     </div>
     <br />
     <br />
-    <div id="collapse-schedule" class="panel-collapse collapse">
-            <div class="panel-body">
-                @Html.Partial("_AddCourseAutoCompletePartial")
-                <br />
-                <input type="submit" value="Generate Schedule"  class="btn btn-default pull-right" id="generateSchedule" />
-            </div>
+    <div id="collapseSchedule" class="panel-collapse collapse">
+        <div class="panel-body">
+            @Html.Partial("_AddCourseAutoCompletePartial")
+            <br />
+            <input type="submit" value="Generate Schedule" class="btn btn-default pull-right" id="generateSchedule" />
+        </div>
     </div>
     <div id="schedule">
         @Html.Partial("_ScheduleAndLegend", Model)
@@ -46,54 +45,4 @@
         </div>
     </div>
 </div>
-<script>
-    function ShowSchedules(data) {
-        debugger;
-        alert("here");
-        $('#generatedSchedulesContent').empty();
-        $('#generatedSchedulesContent').html(data);
-        $('#generatedSchedules').modal('show');
-    }
-    function ManageScheduleSuccess(data) {
-        $('#schedule').empty();
-        $('#schedule').html(data);
-    }
-    $(document).ready(function () {
-        var counter = 0;
-        var count = 0;
-        $('#addCoursesButton').on('click', function () {
-            $('#collapse-schedule').collapse('toggle');
-        });
-
-        $("#generateSchedule").on("click", function (e) {
-            e.preventDefault();
-            $('#manageScheduleForm').attr('data-ajax-success', 'ShowSchedules(data)');
-            $('#manageScheduleForm').attr('action', "/StudentSchedule/GenerateSchedules").submit();
-        });
-
-        $('#removeButton').on('click', function () {
-            if ($('input[type=checkbox]:checked').length) {
-                $('#submitType').val('remove');
-                $('#manageScheduleForm').submit();
-            }
-            else
-                alert("You must select courses to remove!");
-        });
-        $('#manageScheduleButton').on('click', function () {
-            if (counter == 0) {
-                var sectionCounter = 0;
-                counter = 1;
-                $('[id^=radioButtonSectionGroup]').each(function () {
-                    $(this).after('<input type="checkbox" class="section-checkbox" name="sectionIds" value="' + $(this).val() + '" >');
-                });
-            }
-            else {
-                counter = 0;
-                $(".section-checkbox").hide();
-                $('#collapse-schedule').collapse('hide');
-            }
-        });
-
-    });
-
-</script>
+<script src="@Url.Content("/Scripts/student.schedule.manage.js")" type="text/javascript"></script>

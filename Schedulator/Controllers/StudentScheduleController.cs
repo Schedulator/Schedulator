@@ -16,7 +16,11 @@ namespace Schedulator.Controllers
             return View("Index",null,semester);
         }
         public ActionResult GetSchedule(string semester)
-        {   
+        {
+            if (semester == null)
+            {
+                throw new System.ArgumentNullException("Please enter a semester.");
+            }
             List<Schedule> schedules = new List<Schedule>();
             string user = db.Users.Find(User.Identity.GetUserId()).Email;
             User.Identity.GetUserId();
@@ -36,24 +40,47 @@ namespace Schedulator.Controllers
         public ActionResult ManageSchedule(List<int> sectionIds, List<int> scheduleIds, string submitType)
         {
             List<Schedule> scheduleList = new List<Schedule>();
+            string semester ="None";
             if (submitType == "remove")
             {
+                Schedule schedule;
                 foreach (int scheduleId in scheduleIds)
                 {
-                    Schedule schedule = db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault();
+                    schedule = db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault();
                     schedule.RemoveCourseFromSchedule(sectionIds, db);
-                    scheduleList.Add(schedule);
+                    if (schedule.Enrollments.Count() == 0)
+                    {
+                        semester = schedule.Semester.Season.ToString();
+                        db.Schedule.Remove(schedule);
+                    }
+                    else
+                        scheduleList.Add(schedule);
+
                 }
                 db.SaveChanges();
+                
             }
-            return PartialView("_ScheduleAndLegend", scheduleList);
+            if (scheduleList.Count() > 0)
+                return PartialView("_ScheduleAndLegend", scheduleList);
+            else
+                return PartialView("StudentScheduleNoResultPartial", semester);
         }
         public ActionResult GenerateSchedules(List<int> scheduleIds, List<string> courseCode, string semester)
         {
+            if (scheduleIds == null)
+            {
+                throw new ArgumentNullException("Please enter valid schedule ID(s).");
+            }
+
+            if (courseCode == null)
+            {
+                throw new ArgumentNullException("Please enter valid course code(s).");
+            }
+            
             Season season;
             switch (semester)
             {
-                case "Summer": season = Season.Summer1;
+                case "Summer1": season = Season.Summer1;
                     break;
                 case "Fall": season = Season.Fall;
                     break;
@@ -78,7 +105,7 @@ namespace Schedulator.Controllers
             List<List<Section>> sections = new List<List<Section>>();
             foreach( int scheduleId in scheduleIds)
                 db.Schedule.Where(n => n.ScheduleId == scheduleId).FirstOrDefault().Enrollments.ToList().ForEach(n => sections.Add(new List<Section>(){ n.Section}));
-            scheduleGenerator.GenerateSchedulesUsingSectionsAndCourse(db.Courses.ToList(), sections, db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            scheduleGenerator.GenerateSchedulesUsingSectionsAndCourse(sections, db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
 
             return PartialView("_GenScheduleResultPartial", scheduleGenerator);
         }

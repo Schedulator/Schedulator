@@ -64,14 +64,84 @@ namespace Schedulator.Controllers
             return View(program);
         }
 
+        //Add course to program
+        public ActionResult AddCourse(string searchTerm, int courseSequenceId)
+        {
+            var courseSequenceData = db.CourseSequence.Find(courseSequenceId);
+
+            var program = courseSequenceData.Program;
+
+            var course = db.Courses.FirstOrDefault(i => (i.CourseLetters + " " + i.CourseNumber) == searchTerm);
+
+            if (course == null)
+            {
+                return RedirectToAction("EditProgram", new { programId = program.ProgramId, season = courseSequenceData.Season, year = courseSequenceData.Year, error = true});
+            }
+
+            var courseToAdd = new CourseSequence
+            {
+                Season = courseSequenceData.Season,
+                Year = courseSequenceData.Year,
+                Program = courseSequenceData.Program,
+                Course = course
+            };
+
+            program.CourseSequences.Add(courseToAdd);
+      
+             if (ModelState.IsValid)
+            {
+                db.Entry(program).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("EditProgram", new { programId = program.ProgramId, season = courseSequenceData.Season, year = courseSequenceData.Year, error = false });
+            }
+            return View(program);
+        
+
+        }
+
+
+
+        // Edit Program 
+        public ActionResult EditProgram(int programId, Season season, int year, bool error = false)
+        {
+            if(error == true)
+                ViewBag.Error = "The Course is invalid.";
+
+            var courses  = db.CourseSequence.Where(i => i.Program.ProgramId == programId && i.Season == season && i.Year == year).ToList();
+            
+            return View(courses);
+        }
+
+        // Delete Course in Program
+        public ActionResult DeleteCourse(int? id)
+        {
+            var data = db.CourseSequence.AsNoTracking().First(i => i.CourseSequenceId == id);
+            var pid = data.CourseSequenceId;
+            var season = data.Season;
+            var year = data.Year;
+            CourseSequence course = db.CourseSequence.Find(id);
+            db.CourseSequence.Remove(course);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+            
+        }
+
+        // POST: ProgramsManagement/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteCourseConfirmed(int id)
+        {
+            CourseSequence course = db.CourseSequence.Find(id);
+            db.CourseSequence.Remove(course);
+            db.SaveChanges();
+            return RedirectToAction("EditProgram", new { programId = course.Program.ProgramId, season = course.Season, year = course.Year, error = false });
+        }
+       
+  
+
         // GET: ProgramsManagement/Edit/5
         public ActionResult Edit(int? id)
         {
-            //Program management details view model instance
-            ProgramManagementViewModel edit = new ProgramManagementViewModel();
-
-            //Program director instance
-            ProgramDirector progD = new ProgramDirector();
 
             if (id == null)
             {
@@ -80,21 +150,11 @@ namespace Schedulator.Controllers
             //Get the program Id
             Program program = db.Program.Find(id);
 
-            //Get the program Course IDs from the specified program Id
-            var detailedCourseList = progD.getProgramCourseIDs(program.ProgramId);
-
-
-            //Copy elements from list to details  list
-            edit.Courses = detailedCourseList.ToList();
-
-            //Copy program details into details program instance
-            edit.Program = program;
-
             if (program == null)
             {
                 return HttpNotFound();
             }
-            return View(edit);
+            return View(program);
         }
 
         // POST: ProgramsManagement/Edit/5
@@ -102,7 +162,7 @@ namespace Schedulator.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProgramId,ProgramName,ProgramOption,CreditsRequirement,Courses,Credit,Lectures,Prerequisites")] ProgramManagementViewModel program)
+        public ActionResult Edit([Bind(Include = "ProgramId,ProgramName,ProgramOption,CreditsRequirement")] Program program)
         {
             if (ModelState.IsValid)
             {

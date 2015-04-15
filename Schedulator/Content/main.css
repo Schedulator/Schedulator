@@ -25,7 +25,7 @@ h6 {
 
 h1{
   font-size: 36px;
-  color:#fff;
+  color:#4e4e4e;
 }
 
 h2{
@@ -1939,6 +1939,7 @@ ul.social_icons li  a i{
   box-shadow: none;
 }
 
+
 textarea#message{
   resize: none;
   padding: 10px;
@@ -2532,7 +2533,14 @@ shortcodes page css
     padding: 0;
 }
 
-.ui-menu-item:hover, .ui-menu-item::selection {
+.ui-menu-item {
+    padding-left: 5px;
+}
+.ui-menu-item:hover, .ui-menu-item::selection, .ui-menu-item:focus {
+    background-color: lightblue;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
     background-color: lightblue;
 }
 

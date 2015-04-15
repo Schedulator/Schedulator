@@ -1,15 +1,15 @@
 ﻿<script src="@Url.Content("~/Scripts/course.autocomplete.js")" type="text/javascript"></script>
 <div class="container-fluid">
     <div class="row">
-        <div class="form-inline">
+        <div class="form-inline ">
             <label for="course">Add Course</label>
-            <input type="text" class="form-control" name="courseName" id="suggestion" onkeyup="showHint(this.value)" placeholder="Enter Course">
+            <input type="text" class="form-control" style="width:260px;"name="courseName" id="suggestion" onkeyup="showHint(this.value)" placeholder="Enter Course">
             <input type="button" id="addCourse" class="btn btn-default" value="Add" />
+            <span style="color:red;" id="addCourseErr" hidden>Please add one or more course.</span>
         </div>
         
     </div>
     <br />
-    <div class="row" id="selectedCourses">
-    </div>
+    <div class="row" id="selectedCourses"></div>
 </div>
 

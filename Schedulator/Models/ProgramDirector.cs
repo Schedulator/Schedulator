@@ -23,7 +23,7 @@ namespace Schedulator.Models
                 {
                     containsItem = detailedCourseList.Any(item => item.CourseID == courseIdsList[i]);
 
-                    if (coursesList[j].CourseID == courseIdsList[i] && courseIdsList[i] != null && containsItem == false)
+                    if (coursesList[j].CourseID == courseIdsList[i] && containsItem == false)
                     {
                         detailedCourseList.Add(coursesList[j]);
                     }
@@ -32,20 +32,49 @@ namespace Schedulator.Models
             return detailedCourseList;
 
         }
-        /*
-        public ICollection<Lecture> getLecturesFromCourses()
+        
+        public List<Lecture> getLecturesFromCourse(Course course)
         {
+            var courseId = course.CourseID;
+            var courseIds = db.Courses.Select(t => t.CourseID).ToList();
+            var lectureIds = db.Lectures.Where(v => v.LectureLetter != "UgradNSched IE").Select(t => t.LectureID).ToList();
+            //var lectures = db.Lectures.Where(x => x.Course.CourseID == course.CourseID && x.LectureLetter != "UgradNSched IE").ToList();
+
+            List<Lecture> lecList = new List<Lecture>();
+
+            var lectureList = db.Lectures.Where(n => n.LectureLetter != "UgradNSched IE").ToList();
+
+            bool containsItem = false;
+
+            for (int i = 0; i < lectureList.Count; i++)
+            {
+
+                containsItem = lecList.Any(item => item.LectureID == lectureIds[i]);
+
+                if (containsItem == false)
+                {
+                    if (lectureList[i].Course.CourseID == courseId)
+                    {
+                        lecList.Add(lectureList[i]);
+                    }
+                }
+
+            }
+            
+            return lecList;
+        }
         
-                    
-        
+        public List<Tutorial> getTutorialsFromCourse(Tutorial course)
+        {
+            var tutList = db.Tutorials.Where(n => n.TutorialID == course.TutorialID).ToList();
+            return tutList;
         }
 
-        public ICollection<Prerequisite> getPrerequisitesFromCourses()
+        public List<Lab> getLabsFromCourse(Lab course)
         {
-
-
-            //return ICollection<Prerequisite> prereqList;
+            var labList = db.Labs.Where(n => n.LabID == course.LabID).ToList();
+            return labList;
         }
-         */
+     
     }
 }

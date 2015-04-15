@@ -41,8 +41,8 @@
 
 <div>
     <table>
-        <tr>
-            <th>Year 1 - Fall</th>
+        <tr>    
+            <th>Year 1 - Winter @Html.ActionLink("Add Course", "EditProgram", new { programId = Model.ProgramId, season = Schedulator.Models.Season.Fall, year = 1 })</th>     
         </tr>
         <tr>
             <th>Course Number</th>
@@ -50,20 +50,21 @@
             <th>Credit</th>
         </tr>
         @{
-        var Year = 1;
-        var Season = Schedulator.Models.Season.Fall;
+        var Year = Model.CourseSequences.First().Year;
+        var Season = Schedulator.Models.Season.Winter;
         }
-
+       
         @foreach (var item in Model.CourseSequences)
         {
-            
+           
             if (item.Season != Season) 
             {
                 Year = item.Year;
                 Season = item.Season;
+                var courses1 = Model.CourseSequences.Where(i => i.Year == Year && i.Season == Season).ToList().Select(i => i.CourseSequenceId );
 
                 <tr>
-                    <th>Year @item.Year - @item.Season</th>
+                    <th>Year @item.Year - @item.Season - @Html.ActionLink("Add Course", "EditProgram", new {programId = Model.ProgramId, season = Season, year = Year})</th>
                 </tr>
                 <tr>
                     <th>Course Number</th>
@@ -74,7 +75,7 @@
             if (item.Course != null)
             {
                 <tr>                   
-                    <td>@item.Course.CourseNumber</td>
+                    <td>@item.Course.CourseLetters @item.Course.CourseNumber</td>
                     <td>@item.Course.Title</td>
                     <td>@item.Course.Credit</td>                    
                 </tr>

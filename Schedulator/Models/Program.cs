@@ -62,9 +62,13 @@ namespace Schedulator.Models
                 }
                 if (noEnrollment)
                 {
-                    if ((courseSequence.Course == null || courseSequence.Course.MissingPrequisite(enrollmentCopy, recommendCourseView.RecommendFallCourseSequence, db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault()).Count == 0) && ((fallSchedule == null && recommendCourseView.RecommendFallCourseSequence.Count() < 5) || (fallSchedule != null && fallSchedule.Enrollments.Count < 5 && recommendCourseView.RecommendFallCourseSequence.Count() < 5 - fallSchedule.Enrollments.Count)))
+                    if (((fallSchedule == null && recommendCourseView.RecommendFallCourseSequence.Count() < 5) 
+                        || (fallSchedule != null && fallSchedule.Enrollments.Count < 5 && recommendCourseView.RecommendFallCourseSequence.Count() < 5 - fallSchedule.Enrollments.Count))
+                        && (courseSequence.Course == null || courseSequence.Course.MissingPrequisite(enrollmentCopy, recommendCourseView.RecommendFallCourseSequence, db.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault()).Count == 0))
                             recommendCourseView.RecommendFallCourseSequence.Add(courseSequence);
-                    else if ((courseSequence.Course == null || courseSequence.Course.MissingPrequisite(enrollmentCopy, recommendCourseView.RecommendWinterCourseSequence, db.Semesters.Where(n => n.Season == Season.Winter).FirstOrDefault()).Count == 0) && ((winterSchedule == null && recommendCourseView.RecommendWinterCourseSequence.Count() < 5) || (winterSchedule != null && winterSchedule.Enrollments.Count < 5 && recommendCourseView.RecommendWinterCourseSequence.Count() < 5 - winterSchedule.Enrollments.Count)))
+                    else if (((winterSchedule == null && recommendCourseView.RecommendWinterCourseSequence.Count() < 5) 
+                        || (winterSchedule != null && winterSchedule.Enrollments.Count < 5 && recommendCourseView.RecommendWinterCourseSequence.Count() < 5 - winterSchedule.Enrollments.Count))
+                        && (courseSequence.Course == null || courseSequence.Course.MissingPrequisite(enrollmentCopy, recommendCourseView.RecommendWinterCourseSequence, recommendCourseView.RecommendFallCourseSequence, db.Semesters.Where(n => n.Season == Season.Winter).FirstOrDefault()).Count == 0))
                             recommendCourseView.RecommendWinterCourseSequence.Add(courseSequence);
                     else if ((summerSchedules.Count() == 0 && recommendCourseView.RecommendSummerCourseSequence.Count < 5))
                         recommendCourseView.RecommendSummerCourseSequence.Add(courseSequence);

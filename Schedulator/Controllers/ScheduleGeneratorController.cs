@@ -6,13 +6,24 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Diagnostics;
+using System.Data.Entity.Validation;
 
 namespace Schedulator.Controllers
 {
     [Authorize]
     public class ScheduleGeneratorController : Controller
     {
-        ApplicationDbContext db = new ApplicationDbContext();
+        public Func<string> GetUserId; //For testing
+        public Func<string, bool> IsInRole; //For testing
+        public List<int> sectionIds;
+        public ScheduleGenerator scheduleGenerator;
+
+        private ApplicationDbContext db = new ApplicationDbContext();
+        public ScheduleGeneratorController()
+        {
+            GetUserId = () => User.Identity.GetUserId();
+            IsInRole = (string role) => User.IsInRole(role);
+        }
         public ActionResult Index()
         {
             return View();
@@ -23,7 +34,7 @@ namespace Schedulator.Controllers
             List<Schedulator.Models.ScheduleGenerator.CourseView> coursesView = new List<Schedulator.Models.ScheduleGenerator.CourseView>();
             foreach (Course course in courses)
             {
-                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, label = course.CourseLetters + " " + course.CourseNumber });
+                coursesView.Add(new Schedulator.Models.ScheduleGenerator.CourseView { CourseId = course.CourseID, label = course.CourseLetters + " " + course.CourseNumber, desc = course.Title.ToLower() });
                 
             }
             return Json(coursesView, JsonRequestBehavior.AllowGet);
@@ -31,68 +42,106 @@ namespace Schedulator.Controllers
 
         public ActionResult StudentsCourseSequence()
         {
-            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            ApplicationUser user = db.Users.Find(GetUserId());
             
             if(user.Program == null){
                 throw new System.ArgumentNullException("User missing program.");
             }else{
                 List<Enrollment> studentEnrollments = new List<Enrollment>();
+                if (user.Schedules == null){
+                    throw new System.ArgumentNullException("User missing schedule(s).");
+                } else {
                 foreach (Schedule schedule in user.Schedules)
                     studentEnrollments.AddRange(schedule.Enrollments);
                 return PartialView("_RecommendedCourseList", user.Program.RecommendedCourseForStudent(studentEnrollments,
                                                              user.Schedules.Where(n =>n.Semester.Season == Season.Fall && n.Semester.SemesterStart.Year == 2014).FirstOrDefault(),
                                                              user.Schedules.Where(n => n.Semester.Season == Season.Winter && n.Semester.SemesterStart.Year == 2015).FirstOrDefault(), 
                                                              user.Schedules.Where(n =>(n.Semester.Season == Season.Summer1 || n.Semester.Season == Season.Summer2) && n.Semester.SemesterStart.Year == 2015).ToList()));
+                }   
             }
         }
         [HttpPost]
         public ActionResult RegisterSchedule()
         {
-            List<string> keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
-
+            List<string> keys = new List<string>();
+            if (sectionIds == null)
+                 keys = Request.Form.AllKeys.Where(n => n.Contains("radioButtonSectionGroup")).ToList();
             List<Schedule> schedules = new List<Schedule>();
-            bool isRegisteredSchedule = false;
-            if (Request.Form["register"] != null )
-                isRegisteredSchedule = true;
-
-
-            foreach( string key in keys)
+            if (sectionIds == null)
             {
-                int sectionId = Convert.ToInt32(Request.Form[key]);
-                Section section = db.Section.Where(n => n.SectionId == sectionId).FirstOrDefault();
-                if (section != null)
+                foreach (string key in keys)
                 {
-                    bool noScheduleForSemester = true;
-                    foreach (Schedule schedule in schedules)
+                    int sectionId = Convert.ToInt32(Request.Form[key]);
+                    Section section = db.Section.Where(n => n.SectionId == sectionId).FirstOrDefault();
+                    if (section != null)
                     {
-                        if (schedule.Semester == section.Lecture.Semester)
+                        bool noScheduleForSemester = true;
+                        foreach (Schedule schedule in schedules)
                         {
-                            schedule.Enrollments.Add(new Enrollment { Course = section.Lecture.Course, Section = section });
-                            noScheduleForSemester = false;
-                            break;
-                        }        
-                    }
-                    if (noScheduleForSemester)
-                        schedules.Add(new Schedule { ApplicationUser = db.Users.Find(User.Identity.GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = isRegisteredSchedule, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
+                            if (schedule.Semester == section.Lecture.Semester)
+                            {
+                                schedule.Enrollments.Add(new Enrollment { Course = section.Lecture.Course, Section = section });
+                                noScheduleForSemester = false;
+                                break;
+                            }
+                        }
+                        if (noScheduleForSemester)
+                            schedules.Add(new Schedule { ApplicationUser = db.Users.Find(GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = true, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
 
+                    }
+                }
+            }
+            else
+            {
+                foreach (int sectionId in sectionIds)
+                {
+                    Section section = db.Section.Where(n => n.SectionId == sectionId).FirstOrDefault();
+                    if (section != null)
+                    {
+                        bool noScheduleForSemester = true;
+                        foreach (Schedule schedule in schedules)
+                        {
+                            if (schedule.Semester == section.Lecture.Semester)
+                            {
+                                schedule.Enrollments.Add(new Enrollment { Course = section.Lecture.Course, Section = section });
+                                noScheduleForSemester = false;
+                                break;
+                            }
+                        }
+                        if (noScheduleForSemester)
+                            schedules.Add(new Schedule { ApplicationUser = db.Users.Find(GetUserId()), Semester = section.Lecture.Semester, IsRegisteredSchedule = true, Enrollments = new List<Enrollment>() { new Enrollment { Course = section.Lecture.Course, Section = section } } });
+
+                    }
                 }
             }
             foreach (Schedule schedule in schedules)
             {
-                if (isRegisteredSchedule)
-                    schedule.RegisterSchedule();
-                else
-                    schedule.SaveSchedule();
-
+                schedule.RegisterSchedule();
                 db.Schedule.Add(schedule);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException dbEx)
+                {
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            System.Console.WriteLine("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        }
+                    }
+                }
             }
 
             return PartialView("RegisterSuccessPartial");
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
-            
+            if(courseCode == null){
+                return Json(new { Success = false, Message = "Please add one or more course." });
+            }
+
             Season season;
             switch (semester)
             {
@@ -128,6 +177,8 @@ namespace Schedulator.Controllers
                     }
                 }
             }
+
+
             endTime = (endTime == 0) ? 1440 : endTime;
             Preference preference = new Preference { Semester = db.Semesters.Where(n => n.Season == season).FirstOrDefault(), StartTime = startTime, EndTime = endTime };
             preference.Courses = new List<Course>();
@@ -139,20 +190,16 @@ namespace Schedulator.Controllers
                 preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             }            
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
-            string user = db.Users.Find(User.Identity.GetUserId()).Email;
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
-            stopWatch.Stop();
-            long duration = stopWatch.ElapsedMilliseconds;
-            try
+            string user = db.Users.Find(GetUserId()).Email;
+            scheduleGenerator.GenerateSchedules( db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            if (scheduleGenerator.Schedules != null)
             {
-                if (scheduleGenerator.Schedules.Count() > 40)
-                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(0, 40);
+                scheduleGenerator.Schedules.OrderByDescending(n => n.FirstOrDefault().Days.Count());
+                if (scheduleGenerator.Schedules.Count() > 20)
+                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(0, 20);
+                this.scheduleGenerator = scheduleGenerator;
             }
-            catch { }
-            
-            return PartialView("_GenScheduleResultPartial", scheduleGenerator);
+            return PartialView("PagingAndScheduleResultPartial", scheduleGenerator);
         }
         [HttpPost]
         public ActionResult GenerateSchedulesPaging(List<String> courseCode, String semester, List<String> timeOption, int pageNumber)
@@ -205,19 +252,25 @@ namespace Schedulator.Controllers
                 preference.Courses.Add(db.Courses.Where(n => n.CourseNumber == courseNumber && n.CourseLetters == courseLetter).FirstOrDefault());
             }
             ScheduleGenerator scheduleGenerator = new ScheduleGenerator { Preference = preference };
-            string user = db.Users.Find(User.Identity.GetUserId()).Email;
+            string user = db.Users.Find(GetUserId()).Email;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            scheduleGenerator.GenerateSchedules(db.Courses.ToList(), db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
+            scheduleGenerator.GenerateSchedules(db.Enrollment.Where(n => n.Schedule.ApplicationUser.Email == user).ToList());
             stopWatch.Stop();
             long duration = stopWatch.ElapsedMilliseconds;
             try
             {
-                if (scheduleGenerator.Schedules.Count() > 40)
-                    scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, pageNumber + 40);
+                if (scheduleGenerator.Schedules.Count() > 20)
+                    if ((pageNumber + 20) < scheduleGenerator.Schedules.Count())
+                        scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, 20);
+                    else
+                        scheduleGenerator.Schedules = scheduleGenerator.Schedules.GetRange(pageNumber, scheduleGenerator.Schedules.Count() - pageNumber);
             }
-            catch { }
-
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            scheduleGenerator.CurrentPageNumber = pageNumber;
             return PartialView("_GenScheduleResultPartial", scheduleGenerator);
         }
 

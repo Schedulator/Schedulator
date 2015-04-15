@@ -11,11 +11,20 @@ namespace Schedulator.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+        public Func<string> GetUserId; //For testing
+        public Func<string, bool> IsInRole; //For testing
+
         private ApplicationDbContext db = new ApplicationDbContext();
+        public HomeController()
+        {
+            GetUserId = () => User.Identity.GetUserId();
+            IsInRole = (string role) => User.IsInRole(role);
+        }
         public ActionResult Index()
         {
-            if (User.IsInRole("Student"))
-                return View(db.Users.Find(User.Identity.GetUserId()));
+            string temp = GetUserId();
+            if (IsInRole("Student"))
+                return View(db.Users.Find(GetUserId()));
             else
                 return Redirect("ProgramDirector");
 

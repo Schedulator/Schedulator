@@ -49,14 +49,16 @@ namespace Schedulator.Migrations
                 user.Program = null;
                 context.Users.AddOrUpdate(user);
             }
-            SeedSemester(context);
-            //SeedCoursesFromExcelSheet(context);
-            //SeedProgramsFromExcelSheet(context);
-            //AddScienceElectives(context);
-            //AddGeneralElective(context);
-            //AddTechnicalElectives(context);
-            //Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault() , IsRegisteredSchedule = true };
 
+            SeedCoursesFromExcelSheet(context);
+            SeedProgramsFromExcelSheet(context);
+            AddScienceElectives(context);
+            AddGeneralElective(context);
+            AddTechnicalElectives(context);
+            AddPrerequisite(context);
+            SeedSemester(context);
+
+           // Schedule schedule = new Schedule { ApplicationUser = context.Users.Where(u => u.Email == "harleymc@gmail.com").FirstOrDefault(), Semester = context.Semesters.Where(n => n.Season == Season.Fall).FirstOrDefault(), IsRegisteredSchedule = true };
             //List<Enrollment> enrollments = new List<Enrollment>();
 
             ////enrollments.Add(new Enrollment { Schedule = schedule, Section = context.Section.Where(t => t.Tutorial.TutorialLetter == "QB" && t.Lecture.Course.CourseLetters == "COMP" && t.Lecture.Course.CourseNumber == 232).FirstOrDefault(), Grade = "B-" });
@@ -755,8 +757,9 @@ namespace Schedulator.Migrations
 
             context.SaveChanges();
         }
-        List<Prerequisite> AddPrerequisite(List<Course> courses)
+        void AddPrerequisite( ApplicationDbContext context)
         {
+            List<Course> courses = context.Courses.ToList();
             List<Prerequisite> prerequisites = new List<Prerequisite>();
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 287).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 248).FirstOrDefault()});
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "SOEN" && m.CourseNumber == 321).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 346).FirstOrDefault() });
@@ -811,7 +814,6 @@ namespace Schedulator.Migrations
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 353).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 354).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
-            prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "ENCS" && m.CourseNumber == 282).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 361).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 232).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 361).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 249).FirstOrDefault() });
             prerequisites.Add(new Prerequisite { Course = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 371).FirstOrDefault(), PrerequisiteCourse = courses.Where(m => m.CourseLetters == "COMP" && m.CourseNumber == 352).FirstOrDefault() });
@@ -838,9 +840,12 @@ namespace Schedulator.Migrations
                 List<Prerequisite> prerequisiteToAddToCourse = prerequisites.Where(n => n.Course == course).ToList();
                 if (prerequisiteToAddToCourse.Count() > 0)
                     course.Prerequisites = prerequisiteToAddToCourse;
-
+                context.Entry(course).State = EntityState.Modified;
             }
-            return prerequisites;
+            context.Prerequisite.AddRange(prerequisites);
+            
+            context.SaveChanges();
+
         }
         public struct time
         {
