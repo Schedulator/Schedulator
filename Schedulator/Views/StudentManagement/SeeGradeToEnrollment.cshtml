@@ -20,7 +20,7 @@
             if (item.Schedule.Semester.Season == season)
             {
                 <tr>
-                    <th>@item.Course.Title : @item.Grade @Html.ActionLink("Edit Grade", "AddGradeToEnrollment", new { id = item.EnrollmentID })</th>
+                    <th>@item.Course.CourseLetters @item.Course.CourseNumber - @item.Course.Title : @item.Grade   @Html.ActionLink("Edit Grade", "AddGradeToEnrollment", new { id = item.EnrollmentID })</th>
                 </tr>
             }
             else
