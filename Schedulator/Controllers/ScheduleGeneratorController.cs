@@ -134,7 +134,7 @@ namespace Schedulator.Controllers
                 }
             }
 
-            return PartialView("RegisterSuccessPartial");
+            return RedirectToAction("Index", "StudentManagement");
         }
         [HttpPost]
         public ActionResult GenerateSchedules(List<String> courseCode, String semester, List<String> timeOption) {
